@@ -404,13 +404,13 @@
   <script>
     const API_URL = '/api';
     let token = localStorage.getItem('token');
-    let username = localStorage.getItem('username');
+    let currentUser = localStorage.getItem('username');
     let currentSpace = null;
     let currentPage = null;
     let allSpaces = [];
 
     // Initialize
-    if (token && username) {
+    if (token && currentUser) {
       showDashboard();
     }
 
@@ -428,7 +428,7 @@
     }
 
     async function signIn() {
-      const username = document.getElementById('signin-username').value.trim();
+      const usernameInput = document.getElementById('signin-username').value.trim();
       const password = document.getElementById('signin-password').value;
       const errorEl = document.getElementById('signin-error');
 
@@ -436,7 +436,7 @@
         const res = await fetch(`${API_URL}/auth`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'login', username, password })
+          body: JSON.stringify({ action: 'login', username: usernameInput, password })
         });
         const data = await res.json();
         
@@ -445,7 +445,7 @@
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         token = data.token;
-        username = data.username;
+        currentUser = data.username;
         showDashboard();
       } catch (e) {
         errorEl.textContent = e.message;
@@ -453,7 +453,7 @@
     }
 
     async function register() {
-      const username = document.getElementById('reg-username').value.trim();
+      const usernameInput = document.getElementById('reg-username').value.trim();
       const password = document.getElementById('reg-password').value;
       const adminSecret = document.getElementById('reg-secret').value;
       const errorEl = document.getElementById('reg-error');
@@ -462,7 +462,7 @@
         const res = await fetch(`${API_URL}/auth`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'register', username, password, adminSecret })
+          body: JSON.stringify({ action: 'register', username: usernameInput, password, adminSecret })
         });
         const data = await res.json();
         
@@ -471,7 +471,7 @@
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         token = data.token;
-        username = data.username;
+        currentUser = data.username;
         showDashboard();
       } catch (e) {
         errorEl.textContent = e.message;
@@ -482,7 +482,7 @@
       localStorage.removeItem('token');
       localStorage.removeItem('username');
       token = null;
-      username = null;
+      currentUser = null;
       document.getElementById('auth-section').classList.remove('hidden');
       document.getElementById('dashboard-section').classList.add('hidden');
     }
@@ -490,7 +490,7 @@
     async function showDashboard() {
       document.getElementById('auth-section').classList.add('hidden');
       document.getElementById('dashboard-section').classList.remove('hidden');
-      document.getElementById('user-display').textContent = `👤 ${username}`;
+      document.getElementById('user-display').textContent = `👤 ${currentUser}`;
       await loadSpaces();
     }
 
@@ -672,6 +672,7 @@
 
       const title = document.getElementById('page-title').value.trim();
       const content = document.getElementById('page-content').value;
+      const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
 
       try {
         const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
@@ -680,7 +681,7 @@
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ title, content })
+          body: JSON.stringify({ title, content, images })
         });
 
         if (!res.ok) throw new Error('Failed to save');
@@ -726,8 +727,7 @@
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const page = currentPage ? allSpaces.find(s => s.id === currentSpace).pages.find(p => p.id === currentPage) : null;
-          const images = page ? (page.images || []) : [];
+          const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
           images.push(e.target.result);
           renderImages(images);
         };
@@ -736,8 +736,7 @@
     }
 
     function removeImage(index) {
-      const page = allSpaces.find(s => s.id === currentSpace).pages.find(p => p.id === currentPage);
-      const images = page ? (page.images || []) : [];
+      const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
       images.splice(index, 1);
       renderImages(images);
     }
@@ -752,8 +751,7 @@
           const file = item.getAsFile();
           const reader = new FileReader();
           reader.onload = (event) => {
-            const page = allSpaces.find(s => s.id === currentSpace).pages.find(p => p.id === currentPage);
-            const images = page ? (page.images || []) : [];
+            const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
             images.push(event.target.result);
             renderImages(images);
             showToast('Image pasted!', 'success');

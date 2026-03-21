@@ -2,21 +2,24 @@
 import { redis } from './_kv.js';
 import { authMiddleware } from './_jwt.js';
 
-function id() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); }
+function id() { 
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 6); 
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
   if (req.method === 'OPTIONS') return res.status(200).end();
-
+  
   const user = authMiddleware(req);
   if (!user) return res.status(401).json({ error: 'Unauthorized' });
-
+  
   const u = user.username;
   const { method, query } = req;
   const { type, id: itemId } = query;
-
+  
   try {
     // ── GET ALL spaces + pages ──
     if (method === 'GET' && !type) {
@@ -31,7 +34,7 @@ export default async function handler(req, res) {
       }));
       return res.status(200).json(spaces.filter(Boolean).sort((a, b) => a.createdAt - b.createdAt));
     }
-
+    
     // ── CREATE SPACE ──
     if (method === 'POST' && type === 'space') {
       const { name, icon } = req.body;
@@ -42,7 +45,7 @@ export default async function handler(req, res) {
       await redis.sadd(`${u}:spaces`, sid);
       return res.status(200).json({ ...space, pages: [] });
     }
-
+    
     // ── CREATE PAGE ──
     if (method === 'POST' && type === 'page') {
       const { spaceId, title } = req.body;
@@ -53,17 +56,23 @@ export default async function handler(req, res) {
       await redis.sadd(`${u}:space:${spaceId}:pages`, pid);
       return res.status(200).json(page);
     }
-
+    
     // ── UPDATE PAGE ──
     if (method === 'PUT' && type === 'page' && itemId) {
       const existing = await redis.get(`${u}:page:${itemId}`);
       if (!existing) return res.status(404).json({ error: 'Page not found' });
       const { title, content, images } = req.body;
-      const updated = { ...existing, title: title ?? existing.title, content: content ?? existing.content, images: images ?? existing.images, updatedAt: Date.now() };
+      const updated = { 
+        ...existing, 
+        title: title ?? existing.title, 
+        content: content ?? existing.content, 
+        images: images ?? existing.images, 
+        updatedAt: Date.now() 
+      };
       await redis.set(`${u}:page:${itemId}`, updated);
       return res.status(200).json(updated);
     }
-
+    
     // ── DELETE PAGE ──
     if (method === 'DELETE' && type === 'page' && itemId) {
       const page = await redis.get(`${u}:page:${itemId}`);
@@ -73,7 +82,7 @@ export default async function handler(req, res) {
       }
       return res.status(200).json({ ok: true });
     }
-
+    
     // ── DELETE SPACE ──
     if (method === 'DELETE' && type === 'space' && itemId) {
       const pageIds = await redis.smembers(`${u}:space:${itemId}:pages`) || [];
@@ -83,7 +92,7 @@ export default async function handler(req, res) {
       await redis.srem(`${u}:spaces`, itemId);
       return res.status(200).json({ ok: true });
     }
-
+    
     return res.status(400).json({ error: 'Invalid request' });
   } catch (e) {
     console.error(e);

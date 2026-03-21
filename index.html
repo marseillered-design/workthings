@@ -3,125 +3,480 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WorkDocs — Your personal Confluence</title>
+  <title>WorkDocs</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f7f7f5;
+      --bg-hover: #efefef;
+      --bg-sidebar: #f7f7f5;
+      --text-primary: #37352f;
+      --text-secondary: #9b9a97;
+      --border-color: #e1e1e0;
+      --accent-color: #2eaadc;
+      --danger-color: #eb5757;
+      --success-color: #27ae60;
+      --shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    
+    body.dark-mode {
+      --bg-primary: #191919;
+      --bg-secondary: #202020;
+      --bg-hover: #2a2a2a;
+      --bg-sidebar: #202020;
+      --text-primary: #d9d9d9;
+      --text-secondary: #9b9a97;
+      --border-color: #373737;
+      --shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: #0f1419;
-      color: #e7e9ea;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       min-height: 100vh;
+      line-height: 1.6;
     }
-    .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
     
-    /* Auth Styles */
-    .auth-container { max-width: 400px; margin: 100px auto; padding: 40px; }
-    .logo { text-align: center; margin-bottom: 40px; }
-    .logo-icon { font-size: 48px; margin-bottom: 10px; }
-    .logo h1 { font-size: 28px; margin-bottom: 8px; }
-    .logo p { color: #8b98a5; }
-    .tabs { display: flex; gap: 10px; margin-bottom: 30px; }
-    .tab {
-      flex: 1;
-      padding: 12px;
-      border: none;
-      border-radius: 8px;
-      background: #1e2732;
-      color: #8b98a5;
-      cursor: pointer;
-      font-size: 14px;
-    }
-    .tab.active { background: #2d3748; color: #e7e9ea; }
-    .input {
-      width: 100%;
-      padding: 14px 16px;
-      border: 1px solid #2d3748;
-      border-radius: 8px;
-      background: #1e2732;
-      color: #e7e9ea;
-      font-size: 14px;
-      margin-bottom: 12px;
-    }
-    .input:focus { outline: none; border-color: #4267f2; }
-    .btn {
-      width: 100%;
-      padding: 14px;
-      border: none;
-      border-radius: 8px;
-      background: #4267f2;
-      color: white;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 10px;
-    }
-    .btn:hover { background: #3658d9; }
-    .btn-secondary { background: #2d3748; }
-    .btn-secondary:hover { background: #3d4a5c; }
-    .btn-danger { background: #dc3545; }
-    .btn-danger:hover { background: #c82333; }
-    .error { color: #f44336; text-align: center; margin-top: 15px; font-size: 14px; }
-    .hidden { display: none !important; }
-    .help { color: #8b98a5; text-align: center; margin-top: 20px; font-size: 13px; }
-    
-    /* Dashboard Styles */
-    .header {
+    /* Auth Container */
+    .auth-wrapper {
+      min-height: 100vh;
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 20px 0;
-      border-bottom: 1px solid #2d3748;
-      margin-bottom: 30px;
-    }
-    .header h1 { font-size: 24px; }
-    .user-info { display: flex; align-items: center; gap: 15px; }
-    .user-info span { color: #8b98a5; }
-    
-    /* Spaces Grid */
-    .spaces-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-bottom: 30px;
-    }
-    .space-card {
-      background: #1e2732;
-      border-radius: 12px;
+      justify-content: center;
+      background: var(--bg-primary);
       padding: 20px;
-      border: 1px solid #2d3748;
     }
-    .space-header {
+    
+    .auth-container {
+      width: 100%;
+      max-width: 400px;
+      padding: 40px;
+    }
+    
+    .auth-logo {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .auth-logo-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .auth-logo h1 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text-primary);
+    }
+    
+    .auth-logo p {
+      color: var(--text-secondary);
+      font-size: 14px;
+    }
+    
+    .auth-tabs {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: var(--bg-secondary);
+      padding: 4px;
+      border-radius: 8px;
     }
-    .space-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; }
-    .space-actions { display: flex; gap: 8px; }
-    .space-actions button {
-      padding: 6px 12px;
+    
+    .auth-tab {
+      flex: 1;
+      padding: 10px 16px;
       border: none;
       border-radius: 6px;
-      background: #2d3748;
-      color: #e7e9ea;
+      background: transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+    
+    .auth-tab.active {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      box-shadow: var(--shadow);
+    }
+    
+    .auth-input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 14px;
+      margin-bottom: 12px;
+      transition: border-color 0.2s;
+    }
+    
+    .auth-input:focus {
+      outline: none;
+      border-color: var(--accent-color);
+    }
+    
+    .auth-input::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    .auth-btn {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity 0.2s;
+    }
+    
+    .auth-btn:hover {
+      opacity: 0.9;
+    }
+    
+    .auth-error {
+      color: var(--danger-color);
+      text-align: center;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+    
+    .auth-help {
+      color: var(--text-secondary);
+      text-align: center;
+      margin-top: 20px;
+      font-size: 13px;
+    }
+    
+    .hidden { display: none !important; }
+    
+    /* App Layout */
+    .app-layout {
+      display: flex;
+      min-height: 100vh;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 240px;
+      background: var(--bg-sidebar);
+      border-right: 1px solid var(--border-color);
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.3s;
+      position: fixed;
+      height: 100vh;
+      overflow-y: auto;
+      z-index: 100;
+    }
+    
+    .sidebar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      margin-bottom: 16px;
+    }
+    
+    .sidebar-logo {
+      font-size: 20px;
+    }
+    
+    .sidebar-title {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--text-primary);
+    }
+    
+    .sidebar-section {
+      margin-bottom: 20px;
+    }
+    
+    .sidebar-section-title {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 8px 12px;
+      margin-bottom: 4px;
+    }
+    
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: background 0.15s;
+      text-decoration: none;
+    }
+    
+    .sidebar-item:hover {
+      background: var(--bg-hover);
+    }
+    
+    .sidebar-item.active {
+      background: var(--bg-hover);
+    }
+    
+    .sidebar-item-icon {
+      font-size: 16px;
+      width: 20px;
+      text-align: center;
+    }
+    
+    .sidebar-item-title {
+      flex: 1;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .sidebar-actions {
+      display: flex;
+      gap: 4px;
+      opacity: 0;
+      transition: opacity 0.15s;
+    }
+    
+    .sidebar-item:hover .sidebar-actions {
+      opacity: 1;
+    }
+    
+    .sidebar-action-btn {
+      padding: 4px 8px;
+      border: none;
+      border-radius: 4px;
+      background: transparent;
+      color: var(--text-secondary);
       cursor: pointer;
       font-size: 12px;
     }
-    .space-actions button:hover { background: #3d4a5c; }
-    .pages-list { margin-top: 15px; }
-    .page-item {
+    
+    .sidebar-action-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .sidebar-footer {
+      margin-top: auto;
+      padding-top: 12px;
+      border-top: 1px solid var(--border-color);
+    }
+    
+    .sidebar-user {
       display: flex;
-      justify-content: space-between;
       align-items: center;
-      padding: 10px;
-      background: #0f1419;
+      gap: 10px;
+      padding: 8px 12px;
       border-radius: 6px;
-      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 14px;
+      color: var(--text-primary);
+      transition: background 0.15s;
+    }
+    
+    .sidebar-user:hover {
+      background: var(--bg-hover);
+    }
+    
+    .sidebar-user-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent-color);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      margin-left: 240px;
+      min-height: 100vh;
+    }
+    
+    .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      z-index: 50;
+    }
+    
+    .main-header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .menu-toggle {
+      display: none;
+      padding: 8px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text-secondary);
+    }
+    
+    .menu-toggle:hover {
+      background: var(--bg-hover);
+    }
+    
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: var(--text-secondary);
+    }
+    
+    .breadcrumb-item {
+      color: var(--text-primary);
       cursor: pointer;
     }
-    .page-item:hover { background: #1a2332; }
-    .page-item-title { font-size: 14px; }
-    .page-item-date { color: #8b98a5; font-size: 12px; }
+    
+    .breadcrumb-item:hover {
+      text-decoration: underline;
+    }
+    
+    .breadcrumb-separator {
+      color: var(--text-secondary);
+    }
+    
+    .main-header-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .header-btn {
+      padding: 8px 12px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    
+    .header-btn:hover {
+      background: var(--bg-hover);
+    }
+    
+    .header-btn-primary {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+      border: none;
+    }
+    
+    .header-btn-primary:hover {
+      opacity: 0.9;
+    }
+    
+    /* Page Content */
+    .page-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 48px 96px;
+    }
+    
+    .page-title {
+      font-size: 40px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      color: var(--text-primary);
+      width: 100%;
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+    
+    .page-title:focus {
+      outline: none;
+    }
+    
+    .page-title::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    .page-content {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-primary);
+      min-height: 400px;
+      border: none;
+      background: transparent;
+      width: 100%;
+      resize: none;
+    }
+    
+    .page-content:focus {
+      outline: none;
+    }
+    
+    .page-content::placeholder {
+      color: var(--text-secondary);
+    }
+    
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      text-align: center;
+      padding: 48px;
+    }
+    
+    .empty-state-icon {
+      font-size: 64px;
+      margin-bottom: 24px;
+      opacity: 0.5;
+    }
+    
+    .empty-state-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 8px;
+    }
+    
+    .empty-state-text {
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 24px;
+    }
     
     /* Modal */
     .modal-overlay {
@@ -130,274 +485,355 @@
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.8);
+      background: rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      backdrop-filter: blur(2px);
     }
+    
     .modal {
-      background: #1e2732;
+      background: var(--bg-primary);
       border-radius: 12px;
-      padding: 30px;
+      padding: 24px;
       width: 90%;
-      max-width: 500px;
-      border: 1px solid #2d3748;
+      max-width: 420px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
     }
-    .modal h2 { margin-bottom: 20px; }
+    
+    .modal-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+    
     .modal-actions {
       display: flex;
-      gap: 10px;
+      gap: 8px;
       margin-top: 20px;
+      justify-content: flex-end;
     }
     
-    /* Page Editor */
-    .editor-container {
-      background: #1e2732;
-      border-radius: 12px;
-      padding: 30px;
-      border: 1px solid #2d3748;
-    }
-    .editor-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .editor-title {
-      font-size: 24px;
-      font-weight: 600;
-      border: none;
-      background: transparent;
-      color: #e7e9ea;
-      width: 100%;
-    }
-    .editor-content {
-      width: 100%;
-      min-height: 400px;
-      border: 1px solid #2d3748;
-      border-radius: 8px;
-      background: #0f1419;
-      color: #e7e9ea;
-      padding: 20px;
+    .modal-btn {
+      padding: 10px 16px;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
       font-size: 14px;
-      line-height: 1.6;
-      resize: vertical;
-    }
-    .editor-content:focus { outline: none; border-color: #4267f2; }
-    .image-upload {
-      margin-top: 20px;
-      padding: 20px;
-      border: 2px dashed #2d3748;
-      border-radius: 8px;
-      text-align: center;
       cursor: pointer;
+      transition: all 0.15s;
     }
-    .image-upload:hover { border-color: #4267f2; }
-    .images-preview {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      gap: 10px;
-      margin-top: 20px;
+    
+    .modal-btn:hover {
+      background: var(--bg-hover);
     }
-    .image-preview {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    .image-preview img {
-      width: 100%;
-      height: 100px;
-      object-fit: cover;
-    }
-    .image-preview button {
-      position: absolute;
-      top: 5px;
-      right: 5px;
-      background: rgba(0, 0, 0, 0.7);
+    
+    .modal-btn-primary {
+      background: var(--text-primary);
+      color: var(--bg-primary);
       border: none;
-      color: white;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      cursor: pointer;
     }
-    
-    /* Breadcrumb */
-    .breadcrumb {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      margin-bottom: 20px;
-      color: #8b98a5;
-    }
-    .breadcrumb a { color: #4267f2; text-decoration: none; }
-    .breadcrumb a:hover { text-decoration: underline; }
-    
-    /* Loading */
-    .loading {
-      text-align: center;
-      padding: 40px;
-      color: #8b98a5;
-    }
-    .spinner {
-      border: 3px solid #2d3748;
-      border-top: 3px solid #4267f2;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 20px;
-    }
-    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    
-    /* Empty State */
-    .empty-state {
-      text-align: center;
-      padding: 60px 20px;
-      color: #8b98a5;
-    }
-    .empty-state-icon { font-size: 64px; margin-bottom: 20px; }
-    .empty-state h3 { margin-bottom: 10px; color: #e7e9ea; }
     
     /* Toast */
     .toast {
       position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: #1e2732;
-      border: 1px solid #2d3748;
+      bottom: 24px;
+      right: 24px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 15px 20px;
+      padding: 12px 16px;
       display: flex;
       align-items: center;
       gap: 10px;
       z-index: 1001;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      font-size: 14px;
     }
-    .toast.success { border-color: #28a745; }
-    .toast.error { border-color: #dc3545; }
+    
+    .toast.success {
+      border-left: 3px solid var(--success-color);
+    }
+    
+    .toast.error {
+      border-left: 3px solid var(--danger-color);
+    }
+    
+    /* Image Upload */
+    .image-upload-area {
+      margin-top: 24px;
+      padding: 24px;
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      text-align: center;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all 0.15s;
+    }
+    
+    .image-upload-area:hover {
+      border-color: var(--accent-color);
+      color: var(--accent-color);
+    }
+    
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 24px;
+    }
+    
+    .image-item {
+      position: relative;
+      border-radius: 8px;
+      overflow: hidden;
+      aspect-ratio: 1;
+    }
+    
+    .image-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .image-item button {
+      position: absolute;
+      top: 6px;
+      right: 6px;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: none;
+      background: rgba(0,0,0,0.7);
+      color: white;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* Loading */
+    .loading-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+    }
+    
+    .spinner {
+      width: 32px;
+      height: 32px;
+      border: 2px solid var(--border-color);
+      border-top-color: var(--accent-color);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin-bottom: 16px;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .main-content {
+        margin-left: 0;
+      }
+      
+      .menu-toggle {
+        display: block;
+      }
+      
+      .page-container {
+        padding: 32px 24px;
+      }
+      
+      .page-title {
+        font-size: 28px;
+      }
+    }
+    
+    /* Scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+    
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-color);
+      border-radius: 3px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-secondary);
+    }
   </style>
 </head>
 <body>
   <!-- Auth Section -->
-  <div id="auth-section" class="auth-container">
-    <div class="logo">
-      <div class="logo-icon">📋</div>
-      <h1>WorkDocs</h1>
-      <p>Your personal Confluence</p>
-    </div>
+  <div id="auth-section" class="auth-wrapper">
+    <div class="auth-container">
+      <div class="auth-logo">
+        <div class="auth-logo-icon">📋</div>
+        <h1>WorkDocs</h1>
+        <p>Your personal knowledge base</p>
+      </div>
 
-    <div class="tabs">
-      <button class="tab active" onclick="showTab('signin')">Sign In</button>
-      <button class="tab" onclick="showTab('register')">Register</button>
-    </div>
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="showAuthTab('signin')">Sign In</button>
+        <button class="auth-tab" onclick="showAuthTab('register')">Register</button>
+      </div>
 
-    <!-- Sign In Form -->
-    <div id="signin-form">
-      <input class="input" type="text" id="signin-username" placeholder="Username" autocomplete="username">
-      <input class="input" type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
-      <button class="btn" onclick="signIn()">Sign In →</button>
-      <p class="error" id="signin-error"></p>
-    </div>
+      <!-- Sign In Form -->
+      <div id="signin-form">
+        <input class="auth-input" type="text" id="signin-username" placeholder="Email or username" autocomplete="username">
+        <input class="auth-input" type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
+        <button class="auth-btn" onclick="signIn()">Continue</button>
+        <p class="auth-error" id="signin-error"></p>
+      </div>
 
-    <!-- Register Form -->
-    <div id="register-form" class="hidden">
-      <input class="input" type="text" id="reg-username" placeholder="Username" autocomplete="username">
-      <input class="input" type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
-      <input class="input" type="password" id="reg-secret" placeholder="Admin Secret Key">
-      <button class="btn" onclick="register()">Create Account →</button>
-      <p class="error" id="reg-error"></p>
-    </div>
+      <!-- Register Form -->
+      <div id="register-form" class="hidden">
+        <input class="auth-input" type="text" id="reg-username" placeholder="Username" autocomplete="username">
+        <input class="auth-input" type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
+        <input class="auth-input" type="password" id="reg-secret" placeholder="Team invite code" autocomplete="off">
+        <button class="auth-btn" onclick="register()">Create account</button>
+        <p class="auth-error" id="reg-error"></p>
+      </div>
 
-    <p class="help">First time? Switch to Register tab and ask your admin for the secret key.</p>
+      <p class="auth-help">New to WorkDocs? Get an invite code from your team admin.</p>
+    </div>
   </div>
 
-  <!-- Dashboard Section -->
-  <div id="dashboard-section" class="container hidden">
-    <div class="header">
-      <h1>📋 WorkDocs</h1>
-      <div class="user-info">
-        <span id="user-display"></span>
-        <button class="btn btn-secondary" style="width: auto; padding: 10px 20px;" onclick="signOut()">Sign Out</button>
-      </div>
-    </div>
-
-    <div id="dashboard-content">
-      <div class="loading" id="loading">
-        <div class="spinner"></div>
-        <p>Loading your workspace...</p>
+  <!-- App Section -->
+  <div id="app-section" class="app-layout hidden">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <span class="sidebar-logo">📋</span>
+        <span class="sidebar-title">WorkDocs</span>
       </div>
 
-      <div id="spaces-view" class="hidden">
-        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-          <h2>Spaces</h2>
-          <button class="btn" style="width: auto;" onclick="openSpaceModal()">+ New Space</button>
+      <div class="sidebar-section">
+        <div class="sidebar-section-title">Spaces</div>
+        <div id="sidebar-spaces"></div>
+        <div class="sidebar-item" onclick="openSpaceModal()">
+          <span class="sidebar-item-icon">+</span>
+          <span class="sidebar-item-title">New space</span>
         </div>
-        <div class="spaces-grid" id="spaces-grid"></div>
       </div>
 
-      <div id="page-view" class="hidden">
-        <div class="breadcrumb">
-          <a href="#" onclick="showSpaces()">← Back to Spaces</a>
-          <span>/</span>
-          <span id="breadcrumb-space"></span>
-          <span>/</span>
-          <span id="breadcrumb-page"></span>
+      <div class="sidebar-footer">
+        <div class="sidebar-user" onclick="signOut()">
+          <div class="sidebar-user-avatar" id="user-avatar"></div>
+          <span class="sidebar-item-title" id="user-name"></span>
+          <span style="color: var(--text-secondary); font-size: 12px;">→ Sign out</span>
         </div>
-        <div class="editor-container">
-          <div class="editor-header">
-            <input class="editor-title" id="page-title" placeholder="Page Title">
-            <div style="display: flex; gap: 10px;">
-              <button class="btn btn-secondary" style="width: auto;" onclick="savePage()">💾 Save</button>
-              <button class="btn btn-danger" style="width: auto;" onclick="deletePage()">🗑️ Delete</button>
-            </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="main-header">
+        <div class="main-header-left">
+          <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+          <div class="breadcrumb" id="breadcrumb">
+            <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
           </div>
-          <textarea class="editor-content" id="page-content" placeholder="Write your instructions, documentation, or notes here...&#10;&#10;You can:&#10;- Write detailed instructions&#10;- Paste screenshots (Ctrl+V)&#10;- Add code snippets&#10;- Create checklists"></textarea>
+        </div>
+        <div class="main-header-right">
+          <button class="header-btn" onclick="toggleTheme()">🌙</button>
+          <button class="header-btn header-btn-primary" onclick="saveCurrentPage()">
+            💾 Save
+          </button>
+        </div>
+      </header>
+
+      <div id="main-container">
+        <!-- Loading State -->
+        <div class="loading-state" id="loading-state">
+          <div class="spinner"></div>
+          <p style="color: var(--text-secondary);">Loading...</p>
+        </div>
+
+        <!-- Empty State -->
+        <div class="empty-state hidden" id="empty-state">
+          <div class="empty-state-icon">📁</div>
+          <h2 class="empty-state-title">No spaces yet</h2>
+          <p class="empty-state-text">Create your first space to start organizing your knowledge</p>
+          <button class="header-btn header-btn-primary" onclick="openSpaceModal()">+ New space</button>
+        </div>
+
+        <!-- Spaces View -->
+        <div class="page-container hidden" id="spaces-view">
+          <input class="page-title" type="text" placeholder="📚 My Knowledge Base" readonly>
+          <div class="page-content" style="min-height: auto;">
+            <p style="color: var(--text-secondary); margin-bottom: 24px;">
+              Select a space from the sidebar or create a new one to get started.
+            </p>
+            <div id="spaces-overview"></div>
+          </div>
+        </div>
+
+        <!-- Page Editor -->
+        <div class="page-container hidden" id="page-editor">
+          <input class="page-title" type="text" id="editor-title" placeholder="Untitled">
+          <textarea class="page-content" id="editor-content" placeholder="Start writing... Use '/' for commands"></textarea>
           
-          <div class="image-upload" onclick="document.getElementById('image-input').click()">
+          <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
             📎 Click to upload images or paste screenshots (Ctrl+V)
             <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
           </div>
-          <div class="images-preview" id="images-preview"></div>
+          <div class="images-grid" id="images-grid"></div>
         </div>
       </div>
-
-      <div id="empty-state" class="empty-state hidden">
-        <div class="empty-state-icon">📁</div>
-        <h3>No spaces yet</h3>
-        <p>Create your first space to organize your documentation</p>
-        <button class="btn" style="width: auto; margin-top: 20px;" onclick="openSpaceModal()">+ New Space</button>
-      </div>
-    </div>
+    </main>
   </div>
 
   <!-- Space Modal -->
-  <div id="space-modal" class="modal-overlay hidden">
+  <div class="modal-overlay hidden" id="space-modal">
     <div class="modal">
-      <h2>📁 New Space</h2>
-      <input class="input" type="text" id="space-name" placeholder="Space name (e.g., Project Documentation)">
-      <input class="input" type="text" id="space-icon" placeholder="Icon (emoji) 📁">
+      <h3 class="modal-title">Create new space</h3>
+      <input class="auth-input" type="text" id="space-name" placeholder="Space name">
+      <input class="auth-input" type="text" id="space-icon" placeholder="Icon (emoji)" value="📁">
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closeSpaceModal()">Cancel</button>
-        <button class="btn" onclick="createSpace()">Create</button>
+        <button class="modal-btn" onclick="closeSpaceModal()">Cancel</button>
+        <button class="modal-btn modal-btn-primary" onclick="createSpace()">Create</button>
       </div>
     </div>
   </div>
 
   <!-- Page Modal -->
-  <div id="page-modal" class="modal-overlay hidden">
+  <div class="modal-overlay hidden" id="page-modal">
     <div class="modal">
-      <h2>📄 New Page</h2>
-      <input class="input" type="text" id="page-name" placeholder="Page title">
+      <h3 class="modal-title">New page</h3>
+      <input class="auth-input" type="text" id="page-name" placeholder="Page title">
       <div class="modal-actions">
-        <button class="btn btn-secondary" onclick="closePageModal()">Cancel</button>
-        <button class="btn" onclick="createPage()">Create</button>
+        <button class="modal-btn" onclick="closePageModal()">Cancel</button>
+        <button class="modal-btn modal-btn-primary" onclick="createPage()">Create</button>
       </div>
     </div>
   </div>
 
   <!-- Toast -->
-  <div id="toast" class="toast hidden">
+  <div class="toast hidden" id="toast">
     <span id="toast-message"></span>
   </div>
 
@@ -408,14 +844,16 @@
     let currentSpace = null;
     let currentPage = null;
     let allSpaces = [];
+    let currentImages = [];
 
     // Initialize
     if (token && currentUser) {
-      showDashboard();
+      showApp();
     }
 
-    function showTab(tab) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    // Auth Functions
+    function showAuthTab(tab) {
+      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       event.target.classList.add('active');
       
       if (tab === 'signin') {
@@ -446,7 +884,7 @@
         localStorage.setItem('username', data.username);
         token = data.token;
         currentUser = data.username;
-        showDashboard();
+        showApp();
       } catch (e) {
         errorEl.textContent = e.message;
       }
@@ -472,7 +910,7 @@
         localStorage.setItem('username', data.username);
         token = data.token;
         currentUser = data.username;
-        showDashboard();
+        showApp();
       } catch (e) {
         errorEl.textContent = e.message;
       }
@@ -484,21 +922,23 @@
       token = null;
       currentUser = null;
       document.getElementById('auth-section').classList.remove('hidden');
-      document.getElementById('dashboard-section').classList.add('hidden');
+      document.getElementById('app-section').classList.add('hidden');
     }
 
-    async function showDashboard() {
+    // App Functions
+    function showApp() {
       document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('dashboard-section').classList.remove('hidden');
-      document.getElementById('user-display').textContent = `👤 ${currentUser}`;
-      await loadSpaces();
+      document.getElementById('app-section').classList.remove('hidden');
+      document.getElementById('user-name').textContent = currentUser;
+      document.getElementById('user-avatar').textContent = currentUser.charAt(0).toUpperCase();
+      loadSpaces();
     }
 
     async function loadSpaces() {
-      document.getElementById('loading').classList.remove('hidden');
-      document.getElementById('spaces-view').classList.add('hidden');
+      document.getElementById('loading-state').classList.remove('hidden');
       document.getElementById('empty-state').classList.add('hidden');
-      document.getElementById('page-view').classList.add('hidden');
+      document.getElementById('spaces-view').classList.add('hidden');
+      document.getElementById('page-editor').classList.add('hidden');
 
       try {
         const res = await fetch(`${API_URL}/pages`, {
@@ -507,44 +947,101 @@
         const spaces = await res.json();
         allSpaces = spaces;
 
-        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('loading-state').classList.add('hidden');
 
         if (spaces.length === 0) {
           document.getElementById('empty-state').classList.remove('hidden');
         } else {
-          document.getElementById('spaces-view').classList.remove('hidden');
-          renderSpaces(spaces);
+          renderSidebar();
+          showSpaces();
         }
       } catch (e) {
         showToast('Failed to load spaces', 'error');
-        document.getElementById('loading').classList.add('hidden');
+        document.getElementById('loading-state').classList.add('hidden');
       }
     }
 
-    function renderSpaces(spaces) {
-      const grid = document.getElementById('spaces-grid');
-      grid.innerHTML = spaces.map(space => `
-        <div class="space-card">
-          <div class="space-header">
-            <div class="space-title">${space.icon || '📁'} ${space.name}</div>
-            <div class="space-actions">
-              <button onclick="openPageModal('${space.id}')">+ Page</button>
-              <button onclick="deleteSpace('${space.id}')">🗑️</button>
-            </div>
-          </div>
-          <div class="pages-list">
-            ${space.pages && space.pages.length > 0 
-              ? space.pages.map(page => `
-                  <div class="page-item" onclick="openPage('${space.id}', '${page.id}')">
-                    <span class="page-item-title">📄 ${page.title}</span>
-                    <span class="page-item-date">${new Date(page.createdAt).toLocaleDateString()}</span>
-                  </div>
-                `).join('')
-              : '<p style="color: #8b98a5; font-size: 13px;">No pages yet</p>'
-            }
+    function renderSidebar() {
+      const container = document.getElementById('sidebar-spaces');
+      container.innerHTML = allSpaces.map(space => `
+        <div class="sidebar-item" onclick="selectSpace('${space.id}')">
+          <span class="sidebar-item-icon">${space.icon || '📁'}</span>
+          <span class="sidebar-item-title">${space.name}</span>
+          <div class="sidebar-actions">
+            <button class="sidebar-action-btn" onclick="event.stopPropagation(); openPageModal('${space.id}')">+</button>
+            <button class="sidebar-action-btn" onclick="event.stopPropagation(); deleteSpace('${space.id}')">✕</button>
           </div>
         </div>
+        ${space.pages && space.pages.length > 0 
+          ? space.pages.map(page => `
+              <div class="sidebar-item" style="padding-left: 36px;" onclick="openPage('${space.id}', '${page.id}')">
+                <span class="sidebar-item-icon">📄</span>
+                <span class="sidebar-item-title">${page.title}</span>
+              </div>
+            `).join('')
+          : ''
+        }
       `).join('');
+    }
+
+    function showSpaces() {
+      document.getElementById('spaces-view').classList.remove('hidden');
+      document.getElementById('page-editor').classList.add('hidden');
+      document.getElementById('breadcrumb').innerHTML = '<span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>';
+      currentPage = null;
+      renderSpacesOverview();
+    }
+
+    function renderSpacesOverview() {
+      const container = document.getElementById('spaces-overview');
+      container.innerHTML = allSpaces.map(space => `
+        <div style="margin-bottom: 32px;">
+          <h3 style="font-size: 20px; margin-bottom: 12px;">${space.icon || '📁'} ${space.name}</h3>
+          ${space.pages && space.pages.length > 0 
+            ? space.pages.map(page => `
+                <div class="sidebar-item" onclick="openPage('${space.id}', '${page.id}')" style="margin-bottom: 8px;">
+                  <span class="sidebar-item-icon">📄</span>
+                  <span class="sidebar-item-title">${page.title}</span>
+                </div>
+              `).join('')
+            : '<p style="color: var(--text-secondary); font-size: 14px;">No pages yet</p>'
+          }
+        </div>
+      `).join('');
+    }
+
+    function selectSpace(spaceId) {
+      currentSpace = spaceId;
+      const space = allSpaces.find(s => s.id === spaceId);
+      document.getElementById('breadcrumb').innerHTML = `
+        <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">${space.name}</span>
+      `;
+    }
+
+    function openPage(spaceId, pageId) {
+      const space = allSpaces.find(s => s.id === spaceId);
+      const page = space.pages.find(p => p.id === pageId);
+
+      currentSpace = spaceId;
+      currentPage = pageId;
+
+      document.getElementById('spaces-view').classList.add('hidden');
+      document.getElementById('page-editor').classList.remove('hidden');
+      
+      document.getElementById('breadcrumb').innerHTML = `
+        <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">${space.name}</span>
+        <span class="breadcrumb-separator">/</span>
+        <span class="breadcrumb-item">${page.title}</span>
+      `;
+      
+      document.getElementById('editor-title').value = page.title;
+      document.getElementById('editor-content').value = page.content || '';
+      currentImages = page.images || [];
+      renderImages();
     }
 
     function openSpaceModal() {
@@ -580,7 +1077,7 @@
         if (!res.ok) throw new Error(space.error);
 
         closeSpaceModal();
-        showToast('Space created!', 'success');
+        showToast('Space created', 'success');
         await loadSpaces();
       } catch (e) {
         showToast(e.message, 'error');
@@ -637,42 +1134,22 @@
         if (!res.ok) throw new Error(page.error);
 
         closePageModal();
-        showToast('Page created!', 'success');
+        showToast('Page created', 'success');
         await loadSpaces();
+        openPage(currentSpace, page.id);
       } catch (e) {
         showToast(e.message, 'error');
       }
     }
 
-    function openPage(spaceId, pageId) {
-      const space = allSpaces.find(s => s.id === spaceId);
-      const page = space.pages.find(p => p.id === pageId);
+    async function saveCurrentPage() {
+      if (!currentPage) {
+        showToast('No page selected', 'error');
+        return;
+      }
 
-      currentSpace = spaceId;
-      currentPage = pageId;
-
-      document.getElementById('spaces-view').classList.add('hidden');
-      document.getElementById('page-view').classList.remove('hidden');
-      document.getElementById('breadcrumb-space').textContent = space.name;
-      document.getElementById('breadcrumb-page').textContent = page.title;
-      document.getElementById('page-title').value = page.title;
-      document.getElementById('page-content').value = page.content || '';
-      
-      renderImages(page.images || []);
-    }
-
-    function showSpaces() {
-      document.getElementById('page-view').classList.add('hidden');
-      document.getElementById('spaces-view').classList.remove('hidden');
-      currentPage = null;
-    }
-
-    async function savePage() {
-      if (!currentPage) return;
-
-      const title = document.getElementById('page-title').value.trim();
-      const content = document.getElementById('page-content').value;
-      const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
+      const title = document.getElementById('editor-title').value.trim();
+      const content = document.getElementById('editor-content').value;
 
       try {
         const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
@@ -681,41 +1158,22 @@
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify({ title, content, images })
+          body: JSON.stringify({ title, content, images: currentImages })
         });
 
         if (!res.ok) throw new Error('Failed to save');
 
-        showToast('Page saved!', 'success');
+        showToast('Page saved', 'success');
         await loadSpaces();
       } catch (e) {
         showToast(e.message, 'error');
       }
     }
 
-    async function deletePage() {
-      if (!currentPage) return;
-      if (!confirm('Delete this page?')) return;
-
-      try {
-        const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-
-        if (!res.ok) throw new Error('Failed to delete');
-
-        showToast('Page deleted', 'success');
-        showSpaces();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
-    }
-
-    function renderImages(images) {
-      const container = document.getElementById('images-preview');
-      container.innerHTML = images.map((img, idx) => `
-        <div class="image-preview">
+    function renderImages() {
+      const container = document.getElementById('images-grid');
+      container.innerHTML = currentImages.map((img, idx) => `
+        <div class="image-item">
           <img src="${img}" alt="Image ${idx + 1}">
           <button onclick="removeImage(${idx})">✕</button>
         </div>
@@ -727,23 +1185,21 @@
       Array.from(files).forEach(file => {
         const reader = new FileReader();
         reader.onload = (e) => {
-          const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
-          images.push(e.target.result);
-          renderImages(images);
+          currentImages.push(e.target.result);
+          renderImages();
         };
         reader.readAsDataURL(file);
       });
     }
 
     function removeImage(index) {
-      const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
-      images.splice(index, 1);
-      renderImages(images);
+      currentImages.splice(index, 1);
+      renderImages();
     }
 
     // Paste image support
     document.addEventListener('paste', (e) => {
-      if (document.getElementById('page-view').classList.contains('hidden')) return;
+      if (document.getElementById('page-editor').classList.contains('hidden')) return;
       
       const items = e.clipboardData.items;
       for (let item of items) {
@@ -751,15 +1207,22 @@
           const file = item.getAsFile();
           const reader = new FileReader();
           reader.onload = (event) => {
-            const images = Array.from(document.querySelectorAll('.image-preview img')).map(img => img.src);
-            images.push(event.target.result);
-            renderImages(images);
-            showToast('Image pasted!', 'success');
+            currentImages.push(event.target.result);
+            renderImages();
+            showToast('Image pasted', 'success');
           };
           reader.readAsDataURL(file);
         }
       }
     });
+
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+    }
+
+    function toggleTheme() {
+      document.body.classList.toggle('dark-mode');
+    }
 
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
@@ -783,6 +1246,15 @@
           createPage();
         }
       }
+    });
+
+    // Close modals on overlay click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) {
+          overlay.classList.add('hidden');
+        }
+      });
     });
   </script>
 </body>

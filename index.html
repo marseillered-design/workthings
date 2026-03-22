@@ -19,6 +19,7 @@
       --danger-color: #eb5757;
       --success-color: #27ae60;
       --shadow: 0 1px 3px rgba(0,0,0,0.1);
+      --shadow-lg: 0 4px 24px rgba(0,0,0,0.15);
     }
     
     body.dark-mode {
@@ -33,14 +34,14 @@
     }
     
     body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
       background: var(--bg-primary);
       color: var(--text-primary);
       min-height: 100vh;
       line-height: 1.6;
     }
     
-    /* Auth Container */
+    /* Auth */
     .auth-wrapper {
       min-height: 100vh;
       display: flex;
@@ -56,758 +57,440 @@
       padding: 40px;
     }
     
-    .auth-logo {
-      text-align: center;
-      margin-bottom: 40px;
-    }
-    
-    .auth-logo-icon {
-      font-size: 48px;
-      margin-bottom: 16px;
-    }
-    
-    .auth-logo h1 {
-      font-size: 24px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      color: var(--text-primary);
-    }
-    
-    .auth-logo p {
-      color: var(--text-secondary);
-      font-size: 14px;
-    }
+    .auth-logo { text-align: center; margin-bottom: 40px; }
+    .auth-logo-icon { font-size: 48px; margin-bottom: 16px; }
+    .auth-logo h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+    .auth-logo p { color: var(--text-secondary); font-size: 14px; }
     
     .auth-tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      background: var(--bg-secondary);
-      padding: 4px;
-      border-radius: 8px;
+      display: flex; gap: 8px; margin-bottom: 24px;
+      background: var(--bg-secondary); padding: 4px; border-radius: 8px;
     }
     
     .auth-tab {
-      flex: 1;
-      padding: 10px 16px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: all 0.2s;
+      flex: 1; padding: 10px 16px; border: none; border-radius: 6px;
+      background: transparent; color: var(--text-secondary);
+      cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;
     }
     
     .auth-tab.active {
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      box-shadow: var(--shadow);
+      background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow);
     }
     
     .auth-input {
-      width: 100%;
-      padding: 12px 14px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: 14px;
-      margin-bottom: 12px;
-      transition: border-color 0.2s;
+      width: 100%; padding: 12px 14px; border: 1px solid var(--border-color);
+      border-radius: 6px; background: var(--bg-primary); color: var(--text-primary);
+      font-size: 14px; margin-bottom: 12px; transition: border-color 0.2s;
     }
     
-    .auth-input:focus {
-      outline: none;
-      border-color: var(--accent-color);
-    }
-    
-    .auth-input::placeholder {
-      color: var(--text-secondary);
-    }
+    .auth-input:focus { outline: none; border-color: var(--accent-color); }
+    .auth-input::placeholder { color: var(--text-secondary); }
     
     .auth-btn {
-      width: 100%;
-      padding: 12px;
-      border: none;
-      border-radius: 6px;
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      font-size: 14px;
-      font-weight: 500;
-      cursor: pointer;
-      margin-top: 8px;
-      transition: opacity 0.2s;
+      width: 100%; padding: 12px; border: none; border-radius: 6px;
+      background: var(--text-primary); color: var(--bg-primary);
+      font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 8px; transition: opacity 0.2s;
     }
     
-    .auth-btn:hover {
-      opacity: 0.9;
-    }
-    
-    .auth-error {
-      color: var(--danger-color);
-      text-align: center;
-      margin-top: 12px;
-      font-size: 13px;
-    }
-    
-    .auth-help {
-      color: var(--text-secondary);
-      text-align: center;
-      margin-top: 20px;
-      font-size: 13px;
-    }
-    
+    .auth-btn:hover { opacity: 0.9; }
+    .auth-error { color: var(--danger-color); text-align: center; margin-top: 12px; font-size: 13px; }
+    .auth-help { color: var(--text-secondary); text-align: center; margin-top: 20px; font-size: 13px; }
     .hidden { display: none !important; }
     
     /* App Layout */
-    .app-layout {
-      display: flex;
-      min-height: 100vh;
-    }
+    .app-layout { display: flex; min-height: 100vh; }
     
     /* Sidebar */
     .sidebar {
-      width: 240px;
-      background: var(--bg-sidebar);
-      border-right: 1px solid var(--border-color);
-      padding: 12px 8px;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.3s;
-      position: fixed;
-      height: 100vh;
-      overflow-y: auto;
-      z-index: 100;
+      width: 240px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color);
+      padding: 12px 8px; display: flex; flex-direction: column;
+      position: fixed; height: 100vh; overflow-y: auto; z-index: 100; transition: transform 0.3s;
     }
     
     .sidebar-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      margin-bottom: 16px;
+      display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 16px;
     }
     
-    .sidebar-logo {
-      font-size: 20px;
-    }
-    
-    .sidebar-title {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-primary);
-    }
-    
-    .sidebar-section {
-      margin-bottom: 20px;
-    }
+    .sidebar-logo { font-size: 20px; }
+    .sidebar-title { font-weight: 600; font-size: 14px; color: var(--text-primary); }
+    .sidebar-section { margin-bottom: 20px; }
     
     .sidebar-section-title {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-      padding: 8px 12px;
-      margin-bottom: 4px;
+      font-size: 11px; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; margin-bottom: 4px;
     }
     
     .sidebar-item {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--text-primary);
-      transition: background 0.15s;
-      text-decoration: none;
+      display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--text-primary);
+      transition: background 0.15s; text-decoration: none;
     }
     
-    .sidebar-item:hover {
-      background: var(--bg-hover);
-    }
+    .sidebar-item:hover { background: var(--bg-hover); }
+    .sidebar-item-icon { font-size: 16px; width: 20px; text-align: center; }
+    .sidebar-item-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     
-    .sidebar-item.active {
-      background: var(--bg-hover);
-    }
-    
-    .sidebar-item-icon {
-      font-size: 16px;
-      width: 20px;
-      text-align: center;
-    }
-    
-    .sidebar-item-title {
-      flex: 1;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .sidebar-actions {
-      display: flex;
-      gap: 4px;
-      opacity: 0;
-      transition: opacity 0.15s;
-    }
-    
-    .sidebar-item:hover .sidebar-actions {
-      opacity: 1;
-    }
+    .sidebar-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
+    .sidebar-item:hover .sidebar-actions { opacity: 1; }
     
     .sidebar-action-btn {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      background: transparent;
-      color: var(--text-secondary);
-      cursor: pointer;
-      font-size: 12px;
+      padding: 4px 8px; border: none; border-radius: 4px; background: transparent;
+      color: var(--text-secondary); cursor: pointer; font-size: 12px;
     }
     
-    .sidebar-action-btn:hover {
-      background: var(--bg-hover);
-      color: var(--text-primary);
-    }
+    .sidebar-action-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
     
     .sidebar-footer {
-      margin-top: auto;
-      padding-top: 12px;
-      border-top: 1px solid var(--border-color);
+      margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-color);
     }
     
     .sidebar-user {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 8px 12px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 14px;
-      color: var(--text-primary);
+      display: flex; align-items: center; gap: 10px; padding: 8px 12px;
+      border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--text-primary);
       transition: background 0.15s;
     }
     
-    .sidebar-user:hover {
-      background: var(--bg-hover);
-    }
+    .sidebar-user:hover { background: var(--bg-hover); }
     
     .sidebar-user-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--accent-color);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      font-size: 12px;
-      font-weight: 600;
+      width: 28px; height: 28px; border-radius: 50%; background: var(--accent-color);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: 600;
     }
     
     /* Main Content */
-    .main-content {
-      flex: 1;
-      margin-left: 240px;
-      min-height: 100vh;
-    }
+    .main-content { flex: 1; margin-left: 240px; min-height: 100vh; }
     
     .main-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 12px 24px;
-      border-bottom: 1px solid var(--border-color);
-      position: sticky;
-      top: 0;
-      background: var(--bg-primary);
-      z-index: 50;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 12px 24px; border-bottom: 1px solid var(--border-color);
+      position: sticky; top: 0; background: var(--bg-primary); z-index: 50;
     }
     
-    .main-header-left {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
+    .main-header-left { display: flex; align-items: center; gap: 12px; }
     
     .menu-toggle {
-      display: none;
-      padding: 8px;
-      border: none;
-      border-radius: 6px;
-      background: transparent;
-      cursor: pointer;
-      color: var(--text-secondary);
+      display: none; padding: 8px; border: none; border-radius: 6px;
+      background: transparent; cursor: pointer; color: var(--text-secondary);
     }
     
-    .menu-toggle:hover {
-      background: var(--bg-hover);
-    }
+    .menu-toggle:hover { background: var(--bg-hover); }
     
     .breadcrumb {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 14px;
-      color: var(--text-secondary);
+      display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-secondary);
     }
     
-    .breadcrumb-item {
-      color: var(--text-primary);
-      cursor: pointer;
-    }
+    .breadcrumb-item { color: var(--text-primary); cursor: pointer; }
+    .breadcrumb-item:hover { text-decoration: underline; }
+    .breadcrumb-separator { color: var(--text-secondary); }
     
-    .breadcrumb-item:hover {
-      text-decoration: underline;
-    }
-    
-    .breadcrumb-separator {
-      color: var(--text-secondary);
-    }
-    
-    .main-header-right {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
+    .main-header-right { display: flex; align-items: center; gap: 8px; }
     
     .header-btn {
-      padding: 8px 12px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: 13px;
-      cursor: pointer;
-      transition: all 0.15s;
-      display: flex;
-      align-items: center;
-      gap: 6px;
+      padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px;
+      background: var(--bg-primary); color: var(--text-primary); font-size: 13px;
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px;
     }
     
-    .header-btn:hover {
-      background: var(--bg-hover);
-    }
+    .header-btn:hover { background: var(--bg-hover); }
+    .header-btn-primary { background: var(--text-primary); color: var(--bg-primary); border: none; }
+    .header-btn-primary:hover { opacity: 0.9; }
     
-    .header-btn-primary {
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      border: none;
-    }
-    
-    .header-btn-primary:hover {
-      opacity: 0.9;
-    }
-    
-    /* Page Content */
+    /* Page Container */
     .page-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 48px 96px;
+      max-width: 900px; margin: 0 auto; padding: 48px 96px;
     }
     
     .page-title {
-      font-size: 40px;
-      font-weight: 700;
-      border: none;
-      background: transparent;
-      color: var(--text-primary);
-      width: 100%;
-      margin-bottom: 24px;
-      line-height: 1.2;
+      font-size: 40px; font-weight: 700; border: none; background: transparent;
+      color: var(--text-primary); width: 100%; margin-bottom: 24px; line-height: 1.2;
     }
     
-    .page-title:focus {
-      outline: none;
+    .page-title:focus { outline: none; }
+    .page-title::placeholder { color: var(--text-secondary); }
+    
+    /* Rich Text Editor */
+    .editor-wrapper { position: relative; }
+    
+    .editor-toolbar {
+      display: flex; align-items: center; gap: 4px; padding: 8px;
+      background: var(--bg-secondary); border-radius: 8px;
+      margin-bottom: 16px; flex-wrap: wrap; position: sticky; top: 60px; z-index: 40;
     }
     
-    .page-title::placeholder {
-      color: var(--text-secondary);
+    .toolbar-btn {
+      padding: 6px 10px; border: none; border-radius: 4px;
+      background: transparent; color: var(--text-secondary);
+      cursor: pointer; font-size: 14px; transition: all 0.15s;
     }
     
-    .page-content {
+    .toolbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
+    .toolbar-btn.active { background: var(--bg-hover); color: var(--text-primary); }
+    .toolbar-divider { width: 1px; height: 24px; background: var(--border-color); margin: 0 4px; }
+    
+    .editor-content {
+      font-size: 16px; line-height: 1.7; color: var(--text-primary);
+      min-height: 500px; border: none; background: transparent;
+      width: 100%; resize: none; padding: 8px;
+    }
+    
+    .editor-content:focus { outline: none; }
+    .editor-content::placeholder { color: var(--text-secondary); }
+    
+    /* Slash Menu */
+    .slash-menu {
+      position: absolute; background: var(--bg-primary); border: 1px solid var(--border-color);
+      border-radius: 8px; box-shadow: var(--shadow-lg); padding: 8px;
+      width: 280px; max-height: 400px; overflow-y: auto; z-index: 1000;
+    }
+    
+    .slash-menu-section { margin-bottom: 12px; }
+    .slash-menu-section-title {
+      font-size: 11px; font-weight: 600; color: var(--text-secondary);
+      text-transform: uppercase; padding: 4px 8px; margin-bottom: 4px;
+    }
+    
+    .slash-menu-item {
+      display: flex; align-items: center; gap: 12px; padding: 8px;
+      border-radius: 6px; cursor: pointer; transition: background 0.15s;
+    }
+    
+    .slash-menu-item:hover { background: var(--bg-hover); }
+    .slash-menu-item-icon {
+      width: 32px; height: 32px; background: var(--bg-secondary);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
       font-size: 16px;
-      line-height: 1.7;
-      color: var(--text-primary);
-      min-height: 400px;
-      border: none;
-      background: transparent;
-      width: 100%;
-      resize: none;
     }
     
-    .page-content:focus {
-      outline: none;
+    .slash-menu-item-text { flex: 1; }
+    .slash-menu-item-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .slash-menu-item-desc { font-size: 12px; color: var(--text-secondary); }
+    
+    /* Floating Toolbar */
+    .floating-toolbar {
+      position: fixed; background: var(--bg-primary); border: 1px solid var(--border-color);
+      border-radius: 8px; box-shadow: var(--shadow-lg); padding: 6px;
+      display: flex; align-items: center; gap: 4px; z-index: 1000;
     }
     
-    .page-content::placeholder {
-      color: var(--text-secondary);
+    /* Search Modal */
+    .search-modal {
+      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+      width: 600px; max-width: 90%; background: var(--bg-primary);
+      border: 1px solid var(--border-color); border-radius: 12px;
+      box-shadow: var(--shadow-lg); z-index: 1000;
     }
     
-    /* Empty State */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      text-align: center;
-      padding: 48px;
+    .search-input {
+      width: 100%; padding: 16px 20px; border: none; border-bottom: 1px solid var(--border-color);
+      background: transparent; color: var(--text-primary); font-size: 16px;
     }
     
-    .empty-state-icon {
-      font-size: 64px;
-      margin-bottom: 24px;
-      opacity: 0.5;
+    .search-input:focus { outline: none; }
+    
+    .search-results { max-height: 400px; overflow-y: auto; padding: 8px; }
+    
+    .search-result-item {
+      padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s;
     }
     
-    .empty-state-title {
-      font-size: 20px;
-      font-weight: 600;
-      color: var(--text-primary);
-      margin-bottom: 8px;
+    .search-result-item:hover { background: var(--bg-hover); }
+    .search-result-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
+    .search-result-preview { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
+    
+    /* History Modal */
+    .history-list { max-height: 500px; overflow-y: auto; }
+    
+    .history-item {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s;
+      border-bottom: 1px solid var(--border-color);
     }
     
-    .empty-state-text {
-      color: var(--text-secondary);
-      font-size: 14px;
-      margin-bottom: 24px;
+    .history-item:hover { background: var(--bg-hover); }
+    .history-item-info { flex: 1; }
+    .history-item-date { font-size: 13px; color: var(--text-primary); font-weight: 500; }
+    .history-item-preview { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    .history-item-actions { display: flex; gap: 8px; }
+    
+    /* Comments */
+    .comments-section {
+      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-color);
     }
     
-    /* Modal */
-    .modal-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, 0.5);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-      backdrop-filter: blur(2px);
+    .comments-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
+    
+    .comment-input {
+      width: 100%; padding: 12px; border: 1px solid var(--border-color);
+      border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);
+      font-size: 14px; resize: vertical; min-height: 80px; margin-bottom: 12px;
     }
     
-    .modal {
-      background: var(--bg-primary);
-      border-radius: 12px;
-      padding: 24px;
-      width: 90%;
-      max-width: 420px;
-      border: 1px solid var(--border-color);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.15);
+    .comment-input:focus { outline: none; border-color: var(--accent-color); }
+    
+    .comment-list { margin-top: 24px; }
+    
+    .comment-item {
+      display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-color);
     }
     
-    .modal-title {
-      font-size: 18px;
-      font-weight: 600;
-      margin-bottom: 20px;
-      color: var(--text-primary);
+    .comment-avatar {
+      width: 32px; height: 32px; border-radius: 50%; background: var(--accent-color);
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 12px; font-weight: 600; flex-shrink: 0;
     }
     
-    .modal-actions {
-      display: flex;
-      gap: 8px;
-      margin-top: 20px;
-      justify-content: flex-end;
+    .comment-content { flex: 1; }
+    .comment-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+    .comment-author { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+    .comment-date { font-size: 12px; color: var(--text-secondary); }
+    .comment-text { font-size: 14px; color: var(--text-primary); line-height: 1.5; }
+    
+    /* Image Modal */
+    .image-modal {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.9); display: flex; align-items: center;
+      justify-content: center; z-index: 2000;
     }
     
-    .modal-btn {
-      padding: 10px 16px;
-      border: 1px solid var(--border-color);
-      border-radius: 6px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: 14px;
-      cursor: pointer;
-      transition: all 0.15s;
+    .image-modal img { max-width: 90%; max-height: 90%; border-radius: 8px; }
+    .image-modal-close {
+      position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
+      border-radius: 50%; background: rgba(255,255,255,0.2); border: none;
+      color: white; font-size: 24px; cursor: pointer;
     }
     
-    .modal-btn:hover {
-      background: var(--bg-hover);
-    }
-    
-    .modal-btn-primary {
-      background: var(--text-primary);
-      color: var(--bg-primary);
-      border: none;
-    }
-    
-    /* Toast */
-    .toast {
-      position: fixed;
-      bottom: 24px;
-      right: 24px;
-      background: var(--bg-primary);
-      border: 1px solid var(--border-color);
-      border-radius: 8px;
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      z-index: 1001;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      font-size: 14px;
-    }
-    
-    .toast.success {
-      border-left: 3px solid var(--success-color);
-    }
-    
-    .toast.error {
-      border-left: 3px solid var(--danger-color);
-    }
-    
-    /* Image Upload */
-    .image-upload-area {
-      margin-top: 24px;
-      padding: 24px;
-      border: 2px dashed var(--border-color);
-      border-radius: 8px;
-      text-align: center;
-      cursor: pointer;
-      color: var(--text-secondary);
-      transition: all 0.15s;
-    }
-    
-    .image-upload-area:hover {
-      border-color: var(--accent-color);
-      color: var(--accent-color);
-    }
-    
+    /* Images Grid */
     .images-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px;
-      margin-top: 24px;
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+      gap: 12px; margin-top: 24px;
     }
     
     .image-item {
-      position: relative;
-      border-radius: 8px;
-      overflow: hidden;
-      aspect-ratio: 1;
+      position: relative; border-radius: 8px; overflow: hidden;
+      aspect-ratio: 1; cursor: pointer;
     }
     
-    .image-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
+    .image-item img { width: 100%; height: 100%; object-fit: cover; }
     
     .image-item button {
-      position: absolute;
-      top: 6px;
-      right: 6px;
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      border: none;
-      background: rgba(0,0,0,0.7);
-      color: white;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
+      border-radius: 50%; border: none; background: rgba(0,0,0,0.7);
+      color: white; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
     }
+    
+    /* Image Upload Area */
+    .image-upload-area {
+      margin-top: 24px; padding: 32px; border: 2px dashed var(--border-color);
+      border-radius: 8px; text-align: center; cursor: pointer;
+      color: var(--text-secondary); transition: all 0.15s;
+    }
+    
+    .image-upload-area:hover { border-color: var(--accent-color); color: var(--accent-color); }
+    
+    /* Templates Modal */
+    .templates-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
+    }
+    
+    .template-card {
+      padding: 16px; border: 1px solid var(--border-color); border-radius: 8px;
+      cursor: pointer; transition: all 0.15s;
+    }
+    
+    .template-card:hover { border-color: var(--accent-color); background: var(--bg-hover); }
+    .template-card-icon { font-size: 24px; margin-bottom: 8px; }
+    .template-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+    .template-card-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+    
+    /* Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.5); display: flex; align-items: center;
+      justify-content: center; z-index: 1000; backdrop-filter: blur(2px);
+    }
+    
+    .modal {
+      background: var(--bg-primary); border-radius: 12px; padding: 24px;
+      width: 90%; max-width: 500px; border: 1px solid var(--border-color);
+      box-shadow: var(--shadow-lg);
+    }
+    
+    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
+    .modal-actions { display: flex; gap: 8px; margin-top: 20px; justify-content: flex-end; }
+    
+    .modal-btn {
+      padding: 10px 16px; border: 1px solid var(--border-color); border-radius: 6px;
+      background: var(--bg-primary); color: var(--text-primary);
+      font-size: 14px; cursor: pointer; transition: all 0.15s;
+    }
+    
+    .modal-btn:hover { background: var(--bg-hover); }
+    .modal-btn-primary { background: var(--text-primary); color: var(--bg-primary); border: none; }
+    
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px; background: var(--bg-primary);
+      border: 1px solid var(--border-color); border-radius: 8px;
+      padding: 12px 16px; display: flex; align-items: center; gap: 10px;
+      z-index: 1001; box-shadow: var(--shadow-lg); font-size: 14px;
+    }
+    
+    .toast.success { border-left: 3px solid var(--success-color); }
+    .toast.error { border-left: 3px solid var(--danger-color); }
     
     /* Loading */
     .loading-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh;
     }
     
     .spinner {
-      width: 32px;
-      height: 32px;
-      border: 2px solid var(--border-color);
-      border-top-color: var(--accent-color);
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-      margin-bottom: 16px;
+      width: 32px; height: 32px; border: 2px solid var(--border-color);
+      border-top-color: var(--accent-color); border-radius: 50%;
+      animation: spin 0.8s linear infinite; margin-bottom: 16px;
     }
     
-    @keyframes spin {
-      to { transform: rotate(360deg); }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    
+    /* Empty State */
+    .empty-state {
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; min-height: 60vh; text-align: center; padding: 48px;
     }
     
-    /* Mobile Responsive */
+    .empty-state-icon { font-size: 64px; margin-bottom: 24px; opacity: 0.5; }
+    .empty-state-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
+    .empty-state-text { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
+    
+    /* Mobile */
     @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      
-      .sidebar.open {
-        transform: translateX(0);
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
-      
-      .menu-toggle {
-        display: block;
-      }
-      
-      .page-container {
-        padding: 32px 24px;
-      }
-      
-      .page-title {
-        font-size: 28px;
-      }
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .main-content { margin-left: 0; }
+      .menu-toggle { display: block; }
+      .page-container { padding: 32px 24px; }
+      .page-title { font-size: 28px; }
+      .editor-toolbar { position: relative; top: 0; }
     }
     
     /* Scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-    }
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
     
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-color);
-      border-radius: 3px;
-    }
-    
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-secondary);
-    }
-
-    /* ── NEW FEATURES CSS ── */
-
-    /* Floating Toolbar */
-    .editor-toolbar { display:flex;align-items:center;gap:2px;padding:6px 10px;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:8px;box-shadow:0 4px 20px rgba(0,0,0,0.15);position:fixed;z-index:200;opacity:0;pointer-events:none;transition:opacity 0.15s;flex-wrap:wrap; }
-    .editor-toolbar.visible { opacity:1;pointer-events:all; }
-    .tb-btn { padding:5px 8px;border:none;background:transparent;color:var(--text-primary);cursor:pointer;border-radius:4px;font-size:13px;transition:all 0.1s;font-family:inherit; }
-    .tb-btn:hover { background:var(--bg-hover); }
-    .tb-sep { width:1px;height:16px;background:var(--border-color);margin:0 4px; }
-
-    /* Slash Menu */
-    .slash-menu { position:fixed;background:var(--bg-primary);border:1px solid var(--border-color);border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,0.15);z-index:300;width:260px;max-height:320px;overflow-y:auto;display:none; }
-    .slash-menu.visible { display:block; }
-    .slash-section { font-size:11px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;padding:10px 14px 4px; }
-    .slash-item { display:flex;align-items:center;gap:10px;padding:8px 14px;cursor:pointer;transition:background 0.1s; }
-    .slash-item:hover,.slash-item.sel { background:var(--bg-hover); }
-    .slash-icon { width:30px;height:30px;background:var(--bg-secondary);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0; }
-    .slash-info-title { font-size:13px;font-weight:500; }
-    .slash-info-desc { font-size:11px;color:var(--text-secondary); }
-
-    /* Rich text content */
-    .rich-editor { min-height:400px;font-size:16px;line-height:1.75;color:var(--text-primary);outline:none;width:100%; }
-    .rich-editor:empty::before { content:attr(data-placeholder);color:var(--text-secondary);pointer-events:none; }
-    .rich-editor h1 { font-size:28px;font-weight:700;margin:20px 0 8px; }
-    .rich-editor h2 { font-size:22px;font-weight:600;margin:16px 0 6px; }
-    .rich-editor h3 { font-size:18px;font-weight:600;margin:12px 0 4px; }
-    .rich-editor p { margin:4px 0;min-height:1.5em; }
-    .rich-editor ul,.rich-editor ol { padding-left:24px;margin:4px 0; }
-    .rich-editor li { margin:2px 0; }
-    .rich-editor blockquote { border-left:3px solid var(--accent-color);padding:8px 16px;margin:8px 0;color:var(--text-secondary);background:var(--bg-secondary);border-radius:0 6px 6px 0; }
-    .rich-editor pre { background:var(--bg-secondary);padding:16px;border-radius:8px;font-family:monospace;font-size:14px;overflow-x:auto;margin:8px 0;border:1px solid var(--border-color); }
-    .rich-editor code { background:var(--bg-secondary);padding:2px 5px;border-radius:3px;font-family:monospace;font-size:13px;color:#e03e3e; }
-    .rich-editor hr { border:none;border-top:1px solid var(--border-color);margin:16px 0; }
-    .rich-editor a { color:var(--accent-color);text-decoration:underline; }
-    .rich-editor mark { background:#fef3b4;border-radius:2px;padding:0 2px; }
-    .rich-editor .callout { display:flex;gap:12px;padding:14px 16px;background:var(--bg-secondary);border-radius:8px;margin:8px 0;border:1px solid var(--border-color); }
-    .rich-editor .todo-item { display:flex;align-items:flex-start;gap:8px;margin:4px 0; }
-    .rich-editor .todo-checkbox { width:16px;height:16px;margin-top:4px;cursor:pointer;accent-color:var(--accent-color);flex-shrink:0; }
-    .rich-editor .todo-text.done { text-decoration:line-through;color:var(--text-secondary); }
-    .rich-editor table { width:100%;border-collapse:collapse;margin:8px 0;font-size:15px; }
-    .rich-editor th { background:var(--bg-secondary);padding:9px 12px;text-align:left;font-weight:600;border:1px solid var(--border-color); }
-    .rich-editor td { padding:9px 12px;border:1px solid var(--border-color);vertical-align:top; }
-    .editor-img-wrap { position:relative;display:inline-block;margin:8px 0;max-width:100%; }
-    .editor-img-wrap img { max-width:100%;border-radius:6px;cursor:zoom-in;display:block; }
-    .editor-img-wrap .del-img { position:absolute;top:6px;right:6px;background:rgba(0,0,0,0.65);color:white;border:none;border-radius:4px;padding:3px 7px;font-size:11px;cursor:pointer;opacity:0;transition:opacity 0.15s; }
-    .editor-img-wrap:hover .del-img { opacity:1; }
-
-    /* Page meta row */
-    .page-meta-row { display:flex;align-items:center;gap:10px;margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--border-color);font-size:12px;color:var(--text-secondary);flex-wrap:wrap; }
-    .meta-badge { padding:2px 8px;background:var(--bg-secondary);border-radius:4px;font-size:11px; }
-    .save-dot { width:6px;height:6px;border-radius:50%;background:var(--success-color);display:inline-block;margin-right:4px;vertical-align:middle; }
-    .save-dot.saving { background:#f59e0b;animation:pulse 1s infinite; }
-    .save-dot.unsaved { background:var(--danger-color); }
-    @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.4} }
-
-    /* Search modal */
-    .search-modal { position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:flex;align-items:flex-start;justify-content:center;padding-top:14vh;backdrop-filter:blur(2px); }
-    .search-box { background:var(--bg-primary);border-radius:12px;width:90%;max-width:560px;border:1px solid var(--border-color);box-shadow:0 8px 30px rgba(0,0,0,0.2);overflow:hidden; }
-    .search-input-row { display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--border-color); }
-    .search-text { flex:1;border:none;background:transparent;color:var(--text-primary);font-size:16px;outline:none;font-family:inherit; }
-    .search-text::placeholder { color:var(--text-secondary); }
-    .search-results { max-height:360px;overflow-y:auto; }
-    .search-result { display:flex;align-items:flex-start;gap:10px;padding:12px 20px;cursor:pointer;transition:background 0.1s; }
-    .search-result:hover { background:var(--bg-hover); }
-    .sr-title { font-size:14px;font-weight:500;margin-bottom:2px; }
-    .sr-preview { font-size:12px;color:var(--text-secondary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:440px; }
-    .sr-space { font-size:11px;color:var(--accent-color);margin-top:2px; }
-    .search-empty { padding:32px 20px;text-align:center;color:var(--text-secondary);font-size:14px; }
-    mark.hl { background:#fef3b4;padding:0 1px;border-radius:2px; }
-
-    /* History panel */
-    .history-panel { position:fixed;right:0;top:0;height:100vh;width:300px;background:var(--bg-primary);border-left:1px solid var(--border-color);z-index:150;transform:translateX(100%);transition:transform 0.3s;overflow-y:auto; }
-    .history-panel.open { transform:translateX(0); }
-    .history-hdr { display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-color);font-size:15px;font-weight:600; }
-    .history-close { background:none;border:none;cursor:pointer;color:var(--text-secondary);font-size:16px; }
-    .history-item { padding:12px 16px;cursor:pointer;border-bottom:1px solid var(--border-color);transition:background 0.15s; }
-    .history-item:hover { background:var(--bg-hover); }
-    .h-time { font-size:13px;font-weight:500; }
-    .h-user { font-size:12px;color:var(--text-secondary);margin-top:2px; }
-    .h-preview { font-size:12px;color:var(--text-secondary);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis; }
-
-    /* Comments */
-    .comments-section { margin-top:48px;padding-top:32px;border-top:1px solid var(--border-color); }
-    .comments-title { font-size:13px;font-weight:600;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:20px; }
-    .comment-row { display:flex;gap:10px;margin-bottom:20px; }
-    .c-avatar { width:26px;height:26px;border-radius:50%;background:var(--accent-color);display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600;flex-shrink:0;margin-top:2px; }
-    .c-input { flex:1;padding:9px 13px;border:1px solid var(--border-color);border-radius:8px;background:var(--bg-primary);color:var(--text-primary);font-size:14px;font-family:inherit;resize:none;min-height:38px;transition:border-color 0.2s; }
-    .c-input:focus { outline:none;border-color:var(--accent-color); }
-    .c-submit { padding:8px 14px;border:none;border-radius:6px;background:var(--accent-color);color:white;font-size:13px;cursor:pointer;white-space:nowrap;align-self:flex-start;margin-top:2px; }
-    .c-submit:hover { opacity:0.85; }
-    .comment { display:flex;gap:10px;margin-bottom:18px; }
-    .c-body { flex:1; }
-    .c-header { display:flex;align-items:center;gap:8px;margin-bottom:4px; }
-    .c-author { font-size:13px;font-weight:600; }
-    .c-time { font-size:11px;color:var(--text-secondary); }
-    .c-delete { font-size:11px;color:var(--text-secondary);background:none;border:none;cursor:pointer;margin-left:auto;opacity:0;transition:opacity 0.15s; }
-    .comment:hover .c-delete { opacity:1; }
-    .c-text { font-size:14px;line-height:1.6;white-space:pre-wrap; }
-
-    /* Templates */
-    .tmpl-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;margin-top:16px; }
-    .tmpl-card { padding:18px;border:1px solid var(--border-color);border-radius:10px;cursor:pointer;transition:all 0.2s; }
-    .tmpl-card:hover { border-color:var(--accent-color);box-shadow:0 2px 12px rgba(0,0,0,0.1);transform:translateY(-2px); }
-    .tmpl-icon { font-size:26px;margin-bottom:8px; }
-    .tmpl-name { font-size:14px;font-weight:600;margin-bottom:3px; }
-    .tmpl-desc { font-size:12px;color:var(--text-secondary); }
-
-    /* Lightbox */
-    .lightbox { position:fixed;inset:0;background:rgba(0,0,0,0.92);z-index:3000;display:flex;align-items:center;justify-content:center;cursor:zoom-out; }
-    .lightbox img { max-width:92vw;max-height:92vh;border-radius:6px;object-fit:contain; }
-    .lb-close { position:absolute;top:18px;right:22px;background:rgba(255,255,255,0.12);border:none;color:white;font-size:20px;cursor:pointer;width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center; }
-
-    /* Sidebar search */
-    .sb-search { padding:0 8px 10px; }
-    .sb-search-wrap { position:relative; }
-    .sb-search-wrap::before { content:"🔍";position:absolute;left:10px;top:50%;transform:translateY(-50%);font-size:11px;pointer-events:none; }
-    .sb-search-input { width:100%;padding:8px 10px 8px 28px;border:1px solid var(--border-color);border-radius:6px;background:var(--bg-primary);color:var(--text-primary);font-size:13px; }
-    .sb-search-input:focus { outline:none;border-color:var(--accent-color); }
-    .sb-search-input::placeholder { color:var(--text-secondary); }
-
-    /* Image drop zone */
-    .drop-zone { margin:16px 0;padding:18px;border:2px dashed var(--border-color);border-radius:8px;text-align:center;cursor:pointer;color:var(--text-secondary);font-size:13px;transition:all 0.15s; }
-    .drop-zone:hover,.drop-zone.over { border-color:var(--accent-color);color:var(--accent-color);background:rgba(46,170,220,0.04); }
-
+    /* Content Styles */
+    .content-h1 { font-size: 32px; font-weight: 700; margin: 24px 0 12px; }
+    .content-h2 { font-size: 24px; font-weight: 600; margin: 20px 0 10px; }
+    .content-h3 { font-size: 20px; font-weight: 600; margin: 16px 0 8px; }
+    .content-quote { border-left: 3px solid var(--accent-color); padding-left: 16px; margin: 16px 0; color: var(--text-secondary); }
+    .content-callout { background: var(--bg-secondary); padding: 16px; border-radius: 8px; margin: 16px 0; }
+    .content-code { background: var(--bg-secondary); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; overflow-x: auto; }
+    .content-list { margin: 12px 0 12px 24px; }
+    .content-checkbox { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
+    .content-divider { border: none; border-top: 1px solid var(--border-color); margin: 24px 0; }
   </style>
 </head>
 <body>
@@ -819,21 +502,16 @@
         <h1>WorkDocs</h1>
         <p>Your personal knowledge base</p>
       </div>
-
       <div class="auth-tabs">
         <button class="auth-tab active" onclick="showAuthTab('signin')">Sign In</button>
         <button class="auth-tab" onclick="showAuthTab('register')">Register</button>
       </div>
-
-      <!-- Sign In Form -->
       <div id="signin-form">
-        <input class="auth-input" type="text" id="signin-username" placeholder="Email or username" autocomplete="username">
+        <input class="auth-input" type="text" id="signin-username" placeholder="Username" autocomplete="username">
         <input class="auth-input" type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
         <button class="auth-btn" onclick="signIn()">Continue</button>
         <p class="auth-error" id="signin-error"></p>
       </div>
-
-      <!-- Register Form -->
       <div id="register-form" class="hidden">
         <input class="auth-input" type="text" id="reg-username" placeholder="Username" autocomplete="username">
         <input class="auth-input" type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
@@ -841,7 +519,6 @@
         <button class="auth-btn" onclick="register()">Create account</button>
         <p class="auth-error" id="reg-error"></p>
       </div>
-
       <p class="auth-help">New to WorkDocs? Get an invite code from your team admin.</p>
     </div>
   </div>
@@ -854,9 +531,7 @@
         <span class="sidebar-logo">📋</span>
         <span class="sidebar-title">WorkDocs</span>
       </div>
-
-      <div class="sb-search"><div class="sb-search-wrap"><input class="sb-search-input" placeholder="Search..." onfocus="openSearch()"></div></div>
-    <div class="sidebar-section">
+      <div class="sidebar-section">
         <div class="sidebar-section-title">Spaces</div>
         <div id="sidebar-spaces"></div>
         <div class="sidebar-item" onclick="openSpaceModal()">
@@ -864,7 +539,6 @@
           <span class="sidebar-item-title">New space</span>
         </div>
       </div>
-
       <div class="sidebar-footer">
         <div class="sidebar-user" onclick="signOut()">
           <div class="sidebar-user-avatar" id="user-avatar"></div>
@@ -885,22 +559,18 @@
         </div>
         <div class="main-header-right">
           <button class="header-btn" onclick="openSearch()" title="Search (Cmd+K)">🔍</button>
-          <button class="header-btn" onclick="toggleHistory()" id="history-btn" title="History" style="display:none">🕐 History</button>
+          <button class="header-btn" onclick="openHistory()" title="History">🕐</button>
           <button class="header-btn" onclick="toggleTheme()">🌙</button>
-          <button class="header-btn header-btn-primary" onclick="saveCurrentPage()">
-            💾 Save
-          </button>
+          <button class="header-btn header-btn-primary" onclick="saveCurrentPage()">💾 Save</button>
         </div>
       </header>
 
       <div id="main-container">
-        <!-- Loading State -->
         <div class="loading-state" id="loading-state">
           <div class="spinner"></div>
           <p style="color: var(--text-secondary);">Loading...</p>
         </div>
 
-        <!-- Empty State -->
         <div class="empty-state hidden" id="empty-state">
           <div class="empty-state-icon">📁</div>
           <h2 class="empty-state-title">No spaces yet</h2>
@@ -908,60 +578,179 @@
           <button class="header-btn header-btn-primary" onclick="openSpaceModal()">+ New space</button>
         </div>
 
-        <!-- Spaces View -->
         <div class="page-container hidden" id="spaces-view">
           <input class="page-title" type="text" placeholder="📚 My Knowledge Base" readonly>
-          <div class="page-content" style="min-height: auto;">
-            <p style="color: var(--text-secondary); margin-bottom: 24px;">
-              Select a space from the sidebar or create a new one to get started.
-            </p>
+          <div style="color: var(--text-secondary);">
+            <p style="margin-bottom: 24px;">Select a space from the sidebar or create a new one to get started.</p>
             <div id="spaces-overview"></div>
           </div>
         </div>
 
-        <!-- Page Editor -->
         <div class="page-container hidden" id="page-editor">
           <input class="page-title" type="text" id="editor-title" placeholder="Untitled">
-          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border-color);font-size:12px;color:var(--text-secondary);flex-wrap:wrap">
-            <span id="save-status"><span class="save-dot"></span>Saved</span>
-            <span id="page-updated" class="meta-badge"></span>
-            <span id="word-count" class="meta-badge">0 words</span>
-          </div>
-
-          <div class="rich-editor" id="rich-editor" contenteditable="true"
-            data-placeholder="Start writing... Press '/' for commands"
-            oninput="onEditorInput(event)" onkeydown="onEditorKeydown(event)"
-            onmouseup="checkSel()" onkeyup="checkSel()"></div>
-
-          <div class="drop-zone" id="drop-zone"
-            onclick="document.getElementById('image-input').click()"
-            ondragover="event.preventDefault();this.classList.add('over')"
-            ondragleave="this.classList.remove('over')"
-            ondrop="handleDrop(event)">
-            📎 Click to upload images · Paste (Ctrl+V) · Drag & drop
-            <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
-          </div>
-
-          <div class="comments-section">
-            <div class="comments-title">💬 Comments</div>
-            <div class="comment-row">
-              <div class="c-avatar" id="c-avatar"></div>
-              <textarea class="c-input" id="comment-input" placeholder="Add a comment... (Ctrl+Enter to post)" rows="1"
-                oninput="autoResize(this)"
-                onkeydown="if(event.key==='Enter'&&(event.ctrlKey||event.metaKey))submitComment()"></textarea>
-              <button class="c-submit" onclick="submitComment()">Post</button>
+          
+          <div class="editor-wrapper">
+            <div class="editor-toolbar">
+              <button class="toolbar-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
+              <button class="toolbar-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
+              <button class="toolbar-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
+              <button class="toolbar-btn" onclick="formatText('strikeThrough')" title="Strikethrough"><s>S</s></button>
+              <div class="toolbar-divider"></div>
+              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H1')" title="Heading 1">H1</button>
+              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H2')" title="Heading 2">H2</button>
+              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H3')" title="Heading 3">H3</button>
+              <div class="toolbar-divider"></div>
+              <button class="toolbar-btn" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
+              <button class="toolbar-btn" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
+              <button class="toolbar-btn" onclick="toggleCheckbox()" title="Checkbox">☑️</button>
+              <div class="toolbar-divider"></div>
+              <button class="toolbar-btn" onclick="formatText('formatBlock', 'blockquote')" title="Quote">❝</button>
+              <button class="toolbar-btn" onclick="insertCallout()" title="Callout">💡</button>
+              <button class="toolbar-btn" onclick="insertCode()" title="Code">⌨️</button>
+              <div class="toolbar-divider"></div>
+              <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
+              <button class="toolbar-btn" onclick="insertDivider()" title="Divider">—</button>
+              <button class="toolbar-btn" onclick="document.getElementById('image-input').click()" title="Image">🖼️</button>
             </div>
-            <div id="comments-list"></div>
+            
+            <textarea class="editor-content" id="editor-content" placeholder="Start writing... Type '/' for commands"></textarea>
+            
+            <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
+              📎 Click to upload images · Paste (Ctrl+V) · Drag & drop
+              <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
+            </div>
+            <div class="images-grid" id="images-grid"></div>
+          </div>
+
+          <!-- Comments Section -->
+          <div class="comments-section">
+            <h3 class="comments-title">💬 Comments</h3>
+            <textarea class="comment-input" id="comment-input" placeholder="Add a comment... (Ctrl+Enter to send)"></textarea>
+            <button class="header-btn header-btn-primary" style="width: auto;" onclick="addComment()">Post</button>
+            <div class="comment-list" id="comment-list"></div>
           </div>
         </div>
       </div>
     </main>
   </div>
 
+  <!-- Slash Menu -->
+  <div class="slash-menu hidden" id="slash-menu">
+    <div class="slash-menu-section">
+      <div class="slash-menu-section-title">Basic blocks</div>
+      <div class="slash-menu-item" onclick="insertBlock('h1')">
+        <div class="slash-menu-item-icon">H1</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Heading 1</div>
+          <div class="slash-menu-item-desc">Large title</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('h2')">
+        <div class="slash-menu-item-icon">H2</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Heading 2</div>
+          <div class="slash-menu-item-desc">Medium title</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('h3')">
+        <div class="slash-menu-item-icon">H3</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Heading 3</div>
+          <div class="slash-menu-item-desc">Small title</div>
+        </div>
+      </div>
+    </div>
+    <div class="slash-menu-section">
+      <div class="slash-menu-section-title">Lists</div>
+      <div class="slash-menu-item" onclick="insertBlock('bullet')">
+        <div class="slash-menu-item-icon">•</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Bullet list</div>
+          <div class="slash-menu-item-desc">Unordered</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('numbered')">
+        <div class="slash-menu-item-icon">1.</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Numbered list</div>
+          <div class="slash-menu-item-desc">Ordered</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('checkbox')">
+        <div class="slash-menu-item-icon">☑️</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">To-do</div>
+          <div class="slash-menu-item-desc">Checkbox task</div>
+        </div>
+      </div>
+    </div>
+    <div class="slash-menu-section">
+      <div class="slash-menu-section-title">Content</div>
+      <div class="slash-menu-item" onclick="insertBlock('quote')">
+        <div class="slash-menu-item-icon">❝</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Quote</div>
+          <div class="slash-menu-item-desc">Blockquote</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('callout')">
+        <div class="slash-menu-item-icon">💡</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Callout</div>
+          <div class="slash-menu-item-desc">Highlighted box</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('code')">
+        <div class="slash-menu-item-icon">⌨️</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Code</div>
+          <div class="slash-menu-item-desc">Code block</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="insertBlock('divider')">
+        <div class="slash-menu-item-icon">—</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Divider</div>
+          <div class="slash-menu-item-desc">Horizontal line</div>
+        </div>
+      </div>
+      <div class="slash-menu-item" onclick="document.getElementById('image-input').click()">
+        <div class="slash-menu-item-icon">🖼️</div>
+        <div class="slash-menu-item-text">
+          <div class="slash-menu-item-title">Image</div>
+          <div class="slash-menu-item-desc">Upload image</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Search Modal -->
+  <div class="search-modal hidden" id="search-modal">
+    <input class="search-input" type="text" id="search-input" placeholder="Search pages and content... (Esc to close)">
+    <div class="search-results" id="search-results"></div>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal-overlay hidden" id="history-modal">
+    <div class="modal" style="max-width: 600px;">
+      <h3 class="modal-title">🕐 Page History</h3>
+      <div class="history-list" id="history-list"></div>
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="closeHistory()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Image Modal -->
+  <div class="image-modal hidden" id="image-modal">
+    <button class="image-modal-close" onclick="closeImageModal()">✕</button>
+    <img id="image-modal-img" src="" alt="Zoomed image">
+  </div>
+
   <!-- Space Modal -->
   <div class="modal-overlay hidden" id="space-modal">
     <div class="modal">
-      <h3 class="modal-title">Create new space</h3>
+      <h3 class="modal-title">📁 New Space</h3>
       <input class="auth-input" type="text" id="space-name" placeholder="Space name">
       <input class="auth-input" type="text" id="space-icon" placeholder="Icon (emoji)" value="📁">
       <div class="modal-actions">
@@ -974,8 +763,11 @@
   <!-- Page Modal -->
   <div class="modal-overlay hidden" id="page-modal">
     <div class="modal">
-      <h3 class="modal-title">New page</h3>
+      <h3 class="modal-title">📄 New Page</h3>
       <input class="auth-input" type="text" id="page-name" placeholder="Page title">
+      <div class="modal-actions" style="margin-top: 16px;">
+        <button class="modal-btn" onclick="openTemplatesModal()">📋 Use template</button>
+      </div>
       <div class="modal-actions">
         <button class="modal-btn" onclick="closePageModal()">Cancel</button>
         <button class="modal-btn modal-btn-primary" onclick="createPage()">Create</button>
@@ -983,67 +775,36 @@
     </div>
   </div>
 
-
-  <!-- Floating Toolbar -->
-  <div class="editor-toolbar" id="editor-toolbar">
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('bold')"><b>B</b></button>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('italic')"><i>I</i></button>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('underline')"><u>U</u></button>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('strikeThrough')"><s>S</s></button>
-    <div class="tb-sep"></div>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('hiliteColor','#fef3b4')">🖊</button>
-    <button class="tb-btn" onmousedown="event.preventDefault();insertLink()">🔗</button>
-    <div class="tb-sep"></div>
-    <button class="tb-btn" onmousedown="event.preventDefault();document.execCommand('formatBlock',false,'H1')">H1</button>
-    <button class="tb-btn" onmousedown="event.preventDefault();document.execCommand('formatBlock',false,'H2')">H2</button>
-    <button class="tb-btn" onmousedown="event.preventDefault();document.execCommand('formatBlock',false,'H3')">H3</button>
-    <div class="tb-sep"></div>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('insertUnorderedList')">•</button>
-    <button class="tb-btn" onmousedown="event.preventDefault();fmt('insertOrderedList')">1.</button>
-  </div>
-
-  <!-- Slash Menu -->
-  <div class="slash-menu" id="slash-menu">
-    <div class="slash-section">Blocks</div>
-    <div class="slash-item" onclick="insBlock('h1')"><div class="slash-icon">H1</div><div><div class="slash-info-title">Heading 1</div><div class="slash-info-desc">Large title</div></div></div>
-    <div class="slash-item" onclick="insBlock('h2')"><div class="slash-icon">H2</div><div><div class="slash-info-title">Heading 2</div><div class="slash-info-desc">Medium title</div></div></div>
-    <div class="slash-item" onclick="insBlock('h3')"><div class="slash-icon">H3</div><div><div class="slash-info-title">Heading 3</div><div class="slash-info-desc">Small title</div></div></div>
-    <div class="slash-item" onclick="insBlock('ul')"><div class="slash-icon">•</div><div><div class="slash-info-title">Bullet list</div><div class="slash-info-desc">Unordered</div></div></div>
-    <div class="slash-item" onclick="insBlock('ol')"><div class="slash-icon">1.</div><div><div class="slash-info-title">Numbered list</div><div class="slash-info-desc">Ordered</div></div></div>
-    <div class="slash-item" onclick="insBlock('todo')"><div class="slash-icon">☑️</div><div><div class="slash-info-title">To-do</div><div class="slash-info-desc">Checkbox task</div></div></div>
-    <div class="slash-item" onclick="insBlock('quote')"><div class="slash-icon">❝</div><div><div class="slash-info-title">Quote</div><div class="slash-info-desc">Blockquote</div></div></div>
-    <div class="slash-item" onclick="insBlock('callout')"><div class="slash-icon">💡</div><div><div class="slash-info-title">Callout</div><div class="slash-info-desc">Highlighted box</div></div></div>
-    <div class="slash-item" onclick="insBlock('code')"><div class="slash-icon">⌨️</div><div><div class="slash-info-title">Code</div><div class="slash-info-desc">Code block</div></div></div>
-    <div class="slash-item" onclick="insBlock('table')"><div class="slash-icon">⊞</div><div><div class="slash-info-title">Table</div><div class="slash-info-desc">2×3 grid</div></div></div>
-    <div class="slash-item" onclick="insBlock('hr')"><div class="slash-icon">—</div><div><div class="slash-info-title">Divider</div><div class="slash-info-desc">Horizontal line</div></div></div>
-    <div class="slash-item" onclick="insBlock('img')"><div class="slash-icon">🖼️</div><div><div class="slash-info-title">Image</div><div class="slash-info-desc">Upload image</div></div></div>
-  </div>
-
-  <!-- Search Modal -->
-  <div class="search-modal hidden" id="search-modal" onclick="if(event.target===this)closeSearch()">
-    <div class="search-box">
-      <div class="search-input-row">
-        <span>🔍</span>
-        <input class="search-text" id="search-input" placeholder="Search all pages..." oninput="doSearch(this.value)" autocomplete="off">
-        <kbd style="font-size:11px;color:var(--text-secondary)">Esc</kbd>
+  <!-- Templates Modal -->
+  <div class="modal-overlay hidden" id="templates-modal">
+    <div class="modal" style="max-width: 600px;">
+      <h3 class="modal-title">📋 Choose a template</h3>
+      <div class="templates-grid">
+        <div class="template-card" onclick="useTemplate('meeting')">
+          <div class="template-card-icon">📅</div>
+          <div class="template-card-title">Meeting Notes</div>
+          <div class="template-card-desc">Agenda, decisions, action items</div>
+        </div>
+        <div class="template-card" onclick="useTemplate('techspec')">
+          <div class="template-card-icon">⚙️</div>
+          <div class="template-card-title">Tech Spec</div>
+          <div class="template-card-desc">Technical specification</div>
+        </div>
+        <div class="template-card" onclick="useTemplate('retro')">
+          <div class="template-card-icon">🔄</div>
+          <div class="template-card-title">Retrospective</div>
+          <div class="template-card-desc">What went well, what to improve</div>
+        </div>
+        <div class="template-card" onclick="useTemplate('bug')">
+          <div class="template-card-icon">🐛</div>
+          <div class="template-card-title">Bug Report</div>
+          <div class="template-card-desc">Steps to reproduce, expected behavior</div>
+        </div>
       </div>
-      <div class="search-results" id="search-results"><div class="search-empty">Type to search across all pages</div></div>
+      <div class="modal-actions">
+        <button class="modal-btn" onclick="closeTemplatesModal()">Cancel</button>
+      </div>
     </div>
-  </div>
-
-  <!-- History Panel -->
-  <div class="history-panel" id="history-panel">
-    <div class="history-hdr">
-      🕐 History
-      <button class="history-close" onclick="closeHistory()">✕</button>
-    </div>
-    <div id="history-list" style="padding:8px"></div>
-  </div>
-
-  <!-- Lightbox -->
-  <div class="lightbox hidden" id="lightbox" onclick="closeLb()">
-    <button class="lb-close" onclick="closeLb()">✕</button>
-    <img id="lb-img" src="" alt="">
   </div>
 
   <!-- Toast -->
@@ -1059,17 +820,104 @@
     let currentPage = null;
     let allSpaces = [];
     let currentImages = [];
+    let pageHistory = [];
+    let selectedTextRange = null;
+
+    // Templates
+    const templates = {
+      meeting: `# Meeting Notes
+
+## 📅 Date: ${new Date().toLocaleDateString()}
+## 👥 Attendees: 
+
+## 📋 Agenda
+- 
+
+## 📝 Discussion Notes
+- 
+
+## ✅ Decisions
+- 
+
+## 🎯 Action Items
+- [ ] 
+
+## 📎 Next Meeting
+`,
+      techspec: `# Technical Specification
+
+## 🎯 Problem Statement
+
+## 📊 Current State
+
+## 💡 Proposed Solution
+
+## 🔧 Technical Details
+
+### Architecture
+
+### API Changes
+
+### Database Changes
+
+## ⚠️ Risks & Concerns
+
+## 📈 Success Metrics
+
+## 📅 Timeline
+`,
+      retro: `# Retrospective
+
+## 📅 Date: ${new Date().toLocaleDateString()}
+## 👥 Team: 
+
+## 😊 What went well
+- 
+
+## 😔 What could be improved
+- 
+
+## 💡 Action items
+- [ ] 
+
+## 🎯 Next sprint goals
+`,
+      bug: `# Bug Report
+
+## 🐛 Description
+
+## 🔁 Steps to Reproduce
+1. 
+2. 
+3. 
+
+## ✅ Expected Behavior
+
+## ❌ Actual Behavior
+
+## 📸 Screenshots
+
+## 🖥️ Environment
+- OS: 
+- Browser: 
+- Version: 
+
+## 📊 Priority
+- [ ] Critical
+- [ ] High
+- [ ] Medium
+- [ ] Low
+`}
 
     // Initialize
     if (token && currentUser) {
       showApp();
     }
 
-    // Auth Functions
+    // Auth
     function showAuthTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       event.target.classList.add('active');
-      
       if (tab === 'signin') {
         document.getElementById('signin-form').classList.remove('hidden');
         document.getElementById('register-form').classList.add('hidden');
@@ -1083,7 +931,6 @@
       const usernameInput = document.getElementById('signin-username').value.trim();
       const password = document.getElementById('signin-password').value;
       const errorEl = document.getElementById('signin-error');
-
       try {
         const res = await fetch(`${API_URL}/auth`, {
           method: 'POST',
@@ -1091,9 +938,7 @@
           body: JSON.stringify({ action: 'login', username: usernameInput, password })
         });
         const data = await res.json();
-        
         if (!res.ok) throw new Error(data.error);
-        
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         token = data.token;
@@ -1109,7 +954,6 @@
       const password = document.getElementById('reg-password').value;
       const adminSecret = document.getElementById('reg-secret').value;
       const errorEl = document.getElementById('reg-error');
-
       try {
         const res = await fetch(`${API_URL}/auth`, {
           method: 'POST',
@@ -1117,9 +961,7 @@
           body: JSON.stringify({ action: 'register', username: usernameInput, password, adminSecret })
         });
         const data = await res.json();
-        
         if (!res.ok) throw new Error(data.error);
-        
         localStorage.setItem('token', data.token);
         localStorage.setItem('username', data.username);
         token = data.token;
@@ -1139,7 +981,7 @@
       document.getElementById('app-section').classList.add('hidden');
     }
 
-    // App Functions
+    // App
     function showApp() {
       document.getElementById('auth-section').classList.add('hidden');
       document.getElementById('app-section').classList.remove('hidden');
@@ -1153,16 +995,13 @@
       document.getElementById('empty-state').classList.add('hidden');
       document.getElementById('spaces-view').classList.add('hidden');
       document.getElementById('page-editor').classList.add('hidden');
-
       try {
         const res = await fetch(`${API_URL}/pages`, {
           headers: { 'Authorization': `Bearer ${token}` }
         });
         const spaces = await res.json();
         allSpaces = spaces;
-
         document.getElementById('loading-state').classList.add('hidden');
-
         if (spaces.length === 0) {
           document.getElementById('empty-state').classList.remove('hidden');
         } else {
@@ -1237,13 +1076,10 @@
     function openPage(spaceId, pageId) {
       const space = allSpaces.find(s => s.id === spaceId);
       const page = space.pages.find(p => p.id === pageId);
-
       currentSpace = spaceId;
       currentPage = pageId;
-
       document.getElementById('spaces-view').classList.add('hidden');
       document.getElementById('page-editor').classList.remove('hidden');
-      
       document.getElementById('breadcrumb').innerHTML = `
         <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
         <span class="breadcrumb-separator">/</span>
@@ -1251,20 +1087,15 @@
         <span class="breadcrumb-separator">/</span>
         <span class="breadcrumb-item">${page.title}</span>
       `;
-      
       document.getElementById('editor-title').value = page.title;
-      document.getElementById('rich-editor').innerHTML = page.content || '';
+      document.getElementById('editor-content').value = page.content || '';
       currentImages = page.images || [];
       renderImages();
-      updateWordCount();
-      updateSaveStatus('saved');
-      if (page.updatedAt) document.getElementById('page-updated').textContent = 'Updated ' + new Date(page.updatedAt).toLocaleDateString();
-      document.getElementById('c-avatar').textContent = currentUser.charAt(0).toUpperCase();
-      document.getElementById('history-btn').style.display = 'flex';
-      loadComments();
-      loadHistory();
+      renderComments(page.comments || []);
+      saveToHistory(page.content || '');
     }
 
+    // Space Modal
     function openSpaceModal() {
       document.getElementById('space-name').value = '';
       document.getElementById('space-icon').value = '📁';
@@ -1278,51 +1109,35 @@
     async function createSpace() {
       const name = document.getElementById('space-name').value.trim();
       const icon = document.getElementById('space-icon').value.trim() || '📁';
-
-      if (!name) {
-        showToast('Space name is required', 'error');
-        return;
-      }
-
+      if (!name) { showToast('Space name is required', 'error'); return; }
       try {
         const res = await fetch(`${API_URL}/pages?type=space`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ name, icon })
         });
         const space = await res.json();
-
         if (!res.ok) throw new Error(space.error);
-
         closeSpaceModal();
         showToast('Space created', 'success');
         await loadSpaces();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message, 'error'); }
     }
 
     async function deleteSpace(spaceId) {
       if (!confirm('Delete this space and all its pages?')) return;
-
       try {
         const res = await fetch(`${API_URL}/pages?type=space&id=${spaceId}`, {
           method: 'DELETE',
           headers: { 'Authorization': `Bearer ${token}` }
         });
-
         if (!res.ok) throw new Error('Failed to delete');
-
         showToast('Space deleted', 'success');
         await loadSpaces();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message, 'error'); }
     }
 
+    // Page Modal
     function openPageModal(spaceId) {
       currentSpace = spaceId;
       document.getElementById('page-name').value = '';
@@ -1333,450 +1148,342 @@
       document.getElementById('page-modal').classList.add('hidden');
     }
 
+    // Templates
+    function openTemplatesModal() {
+      document.getElementById('templates-modal').classList.remove('hidden');
+    }
+
+    function closeTemplatesModal() {
+      document.getElementById('templates-modal').classList.add('hidden');
+    }
+
+    function useTemplate(templateName) {
+      document.getElementById('page-name').value = templateName.charAt(0).toUpperCase() + templateName.slice(1);
+      const content = templates[templateName] || '';
+      document.getElementById('editor-content').value = content;
+      closeTemplatesModal();
+      document.getElementById('page-modal').classList.add('hidden');
+      createPageWithContent(content);
+    }
+
     async function createPage() {
       const title = document.getElementById('page-name').value.trim();
-
-      if (!title) {
-        showToast('Page title is required', 'error');
-        return;
-      }
-
+      if (!title) { showToast('Page title is required', 'error'); return; }
       try {
         const res = await fetch(`${API_URL}/pages?type=page`, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ spaceId: currentSpace, title })
         });
         const page = await res.json();
-
         if (!res.ok) throw new Error(page.error);
-
         closePageModal();
         showToast('Page created', 'success');
         await loadSpaces();
         openPage(currentSpace, page.id);
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+      } catch (e) { showToast(e.message, 'error'); }
     }
 
-    async function saveCurrentPage(silent = false) {
-      if (!currentPage) {
-        showToast('No page selected', 'error');
+    async function createPageWithContent(content) {
+      const title = document.getElementById('page-name').value.trim() || 'Untitled';
+      try {
+        const res = await fetch(`${API_URL}/pages?type=page`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ spaceId: currentSpace, title, content })
+        });
+        const page = await res.json();
+        if (!res.ok) throw new Error(page.error);
+        showToast('Page created', 'success');
+        await loadSpaces();
+        openPage(currentSpace, page.id);
+      } catch (e) { showToast(e.message, 'error'); }
+    }
+
+    // Rich Text Editor
+    function formatText(command, value = null) {
+      document.execCommand(command, false, value);
+      document.getElementById('editor-content').focus();
+    }
+
+    function insertLink() {
+      const url = prompt('Enter URL:');
+      if (url) formatText('createLink', url);
+    }
+
+    function insertBlock(type) {
+      const editor = document.getElementById('editor-content');
+      const value = editor.value;
+      const cursor = editor.selectionStart;
+      const before = value.substring(0, cursor);
+      const after = value.substring(cursor);
+      
+      let insert = '';
+      switch(type) {
+        case 'h1': insert = '\n# Heading 1\n'; break;
+        case 'h2': insert = '\n## Heading 2\n'; break;
+        case 'h3': insert = '\n### Heading 3\n'; break;
+        case 'bullet': insert = '\n• Item\n'; break;
+        case 'numbered': insert = '\n1. Item\n'; break;
+        case 'checkbox': insert = '\n- [ ] Task\n'; break;
+        case 'quote': insert = '\n> Quote text\n'; break;
+        case 'callout': insert = '\n💡 **Note:** Important information\n'; break;
+        case 'code': insert = '\n```\ncode here\n```\n'; break;
+        case 'divider': insert = '\n---\n'; break;
+      }
+      
+      editor.value = before.replace(/\/$/, '') + insert + after;
+      editor.selectionStart = editor.selectionEnd = cursor + insert.length - (before.endsWith('/') ? 1 : 0);
+      document.getElementById('slash-menu').classList.add('hidden');
+    }
+
+    function insertCallout() { formatText('formatBlock', 'blockquote'); }
+    function insertCode() {
+      const editor = document.getElementById('editor-content');
+      const selected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
+      const insert = `\`\`\`\n${selected || 'code here'}\n\`\`\``;
+      document.execCommand('insertText', false, insert);
+    }
+    function insertDivider() { document.execCommand('insertText', false, '\n---\n'); }
+    function toggleCheckbox() { document.execCommand('insertText', false, '- [ ] '); }
+
+    // Slash Menu
+    document.getElementById('editor-content').addEventListener('keydown', (e) => {
+      if (e.key === '/') {
+        const menu = document.getElementById('slash-menu');
+        const rect = e.target.getBoundingClientRect();
+        menu.style.top = (rect.top + 50) + 'px';
+        menu.style.left = rect.left + 'px';
+        menu.classList.remove('hidden');
+      } else if (e.key === 'Escape') {
+        document.getElementById('slash-menu').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('editor-content').addEventListener('click', () => {
+      document.getElementById('slash-menu').classList.add('hidden');
+    });
+
+    // Search
+    function openSearch() {
+      document.getElementById('search-modal').classList.remove('hidden');
+      document.getElementById('search-input').focus();
+    }
+
+    document.getElementById('search-input').addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase();
+      const results = document.getElementById('search-results');
+      
+      if (query.length < 2) {
+        results.innerHTML = '';
         return;
       }
+      
+      const matches = [];
+      allSpaces.forEach(space => {
+        if (space.name.toLowerCase().includes(query)) {
+          matches.push({ type: 'space', title: space.name, space });
+        }
+        space.pages?.forEach(page => {
+          if (page.title.toLowerCase().includes(query) || (page.content || '').toLowerCase().includes(query)) {
+            matches.push({ type: 'page', title: page.title, preview: (page.content || '').substring(0, 100), space, page });
+          }
+        });
+      });
+      
+      results.innerHTML = matches.slice(0, 10).map(m => `
+        <div class="search-result-item" onclick="openPage('${m.space.id}', '${m.page?.id || ''}')">
+          <div class="search-result-title">${m.type === 'space' ? '📁' : '📄'} ${m.title}</div>
+          ${m.preview ? `<div class="search-result-preview">${m.preview}...</div>` : ''}
+        </div>
+      `).join('') || '<p style="padding: 12px; color: var(--text-secondary);">No results found</p>';
+    });
 
-      const title = document.getElementById('editor-title').value.trim();
-      const content = document.getElementById('rich-editor')?.innerHTML || document.getElementById('editor-content')?.value || '';
+    document.addEventListener('keydown', (e) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault();
+        openSearch();
+      }
+      if (e.key === 'Escape') {
+        document.getElementById('search-modal').classList.add('hidden');
+        document.getElementById('slash-menu').classList.add('hidden');
+      }
+    });
 
+    // History
+    function saveToHistory(content) {
+      pageHistory.unshift({ content, timestamp: Date.now() });
+      if (pageHistory.length > 20) pageHistory.pop();
+    }
+
+    function openHistory() {
+      const list = document.getElementById('history-list');
+      list.innerHTML = pageHistory.map((h, i) => `
+        <div class="history-item">
+          <div class="history-item-info">
+            <div class="history-item-date">${new Date(h.timestamp).toLocaleString()}</div>
+            <div class="history-item-preview">${h.content.substring(0, 50)}...</div>
+          </div>
+          <div class="history-item-actions">
+            <button class="modal-btn" onclick="restoreHistory(${i})">Restore</button>
+          </div>
+        </div>
+      `).join('') || '<p style="padding: 12px; color: var(--text-secondary);">No history yet</p>';
+      document.getElementById('history-modal').classList.remove('hidden');
+    }
+
+    function closeHistory() {
+      document.getElementById('history-modal').classList.add('hidden');
+    }
+
+    function restoreHistory(index) {
+      document.getElementById('editor-content').value = pageHistory[index].content;
+      closeHistory();
+      showToast('History restored', 'success');
+    }
+
+    // Comments
+    function renderComments(comments) {
+      const list = document.getElementById('comment-list');
+      list.innerHTML = comments.map(c => `
+        <div class="comment-item">
+          <div class="comment-avatar">${c.author.charAt(0).toUpperCase()}</div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${c.author}</span>
+              <span class="comment-date">${new Date(c.createdAt).toLocaleString()}</span>
+            </div>
+            <div class="comment-text">${c.text}</div>
+          </div>
+        </div>
+      `).join('') || '<p style="color: var(--text-secondary);">No comments yet</p>';
+    }
+
+    async function addComment() {
+      const text = document.getElementById('comment-input').value.trim();
+      if (!text || !currentPage) return;
+      
+      const page = allSpaces.find(s => s.id === currentSpace)?.pages.find(p => p.id === currentPage);
+      if (!page) return;
+      
+      const comments = page.comments || [];
+      comments.push({ id: Date.now().toString(), text, author: currentUser, createdAt: Date.now() });
+      
       try {
         const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
-          },
-          body: JSON.stringify({ title, content, images: currentImages })
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ comments })
         });
-
-        if (!res.ok) throw new Error('Failed to save');
-        const sp = allSpaces.find(s => s.id === currentSpace);
-        const pg = sp?.pages.find(p => p.id === currentPage);
-        if (pg) { pg.title = title; pg.content = content; pg.updatedAt = Date.now(); }
-
-        updateSaveStatus('saved');
-        if (!silent) showToast('Page saved ✓', 'success');
-        saveSnap(title, content);
-        await loadSpaces();
-      } catch (e) {
-        showToast(e.message, 'error');
-      }
+        if (!res.ok) throw new Error('Failed to add comment');
+        document.getElementById('comment-input').value = '';
+        renderComments(comments);
+        showToast('Comment added', 'success');
+      } catch (e) { showToast(e.message, 'error'); }
     }
 
+    document.getElementById('comment-input').addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.key === 'Enter') addComment();
+    });
+
+    // Images
     function renderImages() {
       const container = document.getElementById('images-grid');
       container.innerHTML = currentImages.map((img, idx) => `
-        <div class="image-item">
+        <div class="image-item" onclick="openImageModal('${img}')">
           <img src="${img}" alt="Image ${idx + 1}">
-          <button onclick="removeImage(${idx})">✕</button>
+          <button onclick="event.stopPropagation(); removeImage(${idx})">✕</button>
         </div>
       `).join('');
     }
 
     function handleImageUpload(event) {
-      Array.from(event.target.files).forEach(f => insertImg(f));
-    }
-    function handleDrop(e) {
-      e.preventDefault(); document.getElementById('drop-zone').classList.remove('over');
-      Array.from(e.dataTransfer.files).filter(f=>f.type.startsWith('image/')).forEach(insertImg);
-    }
-    function insertImg(file) {
-      const reader = new FileReader();
-      reader.onload = ev => {
-        const html = '<div class="editor-img-wrap" contenteditable="false"><img src="'+ev.target.result+'" alt="'+file.name+'" onclick="openLb(this.src)"><button class="del-img" onclick="this.parentElement.remove();markUnsaved()">✕</button></div><p><br></p>';
-        document.getElementById('rich-editor').focus();
-        document.execCommand('insertHTML', false, html);
-        markUnsaved();
-        showToast('Image added', 'success');
-      };
-      reader.readAsDataURL(file);
+      Array.from(event.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => { currentImages.push(e.target.result); renderImages(); };
+        reader.readAsDataURL(file);
+      });
     }
 
-    function removeImage(index) {
-      currentImages.splice(index, 1);
-      renderImages();
+    function removeImage(index) { currentImages.splice(index, 1); renderImages(); }
+
+    function openImageModal(src) {
+      document.getElementById('image-modal-img').src = src;
+      document.getElementById('image-modal').classList.remove('hidden');
     }
 
-    document.addEventListener('paste', e => {
+    function closeImageModal() { document.getElementById('image-modal').classList.add('hidden'); }
+
+    // Paste image
+    document.addEventListener('paste', (e) => {
       if (document.getElementById('page-editor').classList.contains('hidden')) return;
-      Array.from(e.clipboardData.items).forEach(item => {
-        if (item.type.startsWith('image/')) { e.preventDefault(); insertImg(item.getAsFile()); }
+      const items = e.clipboardData.items;
+      for (let item of items) {
+        if (item.type.indexOf('image') !== -1) {
+          const file = item.getAsFile();
+          const reader = new FileReader();
+          reader.onload = (event) => { currentImages.push(event.target.result); renderImages(); showToast('Image pasted', 'success'); };
+          reader.readAsDataURL(file);
+        }
+      }
+    });
+
+    // Drag & drop images
+    document.getElementById('page-editor').addEventListener('dragover', (e) => e.preventDefault());
+    document.getElementById('page-editor').addEventListener('drop', (e) => {
+      e.preventDefault();
+      Array.from(e.dataTransfer.files).forEach(file => {
+        if (file.type.indexOf('image') !== -1) {
+          const reader = new FileReader();
+          reader.onload = (event) => { currentImages.push(event.target.result); renderImages(); };
+          reader.readAsDataURL(file);
+        }
       });
     });
 
-    function toggleSidebar() {
-      document.getElementById('sidebar').classList.toggle('open');
+    // Save
+    async function saveCurrentPage() {
+      if (!currentPage) { showToast('No page selected', 'error'); return; }
+      const title = document.getElementById('editor-title').value.trim();
+      const content = document.getElementById('editor-content').value;
+      try {
+        const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+          body: JSON.stringify({ title, content, images: currentImages })
+        });
+        if (!res.ok) throw new Error('Failed to save');
+        saveToHistory(content);
+        showToast('Page saved', 'success');
+        await loadSpaces();
+      } catch (e) { showToast(e.message, 'error'); }
     }
 
-    function toggleTheme() {
-      document.body.classList.toggle('dark-mode');
-    }
+    // UI
+    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
+    function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
     function showToast(message, type = 'success') {
       const toast = document.getElementById('toast');
-      const msg = document.getElementById('toast-message');
-      msg.textContent = message;
+      document.getElementById('toast-message').textContent = message;
       toast.className = `toast ${type}`;
       toast.classList.remove('hidden');
       setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
-    // Enter key support
+    // Enter key
     document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
-        if (document.getElementById('signin-form').contains(e.target)) {
-          signIn();
-        } else if (document.getElementById('register-form').contains(e.target)) {
-          register();
-        } else if (document.getElementById('space-name').contains(e.target)) {
-          createSpace();
-        } else if (document.getElementById('page-name').contains(e.target)) {
-          createPage();
-        }
+        if (document.getElementById('signin-form').contains(e.target)) signIn();
+        else if (document.getElementById('register-form').contains(e.target)) register();
+        else if (document.getElementById('space-name').contains(e.target)) createSpace();
+        else if (document.getElementById('page-name').contains(e.target)) createPage();
       }
     });
 
-
-    // ── RICH TEXT EDITOR ──
-    let autosaveTimer = null;
-    let isUnsaved = false;
-
-    function markUnsaved() {
-      isUnsaved = true;
-      updateSaveStatus('unsaved');
-      updateWordCount();
-      clearTimeout(autosaveTimer);
-      autosaveTimer = setTimeout(() => saveCurrentPage(true), 3000);
-    }
-
-    function updateSaveStatus(s) {
-      const el = document.getElementById('save-status');
-      if (!el) return;
-      if (s === 'saving') el.innerHTML = '<span class="save-dot saving"></span>Saving...';
-      else if (s === 'saved') { el.innerHTML = '<span class="save-dot"></span>Saved'; isUnsaved = false; }
-      else el.innerHTML = '<span class="save-dot unsaved"></span>Unsaved';
-    }
-
-    function updateWordCount() {
-      const ed = document.getElementById('rich-editor');
-      if (!ed) return;
-      const words = (ed.innerText||'').trim().split(/\s+/).filter(Boolean).length;
-      const wc = document.getElementById('word-count');
-      if (wc) wc.textContent = words + ' words';
-    }
-
-    function fmt(cmd, val) {
-      document.execCommand(cmd, false, val || null);
-      document.getElementById('rich-editor')?.focus();
-      markUnsaved();
-    }
-
-    function insertLink() {
-      const url = prompt('Enter URL:');
-      if (url) { document.execCommand('createLink', false, url); markUnsaved(); }
-    }
-
-    // Floating toolbar
-    function checkSel() {
-      const sel = window.getSelection();
-      const tb = document.getElementById('editor-toolbar');
-      const ed = document.getElementById('rich-editor');
-      if (!sel || sel.isCollapsed || !sel.toString().trim() || !ed || !ed.contains(sel.anchorNode)) {
-        tb.classList.remove('visible'); return;
-      }
-      const rect = sel.getRangeAt(0).getBoundingClientRect();
-      tb.style.top = (rect.top + window.scrollY - 46) + 'px';
-      tb.style.left = Math.max(8, rect.left + rect.width/2 - 175) + 'px';
-      tb.classList.add('visible');
-    }
-    document.addEventListener('mousedown', e => {
-      if (!document.getElementById('editor-toolbar').contains(e.target))
-        document.getElementById('editor-toolbar').classList.remove('visible');
-    });
-
-    // Slash command
-    function onEditorInput(e) {
-      markUnsaved();
-      const sel = window.getSelection();
-      if (!sel.rangeCount) return;
-      const node = sel.getRangeAt(0).startContainer;
-      if (node.textContent === '/') {
-        const rect = sel.getRangeAt(0).getBoundingClientRect();
-        const m = document.getElementById('slash-menu');
-        m.style.left = Math.min(rect.left, window.innerWidth - 280) + 'px';
-        m.style.top = (rect.bottom + window.scrollY + 4) + 'px';
-        m.classList.add('visible');
-      } else {
-        document.getElementById('slash-menu').classList.remove('visible');
-      }
-    }
-
-    function onEditorKeydown(e) {
-      if (e.key === 'Escape') { document.getElementById('slash-menu').classList.remove('visible'); }
-      if (e.key === 'Tab') { e.preventDefault(); document.execCommand('insertHTML', false, '&nbsp;&nbsp;&nbsp;&nbsp;'); }
-      if ((e.ctrlKey || e.metaKey) && e.key === 's') { e.preventDefault(); saveCurrentPage(); }
-    }
-
-    function insBlock(type) {
-      document.getElementById('slash-menu').classList.remove('visible');
-      const ed = document.getElementById('rich-editor');
-      ed.focus();
-      const sel = window.getSelection();
-      if (sel.rangeCount) {
-        const node = sel.getRangeAt(0).startContainer;
-        if (node.textContent === '/') node.textContent = '';
-      }
-      const tbl = 'style="border-collapse:collapse;width:100%;margin:8px 0"';
-      const tc = 'style="padding:9px 12px;border:1px solid var(--border-color)"';
-      const th = 'style="padding:9px 12px;border:1px solid var(--border-color);background:var(--bg-secondary);font-weight:600"';
-      const map = {
-        h1: '<h1><br></h1>', h2: '<h2><br></h2>', h3: '<h3><br></h3>',
-        ul: '<ul><li><br></li></ul>', ol: '<ol><li><br></li></ol>',
-        todo: '<div class="todo-item"><input type="checkbox" class="todo-checkbox" onclick="this.nextElementSibling.classList.toggle('done',this.checked);markUnsaved()"><span class="todo-text">&nbsp;</span></div>',
-        quote: '<blockquote><br></blockquote>',
-        callout: '<div class="callout"><span contenteditable="false" style="flex-shrink:0;font-size:20px">💡</span><div><br></div></div>',
-        code: '<pre><br></pre>',
-        hr: '<hr><p><br></p>',
-        table: '<table ' + tbl + '><thead><tr><th ' + th + '>Column 1</th><th ' + th + '>Column 2</th><th ' + th + '>Column 3</th></tr></thead><tbody><tr><td ' + tc + '>&nbsp;</td><td ' + tc + '>&nbsp;</td><td ' + tc + '>&nbsp;</td></tr><tr><td ' + tc + '>&nbsp;</td><td ' + tc + '>&nbsp;</td><td ' + tc + '>&nbsp;</td></tr></tbody></table><p><br></p>',
-      };
-      if (type === 'img') { document.getElementById('image-input').click(); return; }
-      document.execCommand('insertHTML', false, map[type] || '<p><br></p>');
-      markUnsaved();
-    }
-
-    // ── SEARCH ──
-    function openSearch() {
-      document.getElementById('search-modal').classList.remove('hidden');
-      setTimeout(() => document.getElementById('search-input').focus(), 50);
-    }
-    function closeSearch() {
-      document.getElementById('search-modal').classList.add('hidden');
-      document.getElementById('search-input').value = '';
-      document.getElementById('search-results').innerHTML = '<div class="search-empty">Type to search across all pages</div>';
-    }
-    function doSearch(q) {
-      const fl = q.toLowerCase().trim();
-      const res = document.getElementById('search-results');
-      if (!fl) { res.innerHTML = '<div class="search-empty">Type to search...</div>'; return; }
-      const hits = [];
-      allSpaces.forEach(sp => (sp.pages||[]).forEach(pg => {
-        const txt = stripHtml(pg.content||'');
-        if ((pg.title||'').toLowerCase().includes(fl) || txt.toLowerCase().includes(fl)) {
-          let prev = '';
-          const idx = txt.toLowerCase().indexOf(fl);
-          if (idx >= 0) prev = '...' + txt.substring(Math.max(0,idx-40),idx+80).replace(new RegExp(fl,'gi'), w => '<mark class="hl">'+w+'</mark>') + '...';
-          hits.push({ sp, pg, prev });
-        }
-      }));
-      if (!hits.length) { res.innerHTML = '<div class="search-empty">No results for "' + q + '"</div>'; return; }
-      res.innerHTML = hits.map(h => `
-        <div class="search-result" onclick="openPage('${h.sp.id}','${h.pg.id}');closeSearch()">
-          <span style="font-size:16px">📄</span>
-          <div>
-            <div class="sr-title">${(h.pg.title||'Untitled').replace(new RegExp(q,'gi'),w=>'<mark class="hl">'+w+'</mark>')}</div>
-            ${h.prev?'<div class="sr-preview">'+h.prev+'</div>':''}
-            <div class="sr-space">${h.sp.icon||'📁'} ${h.sp.name}</div>
-          </div>
-        </div>`).join('');
-    }
-
-    // ── HISTORY (localStorage) ──
-    function saveSnap(title, content) {
-      if (!currentPage) return;
-      const key = 'wdh_' + currentPage;
-      const hist = JSON.parse(localStorage.getItem(key)||'[]');
-      hist.unshift({ title, content, time: Date.now(), user: currentUser });
-      if (hist.length > 20) hist.pop();
-      localStorage.setItem(key, JSON.stringify(hist));
-      renderHistory(hist);
-    }
-    function renderHistory(hist) {
-      const list = document.getElementById('history-list');
-      if (!hist.length) { list.innerHTML = '<p style="color:var(--text-secondary);font-size:13px;padding:8px">No history yet.</p>'; return; }
-      list.innerHTML = hist.map((h,i) => `
-        <div class="history-item" onclick="restoreSnap(${i})">
-          <div class="h-time">${new Date(h.time).toLocaleString()}</div>
-          <div class="h-user">by ${h.user}</div>
-          <div class="h-preview">${h.title||'Untitled'}</div>
-        </div>`).join('');
-    }
-    function restoreSnap(idx) {
-      const hist = JSON.parse(localStorage.getItem('wdh_' + currentPage)||'[]');
-      const snap = hist[idx];
-      if (!snap || !confirm('Restore this version?')) return;
-      document.getElementById('editor-title').value = snap.title;
-      document.getElementById('rich-editor').innerHTML = snap.content;
-      markUnsaved();
-      showToast('Version restored', 'success');
-    }
-    function toggleHistory() {
-      document.getElementById('history-panel').classList.toggle('open');
-    }
-    function closeHistory() {
-      document.getElementById('history-panel').classList.remove('open');
-    }
-    function loadHistory() {
-      if (!currentPage) return;
-      const hist = JSON.parse(localStorage.getItem('wdh_' + currentPage)||'[]');
-      renderHistory(hist);
-    }
-
-    // ── COMMENTS ──
-    async function loadComments() {
-      if (!currentPage) return;
-      try {
-        const res = await fetch(API_URL + '/pages?type=comments&id=' + currentPage, { headers:{'Authorization':'Bearer '+token} });
-        const data = await res.json();
-        renderComments(data.comments||[]);
-      } catch {}
-    }
-    function renderComments(comments) {
-      const list = document.getElementById('comments-list');
-      if (!comments.length) { list.innerHTML = '<p style="color:var(--text-secondary);font-size:13px">No comments yet.</p>'; return; }
-      list.innerHTML = comments.map(c => `
-        <div class="comment">
-          <div class="c-avatar" style="background:${strColor(c.author)}">${c.author.charAt(0).toUpperCase()}</div>
-          <div class="c-body">
-            <div class="c-header">
-              <span class="c-author">${c.author}</span>
-              <span class="c-time">${timeAgo(c.createdAt)}</span>
-              ${c.author===currentUser?'<button class="c-delete" onclick="delComment(\''+c.id+'\')">Delete</button>':''}
-            </div>
-            <div class="c-text">${escHtml(c.text)}</div>
-          </div>
-        </div>`).join('');
-    }
-    async function submitComment() {
-      const inp = document.getElementById('comment-input');
-      const text = inp.value.trim();
-      if (!text || !currentPage) return;
-      try {
-        const res = await fetch(API_URL + '/pages?type=comment&id=' + currentPage, {
-          method:'POST', headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},
-          body: JSON.stringify({ text, author: currentUser })
-        });
-        const data = await res.json();
-        inp.value = ''; autoResize(inp);
-        renderComments(data.comments||[]);
-        showToast('Comment added', 'success');
-      } catch { showToast('Failed to post', 'error'); }
-    }
-    async function delComment(commentId) {
-      if (!confirm('Delete?')) return;
-      try {
-        const res = await fetch(API_URL + '/pages?type=comment&id=' + currentPage + '&commentId=' + commentId, {
-          method:'DELETE', headers:{'Authorization':'Bearer '+token}
-        });
-        const data = await res.json();
-        renderComments(data.comments||[]);
-      } catch { showToast('Failed', 'error'); }
-    }
-
-    // ── LIGHTBOX ──
-    function openLb(src) { document.getElementById('lb-img').src = src; document.getElementById('lightbox').classList.remove('hidden'); }
-    function closeLb() { document.getElementById('lightbox').classList.add('hidden'); }
-
-    // ── TEMPLATES ──
-    const TEMPLATES = [
-      { id:'meeting', icon:'📅', name:'Meeting Notes', desc:'Agenda, decisions, action items',
-        content:'<h2>Meeting Notes</h2><p><strong>Date:</strong> ' + new Date().toLocaleDateString() + '</p><hr><h3>Agenda</h3><ul><li>Item 1</li></ul><h3>Decisions</h3><ul><li></li></ul><h3>Action Items</h3><div class="todo-item"><input type="checkbox" class="todo-checkbox"><span class="todo-text">&nbsp;</span></div>' },
-      { id:'spec', icon:'📋', name:'Tech Spec', desc:'Requirements, architecture, API',
-        content:'<h1>Technical Specification</h1><h2>Overview</h2><p></p><h2>Requirements</h2><ul><li></li></ul><h2>Architecture</h2><p></p><h2>API</h2><pre>GET /endpoint</pre>' },
-      { id:'retro', icon:'🔄', name:'Retrospective', desc:'What went well, improvements',
-        content:'<h1>Sprint Retrospective</h1><h2>✅ What went well</h2><ul><li></li></ul><h2>⚠️ What could improve</h2><ul><li></li></ul><h2>🎯 Action items</h2><div class="todo-item"><input type="checkbox" class="todo-checkbox"><span class="todo-text">&nbsp;</span></div>' },
-      { id:'bug', icon:'🐛', name:'Bug Report', desc:'Steps to reproduce, expected behavior',
-        content:'<h1>Bug Report</h1><p><strong>Priority:</strong> Medium</p><hr><h2>Summary</h2><p></p><h2>Steps to Reproduce</h2><ol><li></li><li></li></ol><h2>Expected vs Actual</h2><p></p>' },
-      { id:'blank', icon:'📄', name:'Blank', desc:'Start from scratch', content:'' }
-    ];
-
-    function renderTmplGrid(containerId, onclick) {
-      const el = document.getElementById(containerId);
-      if (!el) return;
-      el.innerHTML = TEMPLATES.map(t => `
-        <div class="tmpl-card" onclick="${onclick}('${t.id}')">
-          <div class="tmpl-icon">${t.icon}</div>
-          <div class="tmpl-name">${t.name}</div>
-          <div class="tmpl-desc">${t.desc}</div>
-        </div>`).join('');
-    }
-
-    function applyTemplate(id) {
-      const t = TEMPLATES.find(x => x.id === id);
-      if (!t) return;
-      if (!currentPage) return;
-      if (!confirm('Replace content with template?')) return;
-      document.getElementById('rich-editor').innerHTML = t.content;
-      markUnsaved();
-      showToast('Template applied: ' + t.name, 'success');
-    }
-
-    let pendingTemplateId = null;
-    function pickTemplate(id) {
-      pendingTemplateId = id;
-      document.querySelectorAll('#quick-tmpl .tmpl-card').forEach(c => c.style.borderColor = 'var(--border-color)');
-      event.currentTarget.style.borderColor = 'var(--accent-color)';
-    }
-
-    // ── HELPERS ──
-    function autoResize(el) { el.style.height='auto'; el.style.height=el.scrollHeight+'px'; }
-    function stripHtml(h) { const d=document.createElement('div'); d.innerHTML=h; return d.innerText||''; }
-    function escHtml(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-    function strColor(s) { let h=0; for(let i=0;i<s.length;i++) h=s.charCodeAt(i)+((h<<5)-h); return 'hsl('+(h%360)+',55%,50%)'; }
-    function timeAgo(ts) { const d=Date.now()-ts; if(d<60000)return 'just now'; if(d<3600000)return Math.floor(d/60000)+'m ago'; if(d<86400000)return Math.floor(d/3600000)+'h ago'; return new Date(ts).toLocaleDateString(); }
-
-    // keyboard shortcuts
-    document.addEventListener('keydown', e => {
-      if ((e.ctrlKey||e.metaKey) && e.key==='k') { e.preventDefault(); openSearch(); }
-      if (e.key==='Escape') {
-        closeSearch();
-        document.getElementById('slash-menu').classList.remove('visible');
-        closeHistory();
-        closeLb();
-      }
-    });
-    window.addEventListener('beforeunload', e => { if (isUnsaved) { e.preventDefault(); e.returnValue=''; } });
-
-    if (localStorage.getItem('theme')==='dark') document.body.classList.add('dark-mode');
-    // Close modals on overlay click
+    // Close modals
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => {
-        if (e.target === overlay) {
-          overlay.classList.add('hidden');
-        }
-      });
+      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
     });
   </script>
 </body>

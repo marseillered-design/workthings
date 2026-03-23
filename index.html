@@ -198,7 +198,7 @@
     
     /* Page Container */
     .page-container {
-      max-width: 900px; margin: 0 auto; padding: 48px 96px;
+      max-width: 1200px; margin: 0 auto; padding: 32px 48px;
     }
     
     .page-title {
@@ -209,9 +209,7 @@
     .page-title:focus { outline: none; }
     .page-title::placeholder { color: var(--text-secondary); }
     
-    /* Rich Text Editor */
-    .editor-wrapper { position: relative; }
-    
+    /* Editor Toolbar */
     .editor-toolbar {
       display: flex; align-items: center; gap: 4px; padding: 8px;
       background: var(--bg-secondary); border-radius: 8px;
@@ -225,17 +223,53 @@
     }
     
     .toolbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-    .toolbar-btn.active { background: var(--bg-hover); color: var(--text-primary); }
     .toolbar-divider { width: 1px; height: 24px; background: var(--border-color); margin: 0 4px; }
     
     .editor-content {
       font-size: 16px; line-height: 1.7; color: var(--text-primary);
-      min-height: 500px; border: none; background: transparent;
-      width: 100%; resize: none; padding: 8px;
+      min-height: 500px; border: 1px solid var(--border-color);
+      background: var(--bg-primary); width: 100%; resize: vertical;
+      padding: 16px; border-radius: 8px;
     }
     
-    .editor-content:focus { outline: none; }
-    .editor-content::placeholder { color: var(--text-secondary); }
+    .editor-content:focus { outline: none; border-color: var(--accent-color); }
+    
+    /* Table Styles - Like Confluence */
+    .content-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 24px 0;
+      font-size: 14px;
+      border: 1px solid var(--border-color);
+    }
+    
+    .content-table thead {
+      background: var(--bg-secondary);
+    }
+    
+    .content-table th {
+      border: 1px solid var(--border-color);
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: var(--text-primary);
+      background: var(--bg-secondary);
+    }
+    
+    .content-table td {
+      border: 1px solid var(--border-color);
+      padding: 12px 16px;
+      color: var(--text-primary);
+      vertical-align: top;
+    }
+    
+    .content-table tbody tr:hover {
+      background: var(--bg-hover);
+    }
+    
+    .content-table tbody tr:nth-child(even) {
+      background: var(--bg-secondary);
+    }
     
     /* Slash Menu */
     .slash-menu {
@@ -437,7 +471,7 @@
       .sidebar.open { transform: translateX(0); }
       .main-content { margin-left: 0; }
       .menu-toggle { display: block; }
-      .page-container { padding: 32px 24px; }
+      .page-container { padding: 24px; }
       .page-title { font-size: 28px; }
       .editor-toolbar { position: relative; top: 0; }
     }
@@ -447,17 +481,6 @@
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
     ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-    
-    /* Content Styles */
-    .content-h1 { font-size: 32px; font-weight: 700; margin: 24px 0 12px; }
-    .content-h2 { font-size: 24px; font-weight: 600; margin: 20px 0 10px; }
-    .content-h3 { font-size: 20px; font-weight: 600; margin: 16px 0 8px; }
-    .content-quote { border-left: 3px solid var(--accent-color); padding-left: 16px; margin: 16px 0; color: var(--text-secondary); }
-    .content-callout { background: var(--bg-secondary); padding: 16px; border-radius: 8px; margin: 16px 0; }
-    .content-code { background: var(--bg-secondary); padding: 16px; border-radius: 8px; font-family: monospace; font-size: 13px; overflow-x: auto; }
-    .content-list { margin: 12px 0 12px 24px; }
-    .content-checkbox { display: flex; align-items: center; gap: 8px; margin: 8px 0; }
-    .content-divider { border: none; border-top: 1px solid var(--border-color); margin: 24px 0; }
   </style>
 </head>
 <body>
@@ -556,39 +579,37 @@
         <div class="page-container hidden" id="page-editor">
           <input class="page-title" type="text" id="editor-title" placeholder="Untitled">
           
-          <div class="editor-wrapper">
-            <div class="editor-toolbar">
-              <button class="toolbar-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
-              <button class="toolbar-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
-              <button class="toolbar-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
-              <button class="toolbar-btn" onclick="formatText('strikeThrough')" title="Strikethrough"><s>S</s></button>
-              <div class="toolbar-divider"></div>
-              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H1')" title="Heading 1">H1</button>
-              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H2')" title="Heading 2">H2</button>
-              <button class="toolbar-btn" onclick="formatText('formatBlock', 'H3')" title="Heading 3">H3</button>
-              <div class="toolbar-divider"></div>
-              <button class="toolbar-btn" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
-              <button class="toolbar-btn" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
-              <button class="toolbar-btn" onclick="toggleCheckbox()" title="Checkbox">☑️</button>
-              <div class="toolbar-divider"></div>
-              <button class="toolbar-btn" onclick="formatText('formatBlock', 'blockquote')" title="Quote">❝</button>
-              <button class="toolbar-btn" onclick="insertCallout()" title="Callout">💡</button>
-              <button class="toolbar-btn" onclick="insertCode()" title="Code">⌨️</button>
-              <div class="toolbar-divider"></div>
-              <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
-              <button class="toolbar-btn" onclick="insertDivider()" title="Divider">—</button>
-              <button class="toolbar-btn" onclick="openTableModal()" title="Table">📊</button>
-              <button class="toolbar-btn" onclick="document.getElementById('image-input').click()" title="Image">🖼️</button>
-            </div>
-            
-            <textarea class="editor-content" id="editor-content" placeholder="Start writing... Type '/' for commands"></textarea>
-            
-            <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
-              📎 Click to upload images · Paste (Ctrl+V) · Drag & drop
-              <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
-            </div>
-            <div class="images-grid" id="images-grid"></div>
+          <div class="editor-toolbar">
+            <button class="toolbar-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
+            <button class="toolbar-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
+            <button class="toolbar-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
+            <button class="toolbar-btn" onclick="formatText('strikeThrough')" title="Strikethrough"><s>S</s></button>
+            <div class="toolbar-divider"></div>
+            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H1')" title="Heading 1">H1</button>
+            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H2')" title="Heading 2">H2</button>
+            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H3')" title="Heading 3">H3</button>
+            <div class="toolbar-divider"></div>
+            <button class="toolbar-btn" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
+            <button class="toolbar-btn" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
+            <button class="toolbar-btn" onclick="toggleCheckbox()" title="Checkbox">☑️</button>
+            <div class="toolbar-divider"></div>
+            <button class="toolbar-btn" onclick="formatText('formatBlock', 'blockquote')" title="Quote">❝</button>
+            <button class="toolbar-btn" onclick="insertCallout()" title="Callout">💡</button>
+            <button class="toolbar-btn" onclick="insertCode()" title="Code">⌨️</button>
+            <div class="toolbar-divider"></div>
+            <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
+            <button class="toolbar-btn" onclick="insertDivider()" title="Divider">—</button>
+            <button class="toolbar-btn" onclick="openTableModal()" title="Table">📊</button>
+            <button class="toolbar-btn" onclick="document.getElementById('image-input').click()" title="Image">🖼️</button>
           </div>
+          
+          <textarea class="editor-content" id="editor-content" placeholder="Start writing... Type '/' for commands"></textarea>
+          
+          <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
+            📎 Click to upload images · Paste (Ctrl+V) · Drag & drop
+            <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
+          </div>
+          <div class="images-grid" id="images-grid"></div>
 
           <!-- Comments Section -->
           <div class="comments-section">
@@ -819,7 +840,6 @@
     let pageHistory = [];
     let currentComments = [];
 
-    // Templates
     const templates = {
       meeting: `# Meeting Notes\n\n## 📅 Date: ${new Date().toLocaleDateString()}\n## 👥 Attendees: \n\n## 📋 Agenda\n- \n\n## 📝 Discussion Notes\n- \n\n## ✅ Decisions\n- \n\n## 🎯 Action Items\n- [ ] \n\n## 📎 Next Meeting\n`,
       techspec: `# Technical Specification\n\n## 🎯 Problem Statement\n\n## 📊 Current State\n\n## 💡 Proposed Solution\n\n## 🔧 Technical Details\n\n### Architecture\n\n### API Changes\n\n### Database Changes\n\n## ⚠️ Risks & Concerns\n\n## 📈 Success Metrics\n\n## 📅 Timeline\n`,
@@ -827,12 +847,8 @@
       bug: `# Bug Report\n\n## 🐛 Description\n\n## 🔁 Steps to Reproduce\n1. \n2. \n3. \n\n## ✅ Expected Behavior\n\n## ❌ Actual Behavior\n\n## 📸 Screenshots\n\n## 🖥️ Environment\n- OS: \n- Browser: \n- Version: \n\n## 📊 Priority\n- [ ] Critical\n- [ ] High\n- [ ] Medium\n- [ ] Low\n`
     };
 
-    // Initialize
-    if (token && currentUser) {
-      showApp();
-    }
+    if (token && currentUser) { showApp(); }
 
-    // Auth
     function showAuthTab(tab) {
       document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
       event.target.classList.add('active');
@@ -862,9 +878,7 @@
         token = data.token;
         currentUser = data.username;
         showApp();
-      } catch (e) {
-        errorEl.textContent = e.message;
-      }
+      } catch (e) { errorEl.textContent = e.message; }
     }
 
     async function register() {
@@ -885,9 +899,7 @@
         token = data.token;
         currentUser = data.username;
         showApp();
-      } catch (e) {
-        errorEl.textContent = e.message;
-      }
+      } catch (e) { errorEl.textContent = e.message; }
     }
 
     function signOut() {
@@ -899,7 +911,6 @@
       document.getElementById('app-section').classList.add('hidden');
     }
 
-    // App
     function showApp() {
       document.getElementById('auth-section').classList.add('hidden');
       document.getElementById('app-section').classList.remove('hidden');
@@ -914,9 +925,7 @@
       document.getElementById('spaces-view').classList.add('hidden');
       document.getElementById('page-editor').classList.add('hidden');
       try {
-        const res = await fetch(`${API_URL}/pages`, {
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
+        const res = await fetch(`${API_URL}/pages`, { headers: { 'Authorization': `Bearer ${token}` } });
         const spaces = await res.json();
         allSpaces = spaces;
         document.getElementById('loading-state').classList.add('hidden');
@@ -1014,16 +1023,13 @@
       saveToHistory(page.content || '');
     }
 
-    // Space Modal
     function openSpaceModal() {
       document.getElementById('space-name').value = '';
       document.getElementById('space-icon').value = '📁';
       document.getElementById('space-modal').classList.remove('hidden');
     }
 
-    function closeSpaceModal() {
-      document.getElementById('space-modal').classList.add('hidden');
-    }
+    function closeSpaceModal() { document.getElementById('space-modal').classList.add('hidden'); }
 
     async function createSpace() {
       const name = document.getElementById('space-name').value.trim();
@@ -1056,25 +1062,16 @@
       } catch (e) { showToast(e.message, 'error'); }
     }
 
-    // Page Modal
     function openPageModal(spaceId) {
       currentSpace = spaceId;
       document.getElementById('page-name').value = '';
       document.getElementById('page-modal').classList.remove('hidden');
     }
 
-    function closePageModal() {
-      document.getElementById('page-modal').classList.add('hidden');
-    }
+    function closePageModal() { document.getElementById('page-modal').classList.add('hidden'); }
 
-    // Templates
-    function openTemplatesModal() {
-      document.getElementById('templates-modal').classList.remove('hidden');
-    }
-
-    function closeTemplatesModal() {
-      document.getElementById('templates-modal').classList.add('hidden');
-    }
+    function openTemplatesModal() { document.getElementById('templates-modal').classList.remove('hidden'); }
+    function closeTemplatesModal() { document.getElementById('templates-modal').classList.add('hidden'); }
 
     function useTemplate(templateName) {
       document.getElementById('page-name').value = templateName.charAt(0).toUpperCase() + templateName.slice(1);
@@ -1119,7 +1116,6 @@
       } catch (e) { showToast(e.message, 'error'); }
     }
 
-    // Rich Text Editor
     function formatText(command, value = null) {
       document.execCommand(command, false, value);
       document.getElementById('editor-content').focus();
@@ -1166,45 +1162,25 @@
     function insertDivider() { document.execCommand('insertText', false, '\n---\n'); }
     function toggleCheckbox() { document.execCommand('insertText', false, '- [ ] '); }
 
-    // Table
-    function openTableModal() {
-      document.getElementById('table-modal').classList.remove('hidden');
-    }
-
-    function closeTableModal() {
-      document.getElementById('table-modal').classList.add('hidden');
-    }
+    function openTableModal() { document.getElementById('table-modal').classList.remove('hidden'); }
+    function closeTableModal() { document.getElementById('table-modal').classList.add('hidden'); }
 
     function insertTable() {
       const rows = parseInt(document.getElementById('table-rows').value) || 2;
       const cols = parseInt(document.getElementById('table-cols').value) || 3;
       
-      if (rows < 1 || rows > 10) {
-        showToast('Rows must be between 1 and 10', 'error');
-        return;
-      }
-      if (cols < 1 || cols > 10) {
-        showToast('Columns must be between 1 and 10', 'error');
-        return;
-      }
+      if (rows < 1 || rows > 10) { showToast('Rows must be between 1 and 10', 'error'); return; }
+      if (cols < 1 || cols > 10) { showToast('Columns must be between 1 and 10', 'error'); return; }
       
-      let table = '\n\n';
-      const headers = [];
-      for (let i = 1; i <= cols; i++) {
-        headers.push(`Column ${i}`);
-      }
-      table += '| ' + headers.join(' | ') + ' |\n';
-      table += '| ' + Array(cols).fill('---').join(' | ') + ' |\n';
-      
+      let table = '\n\n<table class="content-table">\n<thead>\n<tr>\n';
+      for (let i = 1; i <= cols; i++) { table += `<th>Header ${i}</th>\n`; }
+      table += '</tr>\n</thead>\n<tbody>\n';
       for (let i = 0; i < rows; i++) {
-        const cells = [];
-        for (let j = 0; j < cols; j++) {
-          cells.push('');
-        }
-        table += '| ' + cells.join(' | ') + ' |\n';
+        table += '<tr>\n';
+        for (let j = 0; j < cols; j++) { table += '<td>Cell</td>\n'; }
+        table += '</tr>\n';
       }
-      
-      table += '\n';
+      table += '</tbody>\n</table>\n\n';
       
       const editor = document.getElementById('editor-content');
       const cursor = editor.selectionStart;
@@ -1217,7 +1193,6 @@
       showToast(`Table ${rows}×${cols} inserted`, 'success');
     }
 
-    // Slash Menu
     document.getElementById('editor-content').addEventListener('keydown', (e) => {
       if (e.key === '/') {
         const menu = document.getElementById('slash-menu');
@@ -1235,7 +1210,6 @@
       document.getElementById('slash-menu').classList.add('hidden');
     });
 
-    // Search
     function openSearch() {
       document.getElementById('search-modal').classList.remove('hidden');
       document.getElementById('search-input').focus();
@@ -1244,11 +1218,7 @@
     document.getElementById('search-input').addEventListener('input', (e) => {
       const query = e.target.value.toLowerCase();
       const results = document.getElementById('search-results');
-      
-      if (query.length < 2) {
-        results.innerHTML = '';
-        return;
-      }
+      if (query.length < 2) { results.innerHTML = ''; return; }
       
       const matches = [];
       allSpaces.forEach(space => {
@@ -1271,10 +1241,7 @@
     });
 
     document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
-        e.preventDefault();
-        openSearch();
-      }
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
       if (e.key === 'Escape') {
         document.getElementById('search-modal').classList.add('hidden');
         document.getElementById('slash-menu').classList.add('hidden');
@@ -1282,7 +1249,6 @@
       }
     });
 
-    // History
     function saveToHistory(content) {
       pageHistory.unshift({ content, timestamp: Date.now() });
       if (pageHistory.length > 20) pageHistory.pop();
@@ -1304,17 +1270,13 @@
       document.getElementById('history-modal').classList.remove('hidden');
     }
 
-    function closeHistory() {
-      document.getElementById('history-modal').classList.add('hidden');
-    }
-
+    function closeHistory() { document.getElementById('history-modal').classList.add('hidden'); }
     function restoreHistory(index) {
       document.getElementById('editor-content').value = pageHistory[index].content;
       closeHistory();
       showToast('History restored', 'success');
     }
 
-    // Comments
     function renderComments(comments) {
       const list = document.getElementById('comment-list');
       list.innerHTML = comments.map(c => `
@@ -1355,7 +1317,6 @@
       if (e.ctrlKey && e.key === 'Enter') addComment();
     });
 
-    // Images
     function renderImages() {
       const container = document.getElementById('images-grid');
       container.innerHTML = currentImages.map((img, idx) => `
@@ -1375,15 +1336,12 @@
     }
 
     function removeImage(index) { currentImages.splice(index, 1); renderImages(); }
-
     function openImageModal(src) {
       document.getElementById('image-modal-img').src = src;
       document.getElementById('image-modal').classList.remove('hidden');
     }
-
     function closeImageModal() { document.getElementById('image-modal').classList.add('hidden'); }
 
-    // Paste image
     document.addEventListener('paste', (e) => {
       if (document.getElementById('page-editor').classList.contains('hidden')) return;
       const items = e.clipboardData.items;
@@ -1397,7 +1355,6 @@
       }
     });
 
-    // Drag & drop images
     document.getElementById('page-editor').addEventListener('dragover', (e) => e.preventDefault());
     document.getElementById('page-editor').addEventListener('drop', (e) => {
       e.preventDefault();
@@ -1410,7 +1367,6 @@
       });
     });
 
-    // Save
     async function saveCurrentPage() {
       if (!currentPage) { showToast('No page selected', 'error'); return; }
       const title = document.getElementById('editor-title').value.trim();
@@ -1428,7 +1384,6 @@
       } catch (e) { showToast(e.message, 'error'); }
     }
 
-    // UI
     function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
     function toggleTheme() { document.body.classList.toggle('dark-mode'); }
 
@@ -1440,7 +1395,6 @@
       setTimeout(() => toast.classList.add('hidden'), 3000);
     }
 
-    // Enter key
     document.addEventListener('keypress', (e) => {
       if (e.key === 'Enter' && !e.shiftKey) {
         if (document.getElementById('signin-form').contains(e.target)) signIn();
@@ -1451,7 +1405,6 @@
       }
     });
 
-    // Close modals
     document.querySelectorAll('.modal-overlay').forEach(overlay => {
       overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
     });

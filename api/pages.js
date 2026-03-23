@@ -18,7 +18,7 @@ export default async function handler(req, res) {
 
   const u = user.username;
   const { method, query } = req;
-  const { type, id: itemId, commentId } = query;
+  const { type, id: itemId } = query;
 
   try {
     // GET all spaces + pages

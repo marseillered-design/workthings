@@ -237,51 +237,6 @@
     .editor-content:focus { outline: none; }
     .editor-content::placeholder { color: var(--text-secondary); }
     
-    /* Table Styles */
-    .content-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 16px 0;
-      border: 1px solid var(--border-color);
-    }
-    
-    .content-table th,
-    .content-table td {
-      border: 1px solid var(--border-color);
-      padding: 12px;
-      text-align: left;
-    }
-    
-    .content-table th {
-      background: var(--bg-secondary);
-      font-weight: 600;
-    }
-    
-    .content-table tr:hover {
-      background: var(--bg-hover);
-    }
-    
-    .table-controls {
-      display: flex;
-      gap: 8px;
-      margin-top: 8px;
-      padding: 8px;
-      background: var(--bg-secondary);
-      border-radius: 6px;
-    }
-    
-    .table-control-btn {
-      padding: 4px 8px;
-      border: none;
-      border-radius: 4px;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      font-size: 12px;
-      cursor: pointer;
-    }
-    
-    .table-control-btn:hover { background: var(--bg-hover); }
-    
     /* Slash Menu */
     .slash-menu {
       position: absolute; background: var(--bg-primary); border: 1px solid var(--border-color);
@@ -750,12 +705,12 @@
       <h3 class="modal-title">📊 Insert Table</h3>
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
         <div>
-          <label style="font-size: 13px; color: var(--text-secondary);">Rows</label>
-          <input class="auth-input" type="number" id="table-rows" value="3" min="1" max="10">
+          <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Rows (1-10)</label>
+          <input class="auth-input" type="number" id="table-rows" value="2" min="1" max="10">
         </div>
         <div>
-          <label style="font-size: 13px; color: var(--text-secondary);">Columns</label>
-          <input class="auth-input" type="number" id="table-cols" value="2" min="1" max="10">
+          <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Columns (1-10)</label>
+          <input class="auth-input" type="number" id="table-cols" value="3" min="1" max="10">
         </div>
       </div>
       <div class="modal-actions">
@@ -866,89 +821,11 @@
 
     // Templates
     const templates = {
-      meeting: `# Meeting Notes
-
-## 📅 Date: ${new Date().toLocaleDateString()}
-## 👥 Attendees: 
-
-## 📋 Agenda
-- 
-
-## 📝 Discussion Notes
-- 
-
-## ✅ Decisions
-- 
-
-## 🎯 Action Items
-- [ ] 
-
-## 📎 Next Meeting
-`,
-      techspec: `# Technical Specification
-
-## 🎯 Problem Statement
-
-## 📊 Current State
-
-## 💡 Proposed Solution
-
-## 🔧 Technical Details
-
-### Architecture
-
-### API Changes
-
-### Database Changes
-
-## ⚠️ Risks & Concerns
-
-## 📈 Success Metrics
-
-## 📅 Timeline
-`,
-      retro: `# Retrospective
-
-## 📅 Date: ${new Date().toLocaleDateString()}
-## 👥 Team: 
-
-## 😊 What went well
-- 
-
-## 😔 What could be improved
-- 
-
-## 💡 Action items
-- [ ] 
-
-## 🎯 Next sprint goals
-`,
-      bug: `# Bug Report
-
-## 🐛 Description
-
-## 🔁 Steps to Reproduce
-1. 
-2. 
-3. 
-
-## ✅ Expected Behavior
-
-## ❌ Actual Behavior
-
-## 📸 Screenshots
-
-## 🖥️ Environment
-- OS: 
-- Browser: 
-- Version: 
-
-## 📊 Priority
-- [ ] Critical
-- [ ] High
-- [ ] Medium
-- [ ] Low
-`}
+      meeting: `# Meeting Notes\n\n## 📅 Date: ${new Date().toLocaleDateString()}\n## 👥 Attendees: \n\n## 📋 Agenda\n- \n\n## 📝 Discussion Notes\n- \n\n## ✅ Decisions\n- \n\n## 🎯 Action Items\n- [ ] \n\n## 📎 Next Meeting\n`,
+      techspec: `# Technical Specification\n\n## 🎯 Problem Statement\n\n## 📊 Current State\n\n## 💡 Proposed Solution\n\n## 🔧 Technical Details\n\n### Architecture\n\n### API Changes\n\n### Database Changes\n\n## ⚠️ Risks & Concerns\n\n## 📈 Success Metrics\n\n## 📅 Timeline\n`,
+      retro: `# Retrospective\n\n## 📅 Date: ${new Date().toLocaleDateString()}\n## 👥 Team: \n\n## 😊 What went well\n- \n\n## 😔 What could be improved\n- \n\n## 💡 Action items\n- [ ] \n\n## 🎯 Next sprint goals\n`,
+      bug: `# Bug Report\n\n## 🐛 Description\n\n## 🔁 Steps to Reproduce\n1. \n2. \n3. \n\n## ✅ Expected Behavior\n\n## ❌ Actual Behavior\n\n## 📸 Screenshots\n\n## 🖥️ Environment\n- OS: \n- Browser: \n- Version: \n\n## 📊 Priority\n- [ ] Critical\n- [ ] High\n- [ ] Medium\n- [ ] Low\n`
+    };
 
     // Initialize
     if (token && currentUser) {
@@ -1299,14 +1176,34 @@
     }
 
     function insertTable() {
-      const rows = parseInt(document.getElementById('table-rows').value) || 3;
-      const cols = parseInt(document.getElementById('table-cols').value) || 2;
+      const rows = parseInt(document.getElementById('table-rows').value) || 2;
+      const cols = parseInt(document.getElementById('table-cols').value) || 3;
       
-      let table = '\n| ' + Array(cols).fill('Header').join(' | ') + ' |\n';
-      table += '| ' + Array(cols).fill('---').join(' | ') + ' |\n';
-      for (let i = 0; i < rows; i++) {
-        table += '| ' + Array(cols).fill('Cell').join(' | ') + ' |\n';
+      if (rows < 1 || rows > 10) {
+        showToast('Rows must be between 1 and 10', 'error');
+        return;
       }
+      if (cols < 1 || cols > 10) {
+        showToast('Columns must be between 1 and 10', 'error');
+        return;
+      }
+      
+      let table = '\n\n';
+      const headers = [];
+      for (let i = 1; i <= cols; i++) {
+        headers.push(`Column ${i}`);
+      }
+      table += '| ' + headers.join(' | ') + ' |\n';
+      table += '| ' + Array(cols).fill('---').join(' | ') + ' |\n';
+      
+      for (let i = 0; i < rows; i++) {
+        const cells = [];
+        for (let j = 0; j < cols; j++) {
+          cells.push('');
+        }
+        table += '| ' + cells.join(' | ') + ' |\n';
+      }
+      
       table += '\n';
       
       const editor = document.getElementById('editor-content');
@@ -1317,7 +1214,7 @@
       editor.selectionStart = editor.selectionEnd = cursor + table.length;
       
       closeTableModal();
-      showToast('Table inserted', 'success');
+      showToast(`Table ${rows}×${cols} inserted`, 'success');
     }
 
     // Slash Menu

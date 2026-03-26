@@ -1,1413 +1,2153 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>WorkDocs</title>
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    
-    :root {
-      --bg-primary: #ffffff;
-      --bg-secondary: #f7f7f5;
-      --bg-hover: #efefef;
-      --bg-sidebar: #f7f7f5;
-      --text-primary: #37352f;
-      --text-secondary: #9b9a97;
-      --border-color: #e1e1e0;
-      --accent-color: #2eaadc;
-      --danger-color: #eb5757;
-      --success-color: #27ae60;
-      --shadow: 0 1px 3px rgba(0,0,0,0.1);
-      --shadow-lg: 0 4px 24px rgba(0,0,0,0.15);
-    }
-    
-    body.dark-mode {
-      --bg-primary: #191919;
-      --bg-secondary: #202020;
-      --bg-hover: #2a2a2a;
-      --bg-sidebar: #202020;
-      --text-primary: #d9d9d9;
-      --text-secondary: #9b9a97;
-      --border-color: #373737;
-      --shadow: 0 1px 3px rgba(0,0,0,0.3);
-    }
-    
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-      background: var(--bg-primary);
-      color: var(--text-primary);
-      min-height: 100vh;
-      line-height: 1.6;
-    }
-    
-    /* Auth */
-    .auth-wrapper {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg-primary);
-      padding: 20px;
-    }
-    
-    .auth-container {
-      width: 100%;
-      max-width: 400px;
-      padding: 40px;
-    }
-    
-    .auth-logo { text-align: center; margin-bottom: 40px; }
-    .auth-logo-icon { font-size: 48px; margin-bottom: 16px; }
-    .auth-logo h1 { font-size: 24px; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
-    .auth-logo p { color: var(--text-secondary); font-size: 14px; }
-    
-    .auth-tabs {
-      display: flex; gap: 8px; margin-bottom: 24px;
-      background: var(--bg-secondary); padding: 4px; border-radius: 8px;
-    }
-    
-    .auth-tab {
-      flex: 1; padding: 10px 16px; border: none; border-radius: 6px;
-      background: transparent; color: var(--text-secondary);
-      cursor: pointer; font-size: 14px; font-weight: 500; transition: all 0.2s;
-    }
-    
-    .auth-tab.active {
-      background: var(--bg-primary); color: var(--text-primary); box-shadow: var(--shadow);
-    }
-    
-    .auth-input {
-      width: 100%; padding: 12px 14px; border: 1px solid var(--border-color);
-      border-radius: 6px; background: var(--bg-primary); color: var(--text-primary);
-      font-size: 14px; margin-bottom: 12px; transition: border-color 0.2s;
-    }
-    
-    .auth-input:focus { outline: none; border-color: var(--accent-color); }
-    .auth-input::placeholder { color: var(--text-secondary); }
-    
-    .auth-btn {
-      width: 100%; padding: 12px; border: none; border-radius: 6px;
-      background: var(--text-primary); color: var(--bg-primary);
-      font-size: 14px; font-weight: 500; cursor: pointer; margin-top: 8px; transition: opacity 0.2s;
-    }
-    
-    .auth-btn:hover { opacity: 0.9; }
-    .auth-error { color: var(--danger-color); text-align: center; margin-top: 12px; font-size: 13px; }
-    .auth-help { color: var(--text-secondary); text-align: center; margin-top: 20px; font-size: 13px; }
-    .hidden { display: none !important; }
-    
-    /* App Layout */
-    .app-layout { display: flex; min-height: 100vh; }
-    
-    /* Sidebar */
-    .sidebar {
-      width: 240px; background: var(--bg-sidebar); border-right: 1px solid var(--border-color);
-      padding: 12px 8px; display: flex; flex-direction: column;
-      position: fixed; height: 100vh; overflow-y: auto; z-index: 100; transition: transform 0.3s;
-    }
-    
-    .sidebar-header {
-      display: flex; align-items: center; gap: 10px; padding: 8px 12px; margin-bottom: 16px;
-    }
-    
-    .sidebar-logo { font-size: 20px; }
-    .sidebar-title { font-weight: 600; font-size: 14px; color: var(--text-primary); }
-    .sidebar-section { margin-bottom: 20px; }
-    
-    .sidebar-section-title {
-      font-size: 11px; font-weight: 600; color: var(--text-secondary);
-      text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; margin-bottom: 4px;
-    }
-    
-    .sidebar-item {
-      display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-      border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--text-primary);
-      transition: background 0.15s; text-decoration: none;
-    }
-    
-    .sidebar-item:hover { background: var(--bg-hover); }
-    .sidebar-item-icon { font-size: 16px; width: 20px; text-align: center; }
-    .sidebar-item-title { flex: 1; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    
-    .sidebar-actions { display: flex; gap: 4px; opacity: 0; transition: opacity 0.15s; }
-    .sidebar-item:hover .sidebar-actions { opacity: 1; }
-    
-    .sidebar-action-btn {
-      padding: 4px 8px; border: none; border-radius: 4px; background: transparent;
-      color: var(--text-secondary); cursor: pointer; font-size: 12px;
-    }
-    
-    .sidebar-action-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-    
-    .sidebar-footer {
-      margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-color);
-    }
-    
-    .sidebar-user {
-      display: flex; align-items: center; gap: 10px; padding: 8px 12px;
-      border-radius: 6px; cursor: pointer; font-size: 14px; color: var(--text-primary);
-      transition: background 0.15s;
-    }
-    
-    .sidebar-user:hover { background: var(--bg-hover); }
-    
-    .sidebar-user-avatar {
-      width: 28px; height: 28px; border-radius: 50%; background: var(--accent-color);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 12px; font-weight: 600;
-    }
-    
-    /* Main Content */
-    .main-content { flex: 1; margin-left: 240px; min-height: 100vh; }
-    
-    .main-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 12px 24px; border-bottom: 1px solid var(--border-color);
-      position: sticky; top: 0; background: var(--bg-primary); z-index: 50;
-    }
-    
-    .main-header-left { display: flex; align-items: center; gap: 12px; }
-    
-    .menu-toggle {
-      display: none; padding: 8px; border: none; border-radius: 6px;
-      background: transparent; cursor: pointer; color: var(--text-secondary);
-    }
-    
-    .menu-toggle:hover { background: var(--bg-hover); }
-    
-    .breadcrumb {
-      display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text-secondary);
-    }
-    
-    .breadcrumb-item { color: var(--text-primary); cursor: pointer; }
-    .breadcrumb-item:hover { text-decoration: underline; }
-    .breadcrumb-separator { color: var(--text-secondary); }
-    
-    .main-header-right { display: flex; align-items: center; gap: 8px; }
-    
-    .header-btn {
-      padding: 8px 12px; border: 1px solid var(--border-color); border-radius: 6px;
-      background: var(--bg-primary); color: var(--text-primary); font-size: 13px;
-      cursor: pointer; transition: all 0.15s; display: flex; align-items: center; gap: 6px;
-    }
-    
-    .header-btn:hover { background: var(--bg-hover); }
-    .header-btn-primary { background: var(--text-primary); color: var(--bg-primary); border: none; }
-    .header-btn-primary:hover { opacity: 0.9; }
-    
-    /* Page Container */
-    .page-container {
-      max-width: 1200px; margin: 0 auto; padding: 32px 48px;
-    }
-    
-    .page-title {
-      font-size: 40px; font-weight: 700; border: none; background: transparent;
-      color: var(--text-primary); width: 100%; margin-bottom: 24px; line-height: 1.2;
-    }
-    
-    .page-title:focus { outline: none; }
-    .page-title::placeholder { color: var(--text-secondary); }
-    
-    /* Editor Toolbar */
-    .editor-toolbar {
-      display: flex; align-items: center; gap: 4px; padding: 8px;
-      background: var(--bg-secondary); border-radius: 8px;
-      margin-bottom: 16px; flex-wrap: wrap; position: sticky; top: 60px; z-index: 40;
-    }
-    
-    .toolbar-btn {
-      padding: 6px 10px; border: none; border-radius: 4px;
-      background: transparent; color: var(--text-secondary);
-      cursor: pointer; font-size: 14px; transition: all 0.15s;
-    }
-    
-    .toolbar-btn:hover { background: var(--bg-hover); color: var(--text-primary); }
-    .toolbar-divider { width: 1px; height: 24px; background: var(--border-color); margin: 0 4px; }
-    
-    .editor-content {
-      font-size: 16px; line-height: 1.7; color: var(--text-primary);
-      min-height: 500px; border: 1px solid var(--border-color);
-      background: var(--bg-primary); width: 100%; resize: vertical;
-      padding: 16px; border-radius: 8px;
-    }
-    
-    .editor-content:focus { outline: none; border-color: var(--accent-color); }
-    
-    /* Table Styles - Like Confluence */
-    .content-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin: 24px 0;
-      font-size: 14px;
-      border: 1px solid var(--border-color);
-    }
-    
-    .content-table thead {
-      background: var(--bg-secondary);
-    }
-    
-    .content-table th {
-      border: 1px solid var(--border-color);
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      color: var(--text-primary);
-      background: var(--bg-secondary);
-    }
-    
-    .content-table td {
-      border: 1px solid var(--border-color);
-      padding: 12px 16px;
-      color: var(--text-primary);
-      vertical-align: top;
-    }
-    
-    .content-table tbody tr:hover {
-      background: var(--bg-hover);
-    }
-    
-    .content-table tbody tr:nth-child(even) {
-      background: var(--bg-secondary);
-    }
-    
-    /* Slash Menu */
-    .slash-menu {
-      position: absolute; background: var(--bg-primary); border: 1px solid var(--border-color);
-      border-radius: 8px; box-shadow: var(--shadow-lg); padding: 8px;
-      width: 280px; max-height: 400px; overflow-y: auto; z-index: 1000;
-    }
-    
-    .slash-menu-section { margin-bottom: 12px; }
-    .slash-menu-section-title {
-      font-size: 11px; font-weight: 600; color: var(--text-secondary);
-      text-transform: uppercase; padding: 4px 8px; margin-bottom: 4px;
-    }
-    
-    .slash-menu-item {
-      display: flex; align-items: center; gap: 12px; padding: 8px;
-      border-radius: 6px; cursor: pointer; transition: background 0.15s;
-    }
-    
-    .slash-menu-item:hover { background: var(--bg-hover); }
-    .slash-menu-item-icon {
-      width: 32px; height: 32px; background: var(--bg-secondary);
-      border-radius: 6px; display: flex; align-items: center; justify-content: center;
-      font-size: 16px;
-    }
-    
-    .slash-menu-item-text { flex: 1; }
-    .slash-menu-item-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-    .slash-menu-item-desc { font-size: 12px; color: var(--text-secondary); }
-    
-    /* Search Modal */
-    .search-modal {
-      position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
-      width: 600px; max-width: 90%; background: var(--bg-primary);
-      border: 1px solid var(--border-color); border-radius: 12px;
-      box-shadow: var(--shadow-lg); z-index: 1000;
-    }
-    
-    .search-input {
-      width: 100%; padding: 16px 20px; border: none; border-bottom: 1px solid var(--border-color);
-      background: transparent; color: var(--text-primary); font-size: 16px;
-    }
-    
-    .search-input:focus { outline: none; }
-    .search-results { max-height: 400px; overflow-y: auto; padding: 8px; }
-    .search-result-item {
-      padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s;
-    }
-    .search-result-item:hover { background: var(--bg-hover); }
-    .search-result-title { font-size: 14px; font-weight: 500; color: var(--text-primary); }
-    .search-result-preview { font-size: 13px; color: var(--text-secondary); margin-top: 4px; }
-    
-    /* History Modal */
-    .history-list { max-height: 500px; overflow-y: auto; }
-    .history-item {
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 12px; border-radius: 8px; cursor: pointer; transition: background 0.15s;
-      border-bottom: 1px solid var(--border-color);
-    }
-    .history-item:hover { background: var(--bg-hover); }
-    .history-item-info { flex: 1; }
-    .history-item-date { font-size: 13px; color: var(--text-primary); font-weight: 500; }
-    .history-item-preview { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-    .history-item-actions { display: flex; gap: 8px; }
-    
-    /* Comments */
-    .comments-section {
-      margin-top: 48px; padding-top: 24px; border-top: 1px solid var(--border-color);
-    }
-    
-    .comments-title { font-size: 16px; font-weight: 600; margin-bottom: 16px; }
-    .comment-input {
-      width: 100%; padding: 12px; border: 1px solid var(--border-color);
-      border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);
-      font-size: 14px; resize: vertical; min-height: 80px; margin-bottom: 12px;
-    }
-    .comment-input:focus { outline: none; border-color: var(--accent-color); }
-    .comment-list { margin-top: 24px; }
-    .comment-item {
-      display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-color);
-    }
-    .comment-avatar {
-      width: 32px; height: 32px; border-radius: 50%; background: var(--accent-color);
-      display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 12px; font-weight: 600; flex-shrink: 0;
-    }
-    .comment-content { flex: 1; }
-    .comment-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
-    .comment-author { font-size: 13px; font-weight: 600; color: var(--text-primary); }
-    .comment-date { font-size: 12px; color: var(--text-secondary); }
-    .comment-text { font-size: 14px; color: var(--text-primary); line-height: 1.5; }
-    
-    /* Image Modal */
-    .image-modal {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.9); display: flex; align-items: center;
-      justify-content: center; z-index: 2000;
-    }
-    .image-modal img { max-width: 90%; max-height: 90%; border-radius: 8px; }
-    .image-modal-close {
-      position: absolute; top: 20px; right: 20px; width: 40px; height: 40px;
-      border-radius: 50%; background: rgba(255,255,255,0.2); border: none;
-      color: white; font-size: 24px; cursor: pointer;
-    }
-    
-    /* Images Grid */
-    .images-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-      gap: 12px; margin-top: 24px;
-    }
-    .image-item {
-      position: relative; border-radius: 8px; overflow: hidden;
-      aspect-ratio: 1; cursor: pointer;
-    }
-    .image-item img { width: 100%; height: 100%; object-fit: cover; }
-    .image-item button {
-      position: absolute; top: 6px; right: 6px; width: 24px; height: 24px;
-      border-radius: 50%; border: none; background: rgba(0,0,0,0.7);
-      color: white; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-    }
-    
-    /* Image Upload Area */
-    .image-upload-area {
-      margin-top: 24px; padding: 32px; border: 2px dashed var(--border-color);
-      border-radius: 8px; text-align: center; cursor: pointer;
-      color: var(--text-secondary); transition: all 0.15s;
-    }
-    .image-upload-area:hover { border-color: var(--accent-color); color: var(--accent-color); }
-    
-    /* Templates Modal */
-    .templates-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
-    }
-    .template-card {
-      padding: 16px; border: 1px solid var(--border-color); border-radius: 8px;
-      cursor: pointer; transition: all 0.15s;
-    }
-    .template-card:hover { border-color: var(--accent-color); background: var(--bg-hover); }
-    .template-card-icon { font-size: 24px; margin-bottom: 8px; }
-    .template-card-title { font-size: 14px; font-weight: 600; color: var(--text-primary); }
-    .template-card-desc { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
-    
-    /* Modal */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0,0,0,0.5); display: flex; align-items: center;
-      justify-content: center; z-index: 1000; backdrop-filter: blur(2px);
-    }
-    .modal {
-      background: var(--bg-primary); border-radius: 12px; padding: 24px;
-      width: 90%; max-width: 500px; border: 1px solid var(--border-color);
-      box-shadow: var(--shadow-lg);
-    }
-    .modal-title { font-size: 18px; font-weight: 600; margin-bottom: 20px; color: var(--text-primary); }
-    .modal-actions { display: flex; gap: 8px; margin-top: 20px; justify-content: flex-end; }
-    .modal-btn {
-      padding: 10px 16px; border: 1px solid var(--border-color); border-radius: 6px;
-      background: var(--bg-primary); color: var(--text-primary);
-      font-size: 14px; cursor: pointer; transition: all 0.15s;
-    }
-    .modal-btn:hover { background: var(--bg-hover); }
-    .modal-btn-primary { background: var(--text-primary); color: var(--bg-primary); border: none; }
-    
-    /* Toast */
-    .toast {
-      position: fixed; bottom: 24px; right: 24px; background: var(--bg-primary);
-      border: 1px solid var(--border-color); border-radius: 8px;
-      padding: 12px 16px; display: flex; align-items: center; gap: 10px;
-      z-index: 1001; box-shadow: var(--shadow-lg); font-size: 14px;
-    }
-    .toast.success { border-left: 3px solid var(--success-color); }
-    .toast.error { border-left: 3px solid var(--danger-color); }
-    
-    /* Loading */
-    .loading-state {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; min-height: 60vh;
-    }
-    .spinner {
-      width: 32px; height: 32px; border: 2px solid var(--border-color);
-      border-top-color: var(--accent-color); border-radius: 50%;
-      animation: spin 0.8s linear infinite; margin-bottom: 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    
-    /* Empty State */
-    .empty-state {
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; min-height: 60vh; text-align: center; padding: 48px;
-    }
-    .empty-state-icon { font-size: 64px; margin-bottom: 24px; opacity: 0.5; }
-    .empty-state-title { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: 8px; }
-    .empty-state-text { color: var(--text-secondary); font-size: 14px; margin-bottom: 24px; }
-    
-    /* Mobile */
-    @media (max-width: 768px) {
-      .sidebar { transform: translateX(-100%); }
-      .sidebar.open { transform: translateX(0); }
-      .main-content { margin-left: 0; }
-      .menu-toggle { display: block; }
-      .page-container { padding: 24px; }
-      .page-title { font-size: 28px; }
-      .editor-toolbar { position: relative; top: 0; }
-    }
-    
-    /* Scrollbar */
-    ::-webkit-scrollbar { width: 6px; }
-    ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 3px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--text-secondary); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkDocs — Your Knowledge Base</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            /* Light Theme */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-tertiary: #f1f3f4;
+            --bg-hover: #e8eaed;
+            --border: #e0e0e0;
+            --border-light: #f0f0f0;
+            --text-primary: #1a1a1a;
+            --text-secondary: #5f6368;
+            --text-tertiary: #9aa0a6;
+            --accent: #1a73e8;
+            --accent-hover: #1557b0;
+            --accent-light: #e8f0fe;
+            --success: #188038;
+            --warning: #f9ab00;
+            --danger: #d93025;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius-sm: 6px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --radius-xl: 16px;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #1a1a1a;
+            --bg-secondary: #242424;
+            --bg-tertiary: #2d2d2d;
+            --bg-hover: #383838;
+            --border: #404040;
+            --border-light: #333333;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-tertiary: #666666;
+            --accent: #4d90fe;
+            --accent-hover: #73a9ff;
+            --accent-light: #1a3a5c;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
+
+        /* Auth Pages */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+        }
+
+        .auth-card {
+            background: var(--bg-primary);
+            padding: 48px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            width: 100%;
+            max-width: 420px;
+            border: 1px solid var(--border);
+        }
+
+        .auth-logo {
+            font-size: 40px;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .auth-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--text-primary);
+        }
+
+        .auth-subtitle {
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            font-size: 15px;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 14px 16px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .auth-form input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .auth-btn {
+            width: 100%;
+            padding: 14px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .auth-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .auth-btn:active {
+            transform: translateY(0);
+        }
+
+        .auth-btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .auth-btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 24px;
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+
+        .auth-switch a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .auth-switch a:hover {
+            text-decoration: underline;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 28px 0;
+            color: var(--text-tertiary);
+            font-size: 13px;
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-divider span {
+            padding: 0 16px;
+        }
+
+        .invite-info {
+            background: var(--accent-light);
+            padding: 14px 16px;
+            border-radius: var(--radius-md);
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            border-left: 3px solid var(--accent);
+        }
+
+        /* Main App */
+        .app-container {
+            display: none;
+            min-height: 100vh;
+        }
+
+        .app-container.active {
+            display: flex;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--bg-primary);
+            border-right: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-header {
+            padding: 20px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .sidebar-logo {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-primary);
+        }
+
+        .sidebar-logo-icon {
+            font-size: 24px;
+        }
+
+        .sidebar-menu {
+            padding: 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section-title {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 8px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 16px;
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .sidebar-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .space-item {
+            padding: 10px 12px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .space-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .space-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .space-icon {
+            font-size: 16px;
+        }
+
+        .page-item {
+            padding: 8px 12px 8px 36px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 4px;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .page-item:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .page-item.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .page-icon {
+            font-size: 14px;
+            opacity: 0.7;
+        }
+
+        .sidebar-footer {
+            padding: 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .logout-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            font-size: 13px;
+            margin-left: auto;
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: var(--bg-hover);
+            color: var(--danger);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .top-bar {
+            padding: 12px 24px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .top-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex: 1;
+        }
+
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .menu-toggle:hover {
+            background: var(--bg-hover);
+        }
+
+        .page-title-input {
+            font-size: 18px;
+            font-weight: 600;
+            border: none;
+            background: transparent;
+            flex: 1;
+            max-width: 400px;
+            color: var(--text-primary);
+            padding: 8px 12px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+        }
+
+        .page-title-input:focus {
+            outline: none;
+            background: var(--bg-secondary);
+        }
+
+        .page-title-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .top-bar-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .top-btn {
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .top-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .save-btn {
+            background: var(--accent);
+            color: #fff;
+            font-size: 13px;
+            font-weight: 500;
+            padding: 8px 16px;
+        }
+
+        .save-btn:hover {
+            background: var(--accent-hover);
+        }
+
+        /* Editor */
+        .editor-wrapper {
+            flex: 1;
+            overflow-y: auto;
+            padding: 32px 24px;
+        }
+
+        .editor-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            max-width: 900px;
+            margin: 0 auto;
+            border: 1px solid var(--border);
+        }
+
+        .editor-toolbar {
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 4px;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+
+        .toolbar-btn {
+            padding: 8px 10px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .toolbar-btn.active {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .toolbar-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+            margin: 0 8px;
+        }
+
+        .editor-content {
+            padding: 40px;
+            min-height: 500px;
+            outline: none;
+            font-size: 16px;
+            line-height: 1.8;
+            color: var(--text-primary);
+        }
+
+        .editor-content:empty::before {
+            content: 'Start typing or type "/" for commands...';
+            color: var(--text-tertiary);
+        }
+
+        .editor-content h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
+        }
+
+        .editor-content h2 {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 32px 0 16px;
+            color: var(--text-primary);
+            letter-spacing: -0.3px;
+        }
+
+        .editor-content h3 {
+            font-size: 20px;
+            font-weight: 600;
+            margin: 24px 0 12px;
+            color: var(--text-primary);
+        }
+
+        .editor-content p {
+            margin-bottom: 16px;
+        }
+
+        .editor-content ul,
+        .editor-content ol {
+            margin: 16px 0;
+            padding-left: 24px;
+        }
+
+        .editor-content li {
+            margin-bottom: 8px;
+        }
+
+        .editor-content blockquote {
+            border-left: 4px solid var(--accent);
+            padding: 16px 20px;
+            background: var(--accent-light);
+            margin: 20px 0;
+            border-radius: 0 var(--radius-md) var(--radius-md) 0;
+            color: var(--text-secondary);
+        }
+
+        .editor-content .callout {
+            background: #fff3cd;
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            border-left: 4px solid var(--warning);
+            margin: 20px 0;
+        }
+
+        [data-theme="dark"] .editor-content .callout {
+            background: #3d341b;
+        }
+
+        .editor-content .code-block {
+            background: #1a1a1a;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+            font-size: 13px;
+            margin: 20px 0;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+
+        .editor-content hr {
+            border: none;
+            height: 1px;
+            background: var(--border);
+            margin: 32px 0;
+        }
+
+        .editor-content img {
+            max-width: 100%;
+            border-radius: var(--radius-md);
+            margin: 20px 0;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .editor-content a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .editor-content a:hover {
+            text-decoration: underline;
+        }
+
+        /* Table Styles */
+        .table-wrapper {
+            overflow-x: auto;
+            margin: 20px 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+        }
+
+        .work-table,
+        .work-table-preview {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+
+        .work-table th,
+        .work-table td,
+        .work-table-preview th,
+        .work-table-preview td {
+            border: 1px solid var(--border);
+            padding: 12px 16px;
+            text-align: left;
+        }
+
+        .work-table th,
+        .work-table-preview th {
+            background-color: var(--bg-tertiary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .work-table td,
+        .work-table-preview td {
+            color: var(--text-secondary);
+        }
+
+        .work-table td:empty::before,
+        .work-table-preview td:empty::before {
+            content: '\00a0';
+        }
+
+        .table-controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .table-controls label {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .table-controls input {
+            width: 100px;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+        }
+
+        .table-controls input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .table-preview-area {
+            margin-top: 16px;
+        }
+
+        .table-preview-area p {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            margin-bottom: 12px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        #table-preview-container {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            background: var(--bg-secondary);
+            max-height: 200px;
+            overflow: auto;
+        }
+
+        /* Comments */
+        .comments-section {
+            max-width: 900px;
+            margin: 32px auto;
+            padding: 0 24px;
+        }
+
+        .comments-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .comment-list {
+            margin-bottom: 20px;
+        }
+
+        .comment-item {
+            background: var(--bg-primary);
+            padding: 16px 20px;
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border);
+            transition: all 0.2s;
+        }
+
+        .comment-item:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            font-weight: 500;
+        }
+
+        .comment-user {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .comment-form textarea {
+            width: 100%;
+            padding: 14px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            resize: vertical;
+            min-height: 100px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+
+        .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        .comment-form textarea::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .comment-form button {
+            margin-top: 12px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+            color: var(--text-secondary);
+        }
+
+        .empty-state-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-state h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .empty-state p {
+            margin-bottom: 28px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            padding: 32px;
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 520px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            transform: scale(0.95);
+            transition: transform 0.2s;
+        }
+
+        .modal.active .modal-content {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--text-tertiary);
+            padding: 4px;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: var(--bg-hover);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            margin-bottom: 24px;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+
+        /* Template Grid */
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .template-card {
+            padding: 20px;
+            border: 2px solid var(--border);
+            border-radius: var(--radius-lg);
+            cursor: pointer;
+            transition: all 0.2s;
+            background: var(--bg-secondary);
+        }
+
+        .template-card:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            transform: translateY(-2px);
+        }
+
+        .template-card.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .template-card h4 {
+            margin-bottom: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .template-card p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Buttons */
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-hover);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: #fff;
+        }
+
+        .btn-success {
+            background: var(--success);
+            color: #fff;
+        }
+
+        /* Status Bar */
+        .status-bar {
+            padding: 10px 24px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border);
+            font-size: 12px;
+            color: var(--text-tertiary);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .status-bar span {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Upload Area */
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: var(--radius-lg);
+            padding: 48px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin: 24px 40px;
+            background: var(--bg-secondary);
+        }
+
+        .upload-area:hover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--accent);
+            background: var(--accent-light);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .upload-text strong {
+            color: var(--accent);
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .sidebar {
+                position: fixed;
+                left: -280px;
+                top: 0;
+                height: 100vh;
+                z-index: 100;
+                box-shadow: var(--shadow-lg);
+            }
+
+            .sidebar.open {
+                left: 0;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .editor-content {
+                padding: 24px;
+            }
+
+            .upload-area {
+                margin: 24px;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .auth-card {
+                padding: 32px 24px;
+            }
+
+            .top-bar {
+                padding: 12px 16px;
+            }
+
+            .page-title-input {
+                max-width: 200px;
+            }
+
+            .template-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .toolbar-btn span {
+                display: none;
+            }
+
+            .editor-wrapper {
+                padding: 16px;
+            }
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: var(--text-primary);
+            color: var(--bg-primary);
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            z-index: 2000;
+            animation: slideIn 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Slash Menu */
+        #slash-menu .modal-content {
+            max-width: 420px;
+            padding: 16px;
+        }
+
+        #slash-menu .modal-header {
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        #slash-menu .modal-header h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--text-tertiary);
+        }
+
+        /* Search */
+        .search-box {
+            position: relative;
+            margin: 12px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 14px 10px 36px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 13px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .search-box input:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: var(--bg-primary);
+        }
+
+        .search-box::before {
+            content: '🔍';
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            opacity: 0.5;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease;
+        }
+    </style>
 </head>
 <body>
-  <!-- Auth Section -->
-  <div id="auth-section" class="auth-wrapper">
-    <div class="auth-container">
-      <div class="auth-logo">
-        <div class="auth-logo-icon">📋</div>
-        <h1>WorkDocs</h1>
-        <p>Your personal knowledge base</p>
-      </div>
-      <div class="auth-tabs">
-        <button class="auth-tab active" onclick="showAuthTab('signin')">Sign In</button>
-        <button class="auth-tab" onclick="showAuthTab('register')">Register</button>
-      </div>
-      <div id="signin-form">
-        <input class="auth-input" type="text" id="signin-username" placeholder="Username" autocomplete="username">
-        <input class="auth-input" type="password" id="signin-password" placeholder="Password" autocomplete="current-password">
-        <button class="auth-btn" onclick="signIn()">Continue</button>
-        <p class="auth-error" id="signin-error"></p>
-      </div>
-      <div id="register-form" class="hidden">
-        <input class="auth-input" type="text" id="reg-username" placeholder="Username" autocomplete="username">
-        <input class="auth-input" type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
-        <input class="auth-input" type="password" id="reg-secret" placeholder="Team invite code" autocomplete="off">
-        <button class="auth-btn" onclick="register()">Create account</button>
-        <p class="auth-error" id="reg-error"></p>
-      </div>
-      <p class="auth-help">New to WorkDocs? Get an invite code from your team admin.</p>
-    </div>
-  </div>
-
-  <!-- App Section -->
-  <div id="app-section" class="app-layout hidden">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar">
-      <div class="sidebar-header">
-        <span class="sidebar-logo">📋</span>
-        <span class="sidebar-title">WorkDocs</span>
-      </div>
-      <div class="sidebar-section">
-        <div class="sidebar-section-title">Spaces</div>
-        <div id="sidebar-spaces"></div>
-        <div class="sidebar-item" onclick="openSpaceModal()">
-          <span class="sidebar-item-icon">+</span>
-          <span class="sidebar-item-title">New space</span>
-        </div>
-      </div>
-      <div class="sidebar-footer">
-        <div class="sidebar-user" onclick="signOut()">
-          <div class="sidebar-user-avatar" id="user-avatar"></div>
-          <span class="sidebar-item-title" id="user-name"></span>
-          <span style="color: var(--text-secondary); font-size: 12px;">→ Sign out</span>
-        </div>
-      </div>
-    </aside>
-
-    <!-- Main Content -->
-    <main class="main-content">
-      <header class="main-header">
-        <div class="main-header-left">
-          <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
-          <div class="breadcrumb" id="breadcrumb">
-            <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
-          </div>
-        </div>
-        <div class="main-header-right">
-          <button class="header-btn" onclick="openSearch()" title="Search (Cmd+K)">🔍</button>
-          <button class="header-btn" onclick="openHistory()" title="History">🕐</button>
-          <button class="header-btn" onclick="toggleTheme()">🌙</button>
-          <button class="header-btn header-btn-primary" onclick="saveCurrentPage()">💾 Save</button>
-        </div>
-      </header>
-
-      <div id="main-container">
-        <div class="loading-state" id="loading-state">
-          <div class="spinner"></div>
-          <p style="color: var(--text-secondary);">Loading...</p>
-        </div>
-
-        <div class="empty-state hidden" id="empty-state">
-          <div class="empty-state-icon">📁</div>
-          <h2 class="empty-state-title">No spaces yet</h2>
-          <p class="empty-state-text">Create your first space to start organizing your knowledge</p>
-          <button class="header-btn header-btn-primary" onclick="openSpaceModal()">+ New space</button>
-        </div>
-
-        <div class="page-container hidden" id="spaces-view">
-          <input class="page-title" type="text" placeholder="📚 My Knowledge Base" readonly>
-          <div style="color: var(--text-secondary);">
-            <p style="margin-bottom: 24px;">Select a space from the sidebar or create a new one to get started.</p>
-            <div id="spaces-overview"></div>
-          </div>
-        </div>
-
-        <div class="page-container hidden" id="page-editor">
-          <input class="page-title" type="text" id="editor-title" placeholder="Untitled">
-          
-          <div class="editor-toolbar">
-            <button class="toolbar-btn" onclick="formatText('bold')" title="Bold"><b>B</b></button>
-            <button class="toolbar-btn" onclick="formatText('italic')" title="Italic"><i>I</i></button>
-            <button class="toolbar-btn" onclick="formatText('underline')" title="Underline"><u>U</u></button>
-            <button class="toolbar-btn" onclick="formatText('strikeThrough')" title="Strikethrough"><s>S</s></button>
-            <div class="toolbar-divider"></div>
-            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H1')" title="Heading 1">H1</button>
-            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H2')" title="Heading 2">H2</button>
-            <button class="toolbar-btn" onclick="formatText('formatBlock', 'H3')" title="Heading 3">H3</button>
-            <div class="toolbar-divider"></div>
-            <button class="toolbar-btn" onclick="formatText('insertUnorderedList')" title="Bullet List">•</button>
-            <button class="toolbar-btn" onclick="formatText('insertOrderedList')" title="Numbered List">1.</button>
-            <button class="toolbar-btn" onclick="toggleCheckbox()" title="Checkbox">☑️</button>
-            <div class="toolbar-divider"></div>
-            <button class="toolbar-btn" onclick="formatText('formatBlock', 'blockquote')" title="Quote">❝</button>
-            <button class="toolbar-btn" onclick="insertCallout()" title="Callout">💡</button>
-            <button class="toolbar-btn" onclick="insertCode()" title="Code">⌨️</button>
-            <div class="toolbar-divider"></div>
-            <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
-            <button class="toolbar-btn" onclick="insertDivider()" title="Divider">—</button>
-            <button class="toolbar-btn" onclick="openTableModal()" title="Table">📊</button>
-            <button class="toolbar-btn" onclick="document.getElementById('image-input').click()" title="Image">🖼️</button>
-          </div>
-          
-          <textarea class="editor-content" id="editor-content" placeholder="Start writing... Type '/' for commands"></textarea>
-          
-          <div class="image-upload-area" onclick="document.getElementById('image-input').click()">
-            📎 Click to upload images · Paste (Ctrl+V) · Drag & drop
-            <input type="file" id="image-input" accept="image/*" multiple class="hidden" onchange="handleImageUpload(event)">
-          </div>
-          <div class="images-grid" id="images-grid"></div>
-
-          <!-- Comments Section -->
-          <div class="comments-section">
-            <h3 class="comments-title">💬 Comments</h3>
-            <textarea class="comment-input" id="comment-input" placeholder="Add a comment... (Ctrl+Enter to send)"></textarea>
-            <button class="header-btn header-btn-primary" style="width: auto;" onclick="addComment()">Post</button>
-            <div class="comment-list" id="comment-list"></div>
-          </div>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- Slash Menu -->
-  <div class="slash-menu hidden" id="slash-menu">
-    <div class="slash-menu-section">
-      <div class="slash-menu-section-title">Basic blocks</div>
-      <div class="slash-menu-item" onclick="insertBlock('h1')">
-        <div class="slash-menu-item-icon">H1</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Heading 1</div>
-          <div class="slash-menu-item-desc">Large title</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('h2')">
-        <div class="slash-menu-item-icon">H2</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Heading 2</div>
-          <div class="slash-menu-item-desc">Medium title</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('h3')">
-        <div class="slash-menu-item-icon">H3</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Heading 3</div>
-          <div class="slash-menu-item-desc">Small title</div>
-        </div>
-      </div>
-    </div>
-    <div class="slash-menu-section">
-      <div class="slash-menu-section-title">Lists</div>
-      <div class="slash-menu-item" onclick="insertBlock('bullet')">
-        <div class="slash-menu-item-icon">•</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Bullet list</div>
-          <div class="slash-menu-item-desc">Unordered</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('numbered')">
-        <div class="slash-menu-item-icon">1.</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Numbered list</div>
-          <div class="slash-menu-item-desc">Ordered</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('checkbox')">
-        <div class="slash-menu-item-icon">☑️</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">To-do</div>
-          <div class="slash-menu-item-desc">Checkbox task</div>
-        </div>
-      </div>
-    </div>
-    <div class="slash-menu-section">
-      <div class="slash-menu-section-title">Content</div>
-      <div class="slash-menu-item" onclick="insertBlock('quote')">
-        <div class="slash-menu-item-icon">❝</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Quote</div>
-          <div class="slash-menu-item-desc">Blockquote</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('callout')">
-        <div class="slash-menu-item-icon">💡</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Callout</div>
-          <div class="slash-menu-item-desc">Highlighted box</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('code')">
-        <div class="slash-menu-item-icon">⌨️</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Code</div>
-          <div class="slash-menu-item-desc">Code block</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="insertBlock('divider')">
-        <div class="slash-menu-item-icon">—</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Divider</div>
-          <div class="slash-menu-item-desc">Horizontal line</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="openTableModal()">
-        <div class="slash-menu-item-icon">📊</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Table</div>
-          <div class="slash-menu-item-desc">2×3 grid</div>
-        </div>
-      </div>
-      <div class="slash-menu-item" onclick="document.getElementById('image-input').click()">
-        <div class="slash-menu-item-icon">🖼️</div>
-        <div class="slash-menu-item-text">
-          <div class="slash-menu-item-title">Image</div>
-          <div class="slash-menu-item-desc">Upload image</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Table Modal -->
-  <div class="modal-overlay hidden" id="table-modal">
-    <div class="modal">
-      <h3 class="modal-title">📊 Insert Table</h3>
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px;">
-        <div>
-          <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Rows (1-10)</label>
-          <input class="auth-input" type="number" id="table-rows" value="2" min="1" max="10">
-        </div>
-        <div>
-          <label style="font-size: 13px; color: var(--text-secondary); display: block; margin-bottom: 4px;">Columns (1-10)</label>
-          <input class="auth-input" type="number" id="table-cols" value="3" min="1" max="10">
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn" onclick="closeTableModal()">Cancel</button>
-        <button class="modal-btn modal-btn-primary" onclick="insertTable()">Insert</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Search Modal -->
-  <div class="search-modal hidden" id="search-modal">
-    <input class="search-input" type="text" id="search-input" placeholder="Search pages and content... (Esc to close)">
-    <div class="search-results" id="search-results"></div>
-  </div>
-
-  <!-- History Modal -->
-  <div class="modal-overlay hidden" id="history-modal">
-    <div class="modal" style="max-width: 600px;">
-      <h3 class="modal-title">🕐 Page History</h3>
-      <div class="history-list" id="history-list"></div>
-      <div class="modal-actions">
-        <button class="modal-btn" onclick="closeHistory()">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Image Modal -->
-  <div class="image-modal hidden" id="image-modal">
-    <button class="image-modal-close" onclick="closeImageModal()">✕</button>
-    <img id="image-modal-img" src="" alt="Zoomed image">
-  </div>
-
-  <!-- Space Modal -->
-  <div class="modal-overlay hidden" id="space-modal">
-    <div class="modal">
-      <h3 class="modal-title">📁 New Space</h3>
-      <input class="auth-input" type="text" id="space-name" placeholder="Space name">
-      <input class="auth-input" type="text" id="space-icon" placeholder="Icon (emoji)" value="📁">
-      <div class="modal-actions">
-        <button class="modal-btn" onclick="closeSpaceModal()">Cancel</button>
-        <button class="modal-btn modal-btn-primary" onclick="createSpace()">Create</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Page Modal -->
-  <div class="modal-overlay hidden" id="page-modal">
-    <div class="modal">
-      <h3 class="modal-title">📄 New Page</h3>
-      <input class="auth-input" type="text" id="page-name" placeholder="Page title">
-      <div class="modal-actions" style="margin-top: 16px;">
-        <button class="modal-btn" onclick="openTemplatesModal()">📋 Use template</button>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn" onclick="closePageModal()">Cancel</button>
-        <button class="modal-btn modal-btn-primary" onclick="createPage()">Create</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Templates Modal -->
-  <div class="modal-overlay hidden" id="templates-modal">
-    <div class="modal" style="max-width: 600px;">
-      <h3 class="modal-title">📋 Choose a template</h3>
-      <div class="templates-grid">
-        <div class="template-card" onclick="useTemplate('meeting')">
-          <div class="template-card-icon">📅</div>
-          <div class="template-card-title">Meeting Notes</div>
-          <div class="template-card-desc">Agenda, decisions, action items</div>
-        </div>
-        <div class="template-card" onclick="useTemplate('techspec')">
-          <div class="template-card-icon">⚙️</div>
-          <div class="template-card-title">Tech Spec</div>
-          <div class="template-card-desc">Technical specification</div>
-        </div>
-        <div class="template-card" onclick="useTemplate('retro')">
-          <div class="template-card-icon">🔄</div>
-          <div class="template-card-title">Retrospective</div>
-          <div class="template-card-desc">What went well, what to improve</div>
-        </div>
-        <div class="template-card" onclick="useTemplate('bug')">
-          <div class="template-card-icon">🐛</div>
-          <div class="template-card-title">Bug Report</div>
-          <div class="template-card-desc">Steps to reproduce, expected behavior</div>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="modal-btn" onclick="closeTemplatesModal()">Cancel</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast hidden" id="toast">
-    <span id="toast-message"></span>
-  </div>
-
-  <script>
-    const API_URL = '/api';
-    let token = localStorage.getItem('token');
-    let currentUser = localStorage.getItem('username');
-    let currentSpace = null;
-    let currentPage = null;
-    let allSpaces = [];
-    let currentImages = [];
-    let pageHistory = [];
-    let currentComments = [];
-
-    const templates = {
-      meeting: `# Meeting Notes\n\n## 📅 Date: ${new Date().toLocaleDateString()}\n## 👥 Attendees: \n\n## 📋 Agenda\n- \n\n## 📝 Discussion Notes\n- \n\n## ✅ Decisions\n- \n\n## 🎯 Action Items\n- [ ] \n\n## 📎 Next Meeting\n`,
-      techspec: `# Technical Specification\n\n## 🎯 Problem Statement\n\n## 📊 Current State\n\n## 💡 Proposed Solution\n\n## 🔧 Technical Details\n\n### Architecture\n\n### API Changes\n\n### Database Changes\n\n## ⚠️ Risks & Concerns\n\n## 📈 Success Metrics\n\n## 📅 Timeline\n`,
-      retro: `# Retrospective\n\n## 📅 Date: ${new Date().toLocaleDateString()}\n## 👥 Team: \n\n## 😊 What went well\n- \n\n## 😔 What could be improved\n- \n\n## 💡 Action items\n- [ ] \n\n## 🎯 Next sprint goals\n`,
-      bug: `# Bug Report\n\n## 🐛 Description\n\n## 🔁 Steps to Reproduce\n1. \n2. \n3. \n\n## ✅ Expected Behavior\n\n## ❌ Actual Behavior\n\n## 📸 Screenshots\n\n## 🖥️ Environment\n- OS: \n- Browser: \n- Version: \n\n## 📊 Priority\n- [ ] Critical\n- [ ] High\n- [ ] Medium\n- [ ] Low\n`
-    };
-
-    if (token && currentUser) { showApp(); }
-
-    function showAuthTab(tab) {
-      document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-      event.target.classList.add('active');
-      if (tab === 'signin') {
-        document.getElementById('signin-form').classList.remove('hidden');
-        document.getElementById('register-form').classList.add('hidden');
-      } else {
-        document.getElementById('signin-form').classList.add('hidden');
-        document.getElementById('register-form').classList.remove('hidden');
-      }
-    }
-
-    async function signIn() {
-      const usernameInput = document.getElementById('signin-username').value.trim();
-      const password = document.getElementById('signin-password').value;
-      const errorEl = document.getElementById('signin-error');
-      try {
-        const res = await fetch(`${API_URL}/auth`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'login', username: usernameInput, password })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
-        token = data.token;
-        currentUser = data.username;
-        showApp();
-      } catch (e) { errorEl.textContent = e.message; }
-    }
-
-    async function register() {
-      const usernameInput = document.getElementById('reg-username').value.trim();
-      const password = document.getElementById('reg-password').value;
-      const adminSecret = document.getElementById('reg-secret').value;
-      const errorEl = document.getElementById('reg-error');
-      try {
-        const res = await fetch(`${API_URL}/auth`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ action: 'register', username: usernameInput, password, adminSecret })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error);
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username);
-        token = data.token;
-        currentUser = data.username;
-        showApp();
-      } catch (e) { errorEl.textContent = e.message; }
-    }
-
-    function signOut() {
-      localStorage.removeItem('token');
-      localStorage.removeItem('username');
-      token = null;
-      currentUser = null;
-      document.getElementById('auth-section').classList.remove('hidden');
-      document.getElementById('app-section').classList.add('hidden');
-    }
-
-    function showApp() {
-      document.getElementById('auth-section').classList.add('hidden');
-      document.getElementById('app-section').classList.remove('hidden');
-      document.getElementById('user-name').textContent = currentUser;
-      document.getElementById('user-avatar').textContent = currentUser.charAt(0).toUpperCase();
-      loadSpaces();
-    }
-
-    async function loadSpaces() {
-      document.getElementById('loading-state').classList.remove('hidden');
-      document.getElementById('empty-state').classList.add('hidden');
-      document.getElementById('spaces-view').classList.add('hidden');
-      document.getElementById('page-editor').classList.add('hidden');
-      try {
-        const res = await fetch(`${API_URL}/pages`, { headers: { 'Authorization': `Bearer ${token}` } });
-        const spaces = await res.json();
-        allSpaces = spaces;
-        document.getElementById('loading-state').classList.add('hidden');
-        if (spaces.length === 0) {
-          document.getElementById('empty-state').classList.remove('hidden');
-        } else {
-          renderSidebar();
-          showSpaces();
-        }
-      } catch (e) {
-        showToast('Failed to load spaces', 'error');
-        document.getElementById('loading-state').classList.add('hidden');
-      }
-    }
-
-    function renderSidebar() {
-      const container = document.getElementById('sidebar-spaces');
-      container.innerHTML = allSpaces.map(space => `
-        <div class="sidebar-item" onclick="selectSpace('${space.id}')">
-          <span class="sidebar-item-icon">${space.icon || '📁'}</span>
-          <span class="sidebar-item-title">${space.name}</span>
-          <div class="sidebar-actions">
-            <button class="sidebar-action-btn" onclick="event.stopPropagation(); openPageModal('${space.id}')">+</button>
-            <button class="sidebar-action-btn" onclick="event.stopPropagation(); deleteSpace('${space.id}')">✕</button>
-          </div>
-        </div>
-        ${space.pages && space.pages.length > 0 
-          ? space.pages.map(page => `
-              <div class="sidebar-item" style="padding-left: 36px;" onclick="openPage('${space.id}', '${page.id}')">
-                <span class="sidebar-item-icon">📄</span>
-                <span class="sidebar-item-title">${page.title}</span>
-              </div>
-            `).join('')
-          : ''
-        }
-      `).join('');
-    }
-
-    function showSpaces() {
-      document.getElementById('spaces-view').classList.remove('hidden');
-      document.getElementById('page-editor').classList.add('hidden');
-      document.getElementById('breadcrumb').innerHTML = '<span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>';
-      currentPage = null;
-      renderSpacesOverview();
-    }
-
-    function renderSpacesOverview() {
-      const container = document.getElementById('spaces-overview');
-      container.innerHTML = allSpaces.map(space => `
-        <div style="margin-bottom: 32px;">
-          <h3 style="font-size: 20px; margin-bottom: 12px;">${space.icon || '📁'} ${space.name}</h3>
-          ${space.pages && space.pages.length > 0 
-            ? space.pages.map(page => `
-                <div class="sidebar-item" onclick="openPage('${space.id}', '${page.id}')" style="margin-bottom: 8px;">
-                  <span class="sidebar-item-icon">📄</span>
-                  <span class="sidebar-item-title">${page.title}</span>
-                </div>
-              `).join('')
-            : '<p style="color: var(--text-secondary); font-size: 14px;">No pages yet</p>'
-          }
-        </div>
-      `).join('');
-    }
-
-    function selectSpace(spaceId) {
-      currentSpace = spaceId;
-      const space = allSpaces.find(s => s.id === spaceId);
-      document.getElementById('breadcrumb').innerHTML = `
-        <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item">${space.name}</span>
-      `;
-    }
-
-    function openPage(spaceId, pageId) {
-      const space = allSpaces.find(s => s.id === spaceId);
-      const page = space.pages.find(p => p.id === pageId);
-      currentSpace = spaceId;
-      currentPage = pageId;
-      document.getElementById('spaces-view').classList.add('hidden');
-      document.getElementById('page-editor').classList.remove('hidden');
-      document.getElementById('breadcrumb').innerHTML = `
-        <span class="breadcrumb-item" onclick="showSpaces()">WorkDocs</span>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item">${space.name}</span>
-        <span class="breadcrumb-separator">/</span>
-        <span class="breadcrumb-item">${page.title}</span>
-      `;
-      document.getElementById('editor-title').value = page.title;
-      document.getElementById('editor-content').value = page.content || '';
-      currentImages = page.images || [];
-      currentComments = page.comments || [];
-      renderImages();
-      renderComments(currentComments);
-      saveToHistory(page.content || '');
-    }
-
-    function openSpaceModal() {
-      document.getElementById('space-name').value = '';
-      document.getElementById('space-icon').value = '📁';
-      document.getElementById('space-modal').classList.remove('hidden');
-    }
-
-    function closeSpaceModal() { document.getElementById('space-modal').classList.add('hidden'); }
-
-    async function createSpace() {
-      const name = document.getElementById('space-name').value.trim();
-      const icon = document.getElementById('space-icon').value.trim() || '📁';
-      if (!name) { showToast('Space name is required', 'error'); return; }
-      try {
-        const res = await fetch(`${API_URL}/pages?type=space`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ name, icon })
-        });
-        const space = await res.json();
-        if (!res.ok) throw new Error(space.error);
-        closeSpaceModal();
-        showToast('Space created', 'success');
-        await loadSpaces();
-      } catch (e) { showToast(e.message, 'error'); }
-    }
-
-    async function deleteSpace(spaceId) {
-      if (!confirm('Delete this space and all its pages?')) return;
-      try {
-        const res = await fetch(`${API_URL}/pages?type=space&id=${spaceId}`, {
-          method: 'DELETE',
-          headers: { 'Authorization': `Bearer ${token}` }
-        });
-        if (!res.ok) throw new Error('Failed to delete');
-        showToast('Space deleted', 'success');
-        await loadSpaces();
-      } catch (e) { showToast(e.message, 'error'); }
-    }
-
-    function openPageModal(spaceId) {
-      currentSpace = spaceId;
-      document.getElementById('page-name').value = '';
-      document.getElementById('page-modal').classList.remove('hidden');
-    }
-
-    function closePageModal() { document.getElementById('page-modal').classList.add('hidden'); }
-
-    function openTemplatesModal() { document.getElementById('templates-modal').classList.remove('hidden'); }
-    function closeTemplatesModal() { document.getElementById('templates-modal').classList.add('hidden'); }
-
-    function useTemplate(templateName) {
-      document.getElementById('page-name').value = templateName.charAt(0).toUpperCase() + templateName.slice(1);
-      const content = templates[templateName] || '';
-      document.getElementById('editor-content').value = content;
-      closeTemplatesModal();
-      document.getElementById('page-modal').classList.add('hidden');
-      createPageWithContent(content);
-    }
-
-    async function createPage() {
-      const title = document.getElementById('page-name').value.trim();
-      if (!title) { showToast('Page title is required', 'error'); return; }
-      try {
-        const res = await fetch(`${API_URL}/pages?type=page`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ spaceId: currentSpace, title })
-        });
-        const page = await res.json();
-        if (!res.ok) throw new Error(page.error);
-        closePageModal();
-        showToast('Page created', 'success');
-        await loadSpaces();
-        openPage(currentSpace, page.id);
-      } catch (e) { showToast(e.message, 'error'); }
-    }
-
-    async function createPageWithContent(content) {
-      const title = document.getElementById('page-name').value.trim() || 'Untitled';
-      try {
-        const res = await fetch(`${API_URL}/pages?type=page`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ spaceId: currentSpace, title, content })
-        });
-        const page = await res.json();
-        if (!res.ok) throw new Error(page.error);
-        showToast('Page created', 'success');
-        await loadSpaces();
-        openPage(currentSpace, page.id);
-      } catch (e) { showToast(e.message, 'error'); }
-    }
-
-    function formatText(command, value = null) {
-      document.execCommand(command, false, value);
-      document.getElementById('editor-content').focus();
-    }
-
-    function insertLink() {
-      const url = prompt('Enter URL:');
-      if (url) formatText('createLink', url);
-    }
-
-    function insertBlock(type) {
-      const editor = document.getElementById('editor-content');
-      const value = editor.value;
-      const cursor = editor.selectionStart;
-      const before = value.substring(0, cursor);
-      const after = value.substring(cursor);
-      
-      let insert = '';
-      switch(type) {
-        case 'h1': insert = '\n# Heading 1\n'; break;
-        case 'h2': insert = '\n## Heading 2\n'; break;
-        case 'h3': insert = '\n### Heading 3\n'; break;
-        case 'bullet': insert = '\n• Item\n'; break;
-        case 'numbered': insert = '\n1. Item\n'; break;
-        case 'checkbox': insert = '\n- [ ] Task\n'; break;
-        case 'quote': insert = '\n> Quote text\n'; break;
-        case 'callout': insert = '\n💡 **Note:** Important information\n'; break;
-        case 'code': insert = '\n```\ncode here\n```\n'; break;
-        case 'divider': insert = '\n---\n'; break;
-      }
-      
-      editor.value = before.replace(/\/$/, '') + insert + after;
-      editor.selectionStart = editor.selectionEnd = cursor + insert.length - (before.endsWith('/') ? 1 : 0);
-      document.getElementById('slash-menu').classList.add('hidden');
-    }
-
-    function insertCallout() { formatText('formatBlock', 'blockquote'); }
-    function insertCode() {
-      const editor = document.getElementById('editor-content');
-      const selected = editor.value.substring(editor.selectionStart, editor.selectionEnd);
-      const insert = `\`\`\`\n${selected || 'code here'}\n\`\`\``;
-      document.execCommand('insertText', false, insert);
-    }
-    function insertDivider() { document.execCommand('insertText', false, '\n---\n'); }
-    function toggleCheckbox() { document.execCommand('insertText', false, '- [ ] '); }
-
-    function openTableModal() { document.getElementById('table-modal').classList.remove('hidden'); }
-    function closeTableModal() { document.getElementById('table-modal').classList.add('hidden'); }
-
-    function insertTable() {
-      const rows = parseInt(document.getElementById('table-rows').value) || 2;
-      const cols = parseInt(document.getElementById('table-cols').value) || 3;
-      
-      if (rows < 1 || rows > 10) { showToast('Rows must be between 1 and 10', 'error'); return; }
-      if (cols < 1 || cols > 10) { showToast('Columns must be between 1 and 10', 'error'); return; }
-      
-      let table = '\n\n<table class="content-table">\n<thead>\n<tr>\n';
-      for (let i = 1; i <= cols; i++) { table += `<th>Header ${i}</th>\n`; }
-      table += '</tr>\n</thead>\n<tbody>\n';
-      for (let i = 0; i < rows; i++) {
-        table += '<tr>\n';
-        for (let j = 0; j < cols; j++) { table += '<td>Cell</td>\n'; }
-        table += '</tr>\n';
-      }
-      table += '</tbody>\n</table>\n\n';
-      
-      const editor = document.getElementById('editor-content');
-      const cursor = editor.selectionStart;
-      const before = editor.value.substring(0, cursor);
-      const after = editor.value.substring(cursor);
-      editor.value = before + table + after;
-      editor.selectionStart = editor.selectionEnd = cursor + table.length;
-      
-      closeTableModal();
-      showToast(`Table ${rows}×${cols} inserted`, 'success');
-    }
-
-    document.getElementById('editor-content').addEventListener('keydown', (e) => {
-      if (e.key === '/') {
-        const menu = document.getElementById('slash-menu');
-        const rect = e.target.getBoundingClientRect();
-        menu.style.top = (rect.top + 50) + 'px';
-        menu.style.left = rect.left + 'px';
-        menu.classList.remove('hidden');
-      } else if (e.key === 'Escape') {
-        document.getElementById('slash-menu').classList.add('hidden');
-        document.getElementById('table-modal').classList.add('hidden');
-      }
-    });
-
-    document.getElementById('editor-content').addEventListener('click', () => {
-      document.getElementById('slash-menu').classList.add('hidden');
-    });
-
-    function openSearch() {
-      document.getElementById('search-modal').classList.remove('hidden');
-      document.getElementById('search-input').focus();
-    }
-
-    document.getElementById('search-input').addEventListener('input', (e) => {
-      const query = e.target.value.toLowerCase();
-      const results = document.getElementById('search-results');
-      if (query.length < 2) { results.innerHTML = ''; return; }
-      
-      const matches = [];
-      allSpaces.forEach(space => {
-        if (space.name.toLowerCase().includes(query)) {
-          matches.push({ type: 'space', title: space.name, space });
-        }
-        space.pages?.forEach(page => {
-          if (page.title.toLowerCase().includes(query) || (page.content || '').toLowerCase().includes(query)) {
-            matches.push({ type: 'page', title: page.title, preview: (page.content || '').substring(0, 100), space, page });
-          }
-        });
-      });
-      
-      results.innerHTML = matches.slice(0, 10).map(m => `
-        <div class="search-result-item" onclick="openPage('${m.space.id}', '${m.page?.id || ''}')">
-          <div class="search-result-title">${m.type === 'space' ? '📁' : '📄'} ${m.title}</div>
-          ${m.preview ? `<div class="search-result-preview">${m.preview}...</div>` : ''}
-        </div>
-      `).join('') || '<p style="padding: 12px; color: var(--text-secondary);">No results found</p>';
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openSearch(); }
-      if (e.key === 'Escape') {
-        document.getElementById('search-modal').classList.add('hidden');
-        document.getElementById('slash-menu').classList.add('hidden');
-        document.getElementById('table-modal').classList.add('hidden');
-      }
-    });
-
-    function saveToHistory(content) {
-      pageHistory.unshift({ content, timestamp: Date.now() });
-      if (pageHistory.length > 20) pageHistory.pop();
-    }
-
-    function openHistory() {
-      const list = document.getElementById('history-list');
-      list.innerHTML = pageHistory.map((h, i) => `
-        <div class="history-item">
-          <div class="history-item-info">
-            <div class="history-item-date">${new Date(h.timestamp).toLocaleString()}</div>
-            <div class="history-item-preview">${h.content.substring(0, 50)}...</div>
-          </div>
-          <div class="history-item-actions">
-            <button class="modal-btn" onclick="restoreHistory(${i})">Restore</button>
-          </div>
-        </div>
-      `).join('') || '<p style="padding: 12px; color: var(--text-secondary);">No history yet</p>';
-      document.getElementById('history-modal').classList.remove('hidden');
-    }
-
-    function closeHistory() { document.getElementById('history-modal').classList.add('hidden'); }
-    function restoreHistory(index) {
-      document.getElementById('editor-content').value = pageHistory[index].content;
-      closeHistory();
-      showToast('History restored', 'success');
-    }
-
-    function renderComments(comments) {
-      const list = document.getElementById('comment-list');
-      list.innerHTML = comments.map(c => `
-        <div class="comment-item">
-          <div class="comment-avatar">${c.author.charAt(0).toUpperCase()}</div>
-          <div class="comment-content">
-            <div class="comment-header">
-              <span class="comment-author">${c.author}</span>
-              <span class="comment-date">${new Date(c.createdAt).toLocaleString()}</span>
+    <!-- Auth Page -->
+    <div id="auth-page" class="auth-container">
+        <div class="auth-card">
+            <span class="auth-logo">📋</span>
+            <h1 class="auth-title">WorkDocs</h1>
+            <p class="auth-subtitle">Your personal knowledge base</p>
+            
+            <div id="login-form" class="auth-form">
+                <input type="text" id="login-username" placeholder="Username" autocomplete="username">
+                <input type="password" id="login-password" placeholder="Password" autocomplete="current-password">
+                <button class="auth-btn" onclick="login()">Sign In</button>
+                <div class="auth-divider"><span>or</span></div>
+                <button class="auth-btn auth-btn-secondary" onclick="showRegister()">Create account</button>
             </div>
-            <div class="comment-text">${c.text}</div>
-          </div>
+            
+            <div id="register-form" class="auth-form" style="display: none;">
+                <input type="text" id="reg-username" placeholder="Username" autocomplete="username">
+                <input type="email" id="reg-email" placeholder="Email" autocomplete="email">
+                <input type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
+                <input type="text" id="reg-invite" placeholder="Invite code (optional)">
+                <button class="auth-btn" onclick="register()">Create account</button>
+                <div class="auth-divider"><span>or</span></div>
+                <button class="auth-btn auth-btn-secondary" onclick="showLogin()">Sign In</button>
+                <div class="invite-info">📎 New to WorkDocs? Get an invite code from your team admin.</div>
+            </div>
         </div>
-      `).join('') || '<p style="color: var(--text-secondary);">No comments yet</p>';
-    }
+    </div>
 
-    async function addComment() {
-      const text = document.getElementById('comment-input').value.trim();
-      if (!text || !currentPage) return;
-      
-      const comment = { id: Date.now().toString(), text, author: currentUser, createdAt: Date.now() };
-      currentComments.push(comment);
-      
-      try {
-        const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ comments: currentComments })
-        });
-        if (!res.ok) throw new Error('Failed to add comment');
-        document.getElementById('comment-input').value = '';
-        renderComments(currentComments);
-        showToast('Comment added', 'success');
-      } catch (e) { showToast(e.message, 'error'); }
-    }
+    <!-- Main App -->
+    <div id="app-page" class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <span class="sidebar-logo-icon">📋</span>
+                    <span>WorkDocs</span>
+                </div>
+                <button class="sidebar-btn" onclick="toggleSidebar()" style="display: none;" id="sidebar-close">✕</button>
+            </div>
+            
+            <div class="search-box">
+                <input type="text" placeholder="Search pages..." id="search-input" oninput="searchPages()">
+            </div>
+            
+            <div class="sidebar-menu">
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">
+                        <span>Spaces</span>
+                        <button class="sidebar-btn" onclick="openNewSpaceModal()" title="New space">+</button>
+                    </div>
+                    <div id="spaces-list">
+                        <div class="loading"><div class="loading-spinner"></div></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="sidebar-footer">
+                <div class="user-info">
+                    <div class="user-avatar" id="user-avatar">👤</div>
+                    <span id="user-display">User</span>
+                    <button class="logout-btn" onclick="logout()" title="Sign out">→</button>
+                </div>
+            </div>
+        </aside>
 
-    document.getElementById('comment-input').addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.key === 'Enter') addComment();
-    });
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div class="top-bar-left">
+                    <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+                    <input type="text" class="page-title-input" id="page-title-input" placeholder="Untitled" style="display: none;">
+                </div>
+                <div class="top-bar-right">
+                    <button class="top-btn" onclick="showHistory()" title="History">🕐</button>
+                    <button class="top-btn" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+                    <button class="top-btn save-btn" onclick="savePage()" title="Save">💾 Save</button>
+                </div>
+            </header>
 
-    function renderImages() {
-      const container = document.getElementById('images-grid');
-      container.innerHTML = currentImages.map((img, idx) => `
-        <div class="image-item" onclick="openImageModal('${img}')">
-          <img src="${img}" alt="Image ${idx + 1}">
-          <button onclick="event.stopPropagation(); removeImage(${idx})">✕</button>
+            <!-- Editor Wrapper -->
+            <div class="editor-wrapper">
+                <!-- Empty State -->
+                <div id="empty-state" class="empty-state">
+                    <div class="empty-state-icon">📁</div>
+                    <h2>No spaces yet</h2>
+                    <p>Create your first space to start organizing your knowledge. Spaces help you group related pages together.</p>
+                    <button class="btn btn-primary" onclick="openNewSpaceModal()">+ New space</button>
+                </div>
+
+                <!-- Editor Container -->
+                <div id="editor-container" class="editor-container" style="display: none;">
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" onclick="formatDoc('bold')" title="Bold"><b>B</b></button>
+                        <button class="toolbar-btn" onclick="formatDoc('italic')" title="Italic"><i>I</i></button>
+                        <button class="toolbar-btn" onclick="formatDoc('underline')" title="Underline"><u>U</u></button>
+                        <button class="toolbar-btn" onclick="formatDoc('strikeThrough')" title="Strikethrough"><s>S</s></button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" onclick="formatDoc('formatBlock', 'H1')" title="Heading 1">H1</button>
+                        <button class="toolbar-btn" onclick="formatDoc('formatBlock', 'H2')" title="Heading 2">H2</button>
+                        <button class="toolbar-btn" onclick="formatDoc('formatBlock', 'H3')" title="Heading 3">H3</button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" onclick="formatDoc('insertUnorderedList')" title="Bullet list">•</button>
+                        <button class="toolbar-btn" onclick="formatDoc('insertOrderedList')" title="Numbered list">1.</button>
+                        <button class="toolbar-btn" onclick="formatDoc('insertHTML', '<input type=checkbox> ')" title="Checkbox">☑️</button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" onclick="formatDoc('formatBlock', 'BLOCKQUOTE')" title="Quote">❝</button>
+                        <button class="toolbar-btn" onclick="insertCallout()" title="Callout">💡</button>
+                        <button class="toolbar-btn" onclick="insertCodeBlock()" title="Code">⌨️</button>
+                        <button class="toolbar-btn" onclick="formatDoc('insertHorizontalRule')" title="Divider">—</button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" onclick="openTableModal()" title="Table">📊</button>
+                        <button class="toolbar-btn" onclick="insertImage()" title="Image">🖼️</button>
+                        <button class="toolbar-btn" onclick="insertLink()" title="Link">🔗</button>
+                        <div class="toolbar-divider"></div>
+                        <button class="toolbar-btn" onclick="openSlashMenu()" title="Commands">⌨️</button>
+                    </div>
+                    
+                    <!-- Upload Area -->
+                    <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
+                        <div class="upload-icon">📎</div>
+                        <div class="upload-text">
+                            <strong>Click to upload</strong> or paste images · Drag & drop supported
+                        </div>
+                        <input type="file" id="file-input" accept="image/*" style="display: none;" onchange="handleFileUpload(event)">
+                    </div>
+                    
+                    <div id="editor" class="editor-content" contenteditable="true"></div>
+                </div>
+
+                <!-- Comments Section -->
+                <div class="comments-section" id="comments-section" style="display: none;">
+                    <h3 class="comments-title">💬 Comments</h3>
+                    <div id="comments-list" class="comment-list"></div>
+                    <div class="comment-form">
+                        <textarea id="new-comment" placeholder="Add a comment..."></textarea>
+                        <button class="btn btn-primary" onclick="addComment()">Post Comment</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Status Bar -->
+    <div id="status-bar" class="status-bar" style="display: none;">
+        <span id="last-saved">● Not saved</span>
+        <span id="page-info"></span>
+    </div>
+
+    <!-- Modal: New Space -->
+    <div id="new-space-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📁 New Space</h3>
+                <button class="close-btn" onclick="closeModal('new-space-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" id="space-name" placeholder="e.g., Projects, Team, Personal">
+                </div>
+                <div class="form-group">
+                    <label>Icon</label>
+                    <input type="text" id="space-icon" placeholder="📁" value="📁">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('new-space-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createSpace()">Create Space</button>
+            </div>
         </div>
-      `).join('');
-    }
+    </div>
 
-    function handleImageUpload(event) {
-      Array.from(event.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (e) => { currentImages.push(e.target.result); renderImages(); };
-        reader.readAsDataURL(file);
-      });
-    }
+    <!-- Modal: New Page -->
+    <div id="new-page-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📄 New Page</h3>
+                <button class="close-btn" onclick="closeModal('new-page-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="page-title" placeholder="e.g., Meeting Notes, Project Plan">
+                </div>
+                <div class="form-group">
+                    <label>📋 Use Template</label>
+                    <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="openTemplateModal()">Choose a template</button>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('new-page-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createPage()">Create Page</button>
+            </div>
+        </div>
+    </div>
 
-    function removeImage(index) { currentImages.splice(index, 1); renderImages(); }
-    function openImageModal(src) {
-      document.getElementById('image-modal-img').src = src;
-      document.getElementById('image-modal').classList.remove('hidden');
-    }
-    function closeImageModal() { document.getElementById('image-modal').classList.add('hidden'); }
+    <!-- Modal: Table (Updated with Preview) -->
+    <div id="table-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📊 Insert Table</h3>
+                <button class="close-btn" onclick="closeTableModal()">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-controls">
+                    <label>
+                        Rows (1-10)
+                        <input type="number" id="table-rows" min="1" max="10" value="3" oninput="updateTablePreview()">
+                    </label>
+                    <label>
+                        Columns (1-10)
+                        <input type="number" id="table-cols" min="1" max="10" value="3" oninput="updateTablePreview()">
+                    </label>
+                </div>
+                <div class="table-preview-area">
+                    <p>Preview</p>
+                    <div id="table-preview-container"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeTableModal()">Cancel</button>
+                <button class="btn btn-primary" onclick="insertTable()">Insert Table</button>
+            </div>
+        </div>
+    </div>
 
-    document.addEventListener('paste', (e) => {
-      if (document.getElementById('page-editor').classList.contains('hidden')) return;
-      const items = e.clipboardData.items;
-      for (let item of items) {
-        if (item.type.indexOf('image') !== -1) {
-          const file = item.getAsFile();
-          const reader = new FileReader();
-          reader.onload = (event) => { currentImages.push(event.target.result); renderImages(); showToast('Image pasted', 'success'); };
-          reader.readAsDataURL(file);
-        }
-      }
-    });
+    <!-- Modal: History -->
+    <div id="history-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🕐 Page History</h3>
+                <button class="close-btn" onclick="closeModal('history-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div id="history-list"></div>
+            </div>
+        </div>
+    </div>
 
-    document.getElementById('page-editor').addEventListener('dragover', (e) => e.preventDefault());
-    document.getElementById('page-editor').addEventListener('drop', (e) => {
-      e.preventDefault();
-      Array.from(e.dataTransfer.files).forEach(file => {
-        if (file.type.indexOf('image') !== -1) {
-          const reader = new FileReader();
-          reader.onload = (event) => { currentImages.push(event.target.result); renderImages(); };
-          reader.readAsDataURL(file);
-        }
-      });
-    });
+    <!-- Modal: Templates -->
+    <div id="template-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>📋 Choose a Template</h3>
+                <button class="close-btn" onclick="closeModal('template-modal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="template-grid">
+                    <div class="template-card" onclick="selectTemplate('meeting', this)">
+                        <h4>📅 Meeting Notes</h4>
+                        <p>Agenda, decisions, action items</p>
+                    </div>
+                    <div class="template-card" onclick="selectTemplate('spec', this)">
+                        <h4>⚙️ Tech Spec</h4>
+                        <p>Technical specification document</p>
+                    </div>
+                    <div class="template-card" onclick="selectTemplate('retro', this)">
+                        <h4>🔄 Retrospective</h4>
+                        <p>What went well, what to improve</p>
+                    </div>
+                    <div class="template-card" onclick="selectTemplate('bug', this)">
+                        <h4>🐛 Bug Report</h4>
+                        <p>Steps to reproduce, expected behavior</p>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('template-modal')">Cancel</button>
+                <button class="btn btn-primary" onclick="createPageFromTemplate()">Create Page</button>
+            </div>
+        </div>
+    </div>
 
-    async function saveCurrentPage() {
-      if (!currentPage) { showToast('No page selected', 'error'); return; }
-      const title = document.getElementById('editor-title').value.trim();
-      const content = document.getElementById('editor-content').value;
-      try {
-        const res = await fetch(`${API_URL}/pages?type=page&id=${currentPage}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-          body: JSON.stringify({ title, content, images: currentImages, comments: currentComments })
+    <!-- Modal: Slash Menu -->
+    <div id="slash-menu" class="modal" style="align-items: flex-start; padding-top: 100px;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Basic Blocks</h3>
+                <button class="close-btn" onclick="closeSlashMenu()">✕</button>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('formatBlock', 'H1')">H1 Heading</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('formatBlock', 'H2')">H2 Heading</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('formatBlock', 'H3')">H3 Heading</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('insertUnorderedList')">• Bullet List</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('insertOrderedList')">1. Numbered</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('insertHTML', '<input type=checkbox> ')">☑️ To-do</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('formatBlock', 'BLOCKQUOTE')">❝ Quote</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="insertCallout()">💡 Callout</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="insertCodeBlock()">⌨️ Code</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="formatDoc('insertHorizontalRule')">— Divider</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="openTableModal()">📊 Table</button>
+                <button class="btn btn-secondary" style="justify-content: flex-start; width: 100%;" onclick="insertImage()">🖼️ Image</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // === Global Variables ===
+        let currentUser = null;
+        let currentSpace = null;
+        let currentPage = null;
+        let allData = [];
+        let selectedTemplate = null;
+        let autoSaveTimer = null;
+
+        // === Initialization ===
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAuth();
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('workdocs_theme');
+            if (savedTheme) {
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            }
+            
+            // Drag & drop for file upload
+            const uploadArea = document.getElementById('upload-area');
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const files = e.dataTransfer.files;
+                if (files.length > 0) handleFiles(files);
+            });
+            
+            // Auto-save every 30 seconds
+            setInterval(() => { if (currentPage) savePage(true); }, 30000);
+            
+            // Save on Ctrl+S
+            document.addEventListener('keydown', (e) => {
+                if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                    e.preventDefault();
+                    savePage();
+                }
+            });
+            
+            // Close modals on Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    document.querySelectorAll('.modal.active').forEach(modal => {
+                        modal.classList.remove('active');
+                    });
+                }
+            });
         });
-        if (!res.ok) throw new Error('Failed to save');
-        saveToHistory(content);
-        showToast('Page saved', 'success');
-        await loadSpaces();
-      } catch (e) { showToast(e.message, 'error'); }
-    }
 
-    function toggleSidebar() { document.getElementById('sidebar').classList.toggle('open'); }
-    function toggleTheme() { document.body.classList.toggle('dark-mode'); }
+        // === Authentication ===
+        function checkAuth() {
+            const user = localStorage.getItem('workdocs_user');
+            const token = localStorage.getItem('workdocs_token');
+            if (user && token) {
+                currentUser = JSON.parse(user);
+                document.getElementById('auth-page').style.display = 'none';
+                document.getElementById('app-page').classList.add('active');
+                document.getElementById('user-display').textContent = currentUser.username;
+                document.getElementById('user-avatar').textContent = currentUser.username.charAt(0).toUpperCase();
+                loadData();
+            } else {
+                document.getElementById('auth-page').style.display = 'flex';
+                document.getElementById('app-page').classList.remove('active');
+            }
+        }
 
-    function showToast(message, type = 'success') {
-      const toast = document.getElementById('toast');
-      document.getElementById('toast-message').textContent = message;
-      toast.className = `toast ${type}`;
-      toast.classList.remove('hidden');
-      setTimeout(() => toast.classList.add('hidden'), 3000);
-    }
+        async function api(method, endpoint, body = null) {
+            const token = localStorage.getItem('workdocs_token');
+            const options = {
+                method,
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                }
+            };
+            if (body) options.body = JSON.stringify(body);
+            const res = await fetch(`/api${endpoint}`, options);
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.error || 'Error');
+            return data;
+        }
 
-    document.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter' && !e.shiftKey) {
-        if (document.getElementById('signin-form').contains(e.target)) signIn();
-        else if (document.getElementById('register-form').contains(e.target)) register();
-        else if (document.getElementById('space-name').contains(e.target)) createSpace();
-        else if (document.getElementById('page-name').contains(e.target)) createPage();
-        else if (document.getElementById('table-rows').contains(e.target) || document.getElementById('table-cols').contains(e.target)) insertTable();
-      }
-    });
+        async function login() {
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            if (!username || !password) { showToast('⚠️ Please enter username and password'); return; }
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password, action: 'login' })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                localStorage.setItem('workdocs_user', JSON.stringify(data.user));
+                localStorage.setItem('workdocs_token', data.token);
+                checkAuth();
+                showToast('✅ Welcome back!');
+            } catch (e) {
+                showToast('⚠️ ' + e.message);
+            }
+        }
 
-    document.querySelectorAll('.modal-overlay').forEach(overlay => {
-      overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.add('hidden'); });
-    });
-  </script>
+        async function register() {
+            const username = document.getElementById('reg-username').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const invite = document.getElementById('reg-invite').value.trim();
+            if (!username || !password) { showToast('⚠️ Please enter username and password'); return; }
+            try {
+                const res = await fetch('/api/auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, email, password, invite, action: 'register' })
+                });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error);
+                localStorage.setItem('workdocs_user', JSON.stringify(data.user));
+                localStorage.setItem('workdocs_token', data.token);
+                checkAuth();
+                showToast('✅ Account created!');
+            } catch (e) {
+                showToast('⚠️ ' + e.message);
+            }
+        }
+
+        function showRegister() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'block';
+        }
+
+        function showLogin() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('register-form').style.display = 'none';
+        }
+
+        function logout() {
+            localStorage.removeItem('workdocs_user');
+            localStorage.removeItem('workdocs_token');
+            window.location.reload();
+        }
+
+        // === Data Loading ===
+        async function loadData() {
+            try {
+                allData = await api('GET', '/pages');
+                renderSpaces();
+            } catch (e) {
+                showToast('⚠️ Error loading data: ' + e.message);
+            }
+        }
+
+        function renderSpaces() {
+            const container = document.getElementById('spaces-list');
+            if (!allData || allData.length === 0) {
+                container.innerHTML = '<div class="space-item" onclick="openNewSpaceModal()">📁 No spaces yet</div>';
+                return;
+            }
+            container.innerHTML = allData.map(space => `
+                <div class="space-item ${currentSpace?.id === space.id ? 'active' : ''}" onclick="selectSpace('${space.id}')">
+                    <span class="space-icon">${space.icon}</span>
+                    <span>${space.name}</span>
+                </div>
+                ${space.pages.map(page => `
+                    <div class="page-item ${currentPage?.id === page.id ? 'active' : ''}" onclick="selectPage('${page.id}')">
+                        <span class="page-icon">📄</span>
+                        <span>${page.title}</span>
+                    </div>
+                `).join('')}
+            `).join('');
+        }
+
+        function selectSpace(spaceId) {
+            currentSpace = allData.find(s => s.id === spaceId);
+            currentPage = null;
+            document.getElementById('empty-state').style.display = 'block';
+            document.getElementById('editor-container').style.display = 'none';
+            document.getElementById('comments-section').style.display = 'none';
+            document.getElementById('status-bar').style.display = 'none';
+            document.getElementById('page-title-input').style.display = 'none';
+            renderSpaces();
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function selectPage(pageId) {
+            const space = allData.find(s => s.pages.some(p => p.id === pageId));
+            if (space) selectSpace(space.id);
+            currentPage = space.pages.find(p => p.id === pageId);
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('editor-container').style.display = 'block';
+            document.getElementById('comments-section').style.display = 'block';
+            document.getElementById('status-bar').style.display = 'flex';
+            document.getElementById('page-title-input').style.display = 'block';
+            document.getElementById('page-title-input').value = currentPage.title;
+            document.getElementById('editor').innerHTML = currentPage.content || '';
+            renderComments();
+            document.getElementById('last-saved').textContent = '● Loaded';
+            document.getElementById('page-info').textContent = `Updated: ${new Date(currentPage.updatedAt).toLocaleString()}`;
+            renderSpaces();
+            if (window.innerWidth <= 1024) {
+                document.getElementById('sidebar').classList.remove('open');
+            }
+        }
+
+        function renderComments() {
+            const list = document.getElementById('comments-list');
+            if (!currentPage?.comments?.length) {
+                list.innerHTML = '<p style="color:var(--text-tertiary);font-size:14px;text-align:center;padding:20px;">No comments yet</p>';
+                return;
+            }
+            list.innerHTML = currentPage.comments.map(c => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-user">${c.user}</span>
+                        <span>${new Date(c.createdAt).toLocaleString()}</span>
+                    </div>
+                    <div class="comment-text">${c.text}</div>
+                </div>
+            `).join('');
+        }
+
+        // === Editor Functions ===
+        function formatDoc(cmd, val = null) {
+            document.execCommand(cmd, false, val);
+            document.getElementById('editor').focus();
+        }
+
+        function insertLink() {
+            const url = prompt('Enter URL:');
+            if (url) formatDoc('createLink', url);
+        }
+
+        function insertImage() {
+            const url = prompt('Enter image URL:');
+            if (url) formatDoc('insertImage', url);
+        }
+
+        function insertCallout() {
+            const html = '<div class="callout">💡 <b>Important:</b> Your text here</div><p><br></p>';
+            insertHtmlAtCursor(html);
+        }
+
+        function insertCodeBlock() {
+            const html = '<div class="code-block">// Your code here\n</div><p><br></p>';
+            insertHtmlAtCursor(html);
+        }
+
+        // === Table Functions ===
+        function openTableModal() {
+            document.getElementById('table-rows').value = 3;
+            document.getElementById('table-cols').value = 3;
+            updateTablePreview();
+            document.getElementById('table-modal').classList.add('active');
+        }
+
+        function closeTableModal() {
+            document.getElementById('table-modal').classList.remove('active');
+        }
+
+        function updateTablePreview() {
+            const rows = Math.min(10, Math.max(1, parseInt(document.getElementById('table-rows').value) || 1));
+            const cols = Math.min(10, Math.max(1, parseInt(document.getElementById('table-cols').value) || 1));
+            
+            let html = '<table class="work-table-preview">';
+            html += '<thead><tr>';
+            for (let c = 0; c < cols; c++) {
+                html += `<th>Column ${c + 1}</th>`;
+            }
+            html += '</tr></thead><tbody>';
+            for (let r = 0; r < rows; r++) {
+                html += '<tr>';
+                for (let c = 0; c < cols; c++) {
+                    html += '<td>&nbsp;</td>';
+                }
+                html += '</tr>';
+            }
+            html += '</tbody></table>';
+            
+            document.getElementById('table-preview-container').innerHTML = html;
+        }
+
+        function insertTable() {
+            const rows = document.getElementById('table-rows').value;
+            const cols = document.getElementById('table-cols').value;
+            
+            let tableHtml = '<div class="table-wrapper"><table class="work-table"><tbody>';
+            for (let r = 0; r < rows; r++) {
+                tableHtml += '<tr>';
+                for (let c = 0; c < cols; c++) {
+                    tableHtml += '<td contenteditable="true">&nbsp;</td>';
+                }
+                tableHtml += '</tr>';
+            }
+            tableHtml += '</tbody></table></div><p><br></p>';
+            
+            insertHtmlAtCursor(tableHtml);
+            closeTableModal();
+            if (currentPage) savePage(true);
+            showToast('✅ Table inserted');
+        }
+
+        function insertHtmlAtCursor(html) {
+            const editor = document.getElementById('editor');
+            editor.focus();
+            const sel = window.getSelection();
+            if (sel.rangeCount) {
+                const range = sel.getRangeAt(0);
+                range.deleteContents();
+                const el = document.createElement("div");
+                el.innerHTML = html;
+                let frag = document.createDocumentFragment(), node, lastNode;
+                while ((node = el.firstChild())) {
+                    lastNode = frag.appendChild(node);
+                }
+                range.insertNode(frag);
+                if (lastNode) {
+                    range = document.createRange();
+                    range.setStartAfter(lastNode);
+                    range.collapse(true);
+                    sel.removeAllRanges();
+                    sel.addRange(range);
+                }
+            } else {
+                editor.innerHTML += html;
+            }
+        }
+
+        // === File Upload ===
+        function handleFileUpload(event) {
+            const files = event.target.files;
+            if (files.length > 0) handleFiles(files);
+        }
+
+        function handleFiles(files) {
+            Array.from(files).forEach(file => {
+                if (!file.type.startsWith('image/')) return;
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const html = `<img src="${e.target.result}" alt="${file.name}"><p><br></p>`;
+                    insertHtmlAtCursor(html);
+                    if (currentPage) savePage(true);
+                    showToast('✅ Image uploaded');
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        // === Save ===
+        async function savePage(auto = false) {
+            if (!currentPage) return;
+            try {
+                const content = document.getElementById('editor').innerHTML;
+                const title = document.getElementById('page-title-input').value || currentPage.title;
+                const comments = currentPage.comments || [];
+                
+                const updated = await api('PUT', `/pages?type=page&id=${currentPage.id}`, {
+                    title,
+                    content,
+                    comments
+                });
+                
+                currentPage = updated;
+                const space = allData.find(s => s.id === currentPage.spaceId);
+                if (space) {
+                    const page = space.pages.find(p => p.id === currentPage.id);
+                    if (page) Object.assign(page, updated);
+                }
+                
+                document.getElementById('last-saved').textContent = auto ? '● Auto-saved' : '● Saved';
+                document.getElementById('page-info').textContent = `Updated: ${new Date().toLocaleString()}`;
+                
+                if (!auto) showToast('✅ Page saved');
+            } catch (e) {
+                showToast('⚠️ Error saving: ' + e.message);
+            }
+        }
+
+        // === Comments ===
+        async function addComment() {
+            const text = document.getElementById('new-comment').value.trim();
+            if (!text || !currentPage) return;
+            try {
+                const comments = currentPage.comments || [];
+                comments.push({
+                    id: Date.now().toString(36),
+                    user: currentUser.username,
+                    text,
+                    createdAt: Date.now()
+                });
+                await api('PUT', `/pages?type=page&id=${currentPage.id}`, {
+                    title: currentPage.title,
+                    content: currentPage.content,
+                    comments
+                });
+                currentPage.comments = comments;
+                document.getElementById('new-comment').value = '';
+                renderComments();
+                loadData();
+                showToast('✅ Comment added');
+            } catch (e) {
+                showToast('⚠️ Error: ' + e.message);
+            }
+        }
+
+        // === Spaces ===
+        function openNewSpaceModal() {
+            document.getElementById('new-space-modal').classList.add('active');
+            document.getElementById('space-name').value = '';
+            document.getElementById('space-icon').value = '📁';
+        }
+
+        async function createSpace() {
+            const name = document.getElementById('space-name').value.trim();
+            const icon = document.getElementById('space-icon').value || '📁';
+            if (!name) { showToast('⚠️ Please enter a name'); return; }
+            try {
+                const space = await api('POST', '/pages?type=space', { name, icon });
+                allData.push(space);
+                closeModal('new-space-modal');
+                selectSpace(space.id);
+                loadData();
+                showToast('✅ Space created');
+            } catch (e) {
+                showToast('⚠️ Error: ' + e.message);
+            }
+        }
+
+        // === Pages ===
+        function openNewPageModal() {
+            if (!currentSpace) { showToast('⚠️ Select a space first'); return; }
+            document.getElementById('new-page-modal').classList.add('active');
+            document.getElementById('page-title').value = '';
+            selectedTemplate = null;
+        }
+
+        async function createPage() {
+            const title = document.getElementById('page-title').value.trim();
+            if (!title) { showToast('⚠️ Please enter a title'); return; }
+            try {
+                const templates = {
+                    meeting: '<h1>Meeting Notes</h1><h2>Agenda</h2><h2>Decisions</h2><h2>Action Items</h2>',
+                    spec: '<h1>Tech Spec</h1><h2>Description</h2><h2>Requirements</h2><h2>Timeline</h2>',
+                    retro: '<h1>Retrospective</h1><h2>What went well</h2><h2>What to improve</h2><h2>Actions</h2>',
+                    bug: '<h1>Bug Report</h1><h2>Steps to reproduce</h2><h2>Expected behavior</h2><h2>Actual behavior</h2>'
+                };
+                const content = templates[selectedTemplate] || '';
+                const page = await api('POST', '/pages?type=page', {
+                    spaceId: currentSpace.id,
+                    title,
+                    content
+                });
+                currentSpace.pages.push(page);
+                currentPage = page;
+                closeModal('new-page-modal');
+                selectPage(page.id);
+                loadData();
+                showToast('✅ Page created');
+            } catch (e) {
+                showToast('⚠️ Error: ' + e.message);
+            }
+        }
+
+        // === Templates ===
+        function openTemplateModal() {
+            document.getElementById('template-modal').classList.add('active');
+        }
+
+        function selectTemplate(template, element) {
+            selectedTemplate = template;
+            document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        async function createPageFromTemplate() {
+            if (!selectedTemplate) { showToast('⚠️ Please select a template'); return; }
+            const title = prompt('Page title:');
+            if (!title) return;
+            try {
+                const templates = {
+                    meeting: '<h1>Meeting Notes</h1><h2>Agenda</h2><h2>Decisions</h2><h2>Action Items</h2>',
+                    spec: '<h1>Tech Spec</h1><h2>Description</h2><h2>Requirements</h2><h2>Timeline</h2>',
+                    retro: '<h1>Retrospective</h1><h2>What went well</h2><h2>What to improve</h2><h2>Actions</h2>',
+                    bug: '<h1>Bug Report</h1><h2>Steps to reproduce</h2><h2>Expected behavior</h2><h2>Actual behavior</h2>'
+                };
+                const page = await api('POST', '/pages?type=page', {
+                    spaceId: currentSpace.id,
+                    title,
+                    content: templates[selectedTemplate] || ''
+                });
+                currentSpace.pages.push(page);
+                currentPage = page;
+                closeModal('template-modal');
+                selectPage(page.id);
+                loadData();
+                showToast('✅ Page created');
+            } catch (e) {
+                showToast('⚠️ Error: ' + e.message);
+            }
+        }
+
+        // === History ===
+        function showHistory() {
+            if (!currentPage) return;
+            const list = document.getElementById('history-list');
+            list.innerHTML = `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-user">Created</span>
+                        <span>${new Date(currentPage.createdAt).toLocaleString()}</span>
+                    </div>
+                </div>
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-user">Updated</span>
+                        <span>${new Date(currentPage.updatedAt).toLocaleString()}</span>
+                    </div>
+                </div>
+            `;
+            document.getElementById('history-modal').classList.add('active');
+        }
+
+        // === Slash Menu ===
+        function openSlashMenu() {
+            document.getElementById('slash-menu').classList.add('active');
+        }
+
+        function closeSlashMenu() {
+            document.getElementById('slash-menu').classList.remove('active');
+        }
+
+        // === Utilities ===
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('open');
+        }
+
+        function toggleTheme() {
+            const current = document.documentElement.getAttribute('data-theme');
+            const next = current === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', next);
+            localStorage.setItem('workdocs_theme', next);
+            showToast(next === 'dark' ? '🌙 Dark mode' : '☀️ Light mode');
+        }
+
+        function searchPages() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            document.querySelectorAll('.page-item').forEach(item => {
+                const text = item.textContent.toLowerCase();
+                item.style.display = text.includes(query) ? 'flex' : 'none';
+            });
+        }
+
+        function showToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        // Close modals on outside click
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) modal.classList.remove('active');
+            });
+        });
+    </script>
 </body>
 </html>

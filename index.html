@@ -11,7 +11,6 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         :root {
-            /* Light Theme */
             --bg-primary: #ffffff;
             --bg-secondary: #f8f9fa;
             --bg-tertiary: #f1f3f4;
@@ -63,13 +62,11 @@
             -moz-osx-font-smoothing: grayscale;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; height: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: var(--text-tertiary); }
 
-        /* Auth Pages */
         .auth-container {
             min-height: 100vh;
             display: flex;
@@ -89,24 +86,9 @@
             border: 1px solid var(--border);
         }
 
-        .auth-logo {
-            font-size: 40px;
-            margin-bottom: 12px;
-            display: block;
-        }
-
-        .auth-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: var(--text-primary);
-        }
-
-        .auth-subtitle {
-            color: var(--text-secondary);
-            margin-bottom: 32px;
-            font-size: 15px;
-        }
+        .auth-logo { font-size: 40px; margin-bottom: 12px; display: block; }
+        .auth-title { font-size: 28px; font-weight: 700; margin-bottom: 8px; color: var(--text-primary); }
+        .auth-subtitle { color: var(--text-secondary); margin-bottom: 32px; font-size: 15px; }
 
         .auth-form input {
             width: 100%;
@@ -126,9 +108,7 @@
             box-shadow: 0 0 0 3px var(--accent-light);
         }
 
-        .auth-form input::placeholder {
-            color: var(--text-tertiary);
-        }
+        .auth-form input::placeholder { color: var(--text-tertiary); }
 
         .auth-btn {
             width: 100%;
@@ -148,18 +128,12 @@
             transform: translateY(-1px);
         }
 
-        .auth-btn:active {
-            transform: translateY(0);
-        }
-
         .auth-btn-secondary {
             background: var(--bg-tertiary);
             color: var(--text-primary);
         }
 
-        .auth-btn-secondary:hover {
-            background: var(--bg-hover);
-        }
+        .auth-btn-secondary:hover { background: var(--bg-hover); }
 
         .auth-switch {
             text-align: center;
@@ -174,9 +148,7 @@
             font-weight: 500;
         }
 
-        .auth-switch a:hover {
-            text-decoration: underline;
-        }
+        .auth-switch a:hover { text-decoration: underline; }
 
         .auth-divider {
             display: flex;
@@ -186,17 +158,14 @@
             font-size: 13px;
         }
 
-        .auth-divider::before,
-        .auth-divider::after {
+        .auth-divider::before, .auth-divider::after {
             content: '';
             flex: 1;
             height: 1px;
             background: var(--border);
         }
 
-        .auth-divider span {
-            padding: 0 16px;
-        }
+        .auth-divider span { padding: 0 16px; }
 
         .invite-info {
             background: var(--accent-light);
@@ -208,17 +177,9 @@
             border-left: 3px solid var(--accent);
         }
 
-        /* Main App */
-        .app-container {
-            display: none;
-            min-height: 100vh;
-        }
+        .app-container { display: none; min-height: 100vh; }
+        .app-container.active { display: flex; }
 
-        .app-container.active {
-            display: flex;
-        }
-
-        /* Sidebar */
         .sidebar {
             width: 280px;
             background: var(--bg-primary);
@@ -245,19 +206,11 @@
             color: var(--text-primary);
         }
 
-        .sidebar-logo-icon {
-            font-size: 24px;
-        }
+        .sidebar-logo-icon { font-size: 24px; }
 
-        .sidebar-menu {
-            padding: 12px;
-            flex: 1;
-            overflow-y: auto;
-        }
+        .sidebar-menu { padding: 12px; flex: 1; overflow-y: auto; }
 
-        .sidebar-section {
-            margin-bottom: 24px;
-        }
+        .sidebar-section { margin-bottom: 24px; }
 
         .sidebar-section-title {
             font-size: 11px;
@@ -311,9 +264,7 @@
             color: var(--accent);
         }
 
-        .space-icon {
-            font-size: 16px;
-        }
+        .space-icon { font-size: 16px; }
 
         .page-item {
             padding: 8px 12px 8px 36px;
@@ -338,10 +289,7 @@
             color: var(--accent);
         }
 
-        .page-icon {
-            font-size: 14px;
-            opacity: 0.7;
-        }
+        .page-icon { font-size: 14px; opacity: 0.7; }
 
         .sidebar-footer {
             padding: 16px;
@@ -384,7 +332,6 @@
             color: var(--danger);
         }
 
-        /* Main Content */
         .main-content {
             flex: 1;
             display: flex;
@@ -421,9 +368,7 @@
             transition: all 0.2s;
         }
 
-        .menu-toggle:hover {
-            background: var(--bg-hover);
-        }
+        .menu-toggle:hover { background: var(--bg-hover); }
 
         .page-title-input {
             font-size: 18px;
@@ -443,9 +388,7 @@
             background: var(--bg-secondary);
         }
 
-        .page-title-input::placeholder {
-            color: var(--text-tertiary);
-        }
+        .page-title-input::placeholder { color: var(--text-tertiary); }
 
         .top-bar-right {
             display: flex;
@@ -480,11 +423,8 @@
             padding: 8px 16px;
         }
 
-        .save-btn:hover {
-            background: var(--accent-hover);
-        }
+        .save-btn:hover { background: var(--accent-hover); }
 
-        /* Editor */
         .editor-wrapper {
             flex: 1;
             overflow-y: auto;
@@ -577,19 +517,9 @@
             color: var(--text-primary);
         }
 
-        .editor-content p {
-            margin-bottom: 16px;
-        }
-
-        .editor-content ul,
-        .editor-content ol {
-            margin: 16px 0;
-            padding-left: 24px;
-        }
-
-        .editor-content li {
-            margin-bottom: 8px;
-        }
+        .editor-content p { margin-bottom: 16px; }
+        .editor-content ul, .editor-content ol { margin: 16px 0; padding-left: 24px; }
+        .editor-content li { margin-bottom: 8px; }
 
         .editor-content blockquote {
             border-left: 4px solid var(--accent);
@@ -608,9 +538,7 @@
             margin: 20px 0;
         }
 
-        [data-theme="dark"] .editor-content .callout {
-            background: #3d341b;
-        }
+        [data-theme="dark"] .editor-content .callout { background: #3d341b; }
 
         .editor-content .code-block {
             background: #1a1a1a;
@@ -644,11 +572,8 @@
             font-weight: 500;
         }
 
-        .editor-content a:hover {
-            text-decoration: underline;
-        }
+        .editor-content a:hover { text-decoration: underline; }
 
-        /* Table Styles */
         .table-wrapper {
             overflow-x: auto;
             margin: 20px 0;
@@ -656,36 +581,29 @@
             border-radius: var(--radius-md);
         }
 
-        .work-table,
-        .work-table-preview {
+        .work-table, .work-table-preview {
             width: 100%;
             border-collapse: collapse;
             font-size: 14px;
         }
 
-        .work-table th,
-        .work-table td,
-        .work-table-preview th,
-        .work-table-preview td {
+        .work-table th, .work-table td, .work-table-preview th, .work-table-preview td {
             border: 1px solid var(--border);
             padding: 12px 16px;
             text-align: left;
         }
 
-        .work-table th,
-        .work-table-preview th {
+        .work-table th, .work-table-preview th {
             background-color: var(--bg-tertiary);
             font-weight: 600;
             color: var(--text-primary);
         }
 
-        .work-table td,
-        .work-table-preview td {
+        .work-table td, .work-table-preview td {
             color: var(--text-secondary);
         }
 
-        .work-table td:empty::before,
-        .work-table-preview td:empty::before {
+        .work-table td:empty::before, .work-table-preview td:empty::before {
             content: '\00a0';
         }
 
@@ -720,9 +638,7 @@
             box-shadow: 0 0 0 3px var(--accent-light);
         }
 
-        .table-preview-area {
-            margin-top: 16px;
-        }
+        .table-preview-area { margin-top: 16px; }
 
         .table-preview-area p {
             font-size: 12px;
@@ -742,7 +658,6 @@
             overflow: auto;
         }
 
-        /* Comments */
         .comments-section {
             max-width: 900px;
             margin: 32px auto;
@@ -759,9 +674,7 @@
             gap: 8px;
         }
 
-        .comment-list {
-            margin-bottom: 20px;
-        }
+        .comment-list { margin-bottom: 20px; }
 
         .comment-item {
             background: var(--bg-primary);
@@ -773,9 +686,7 @@
             transition: all 0.2s;
         }
 
-        .comment-item:hover {
-            box-shadow: var(--shadow-md);
-        }
+        .comment-item:hover { box-shadow: var(--shadow-md); }
 
         .comment-header {
             display: flex;
@@ -817,15 +728,9 @@
             box-shadow: 0 0 0 3px var(--accent-light);
         }
 
-        .comment-form textarea::placeholder {
-            color: var(--text-tertiary);
-        }
+        .comment-form textarea::placeholder { color: var(--text-tertiary); }
+        .comment-form button { margin-top: 12px; }
 
-        .comment-form button {
-            margin-top: 12px;
-        }
-
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 100px 20px;
@@ -852,7 +757,6 @@
             margin-right: auto;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -888,9 +792,7 @@
             transition: transform 0.2s;
         }
 
-        .modal.active .modal-content {
-            transform: scale(1);
-        }
+        .modal.active .modal-content { transform: scale(1); }
 
         .modal-header {
             display: flex;
@@ -922,19 +824,10 @@
             color: var(--text-primary);
         }
 
-        .modal-body {
-            margin-bottom: 24px;
-        }
+        .modal-body { margin-bottom: 24px; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; }
 
-        .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 12px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
+        .form-group { margin-bottom: 20px; }
 
         .form-group label {
             display: block;
@@ -946,8 +839,7 @@
             letter-spacing: 0.5px;
         }
 
-        .form-group input,
-        .form-group select {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 12px 16px;
             border: 1px solid var(--border);
@@ -958,14 +850,12 @@
             transition: all 0.2s;
         }
 
-        .form-group input:focus,
-        .form-group select:focus {
+        .form-group input:focus, .form-group select:focus {
             outline: none;
             border-color: var(--accent);
             box-shadow: 0 0 0 3px var(--accent-light);
         }
 
-        /* Template Grid */
         .template-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1005,7 +895,6 @@
             line-height: 1.5;
         }
 
-        /* Buttons */
         .btn {
             padding: 12px 20px;
             border: none;
@@ -1034,21 +923,10 @@
             color: var(--text-primary);
         }
 
-        .btn-secondary:hover {
-            background: var(--bg-hover);
-        }
+        .btn-secondary:hover { background: var(--bg-hover); }
+        .btn-danger { background: var(--danger); color: #fff; }
+        .btn-success { background: var(--success); color: #fff; }
 
-        .btn-danger {
-            background: var(--danger);
-            color: #fff;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: #fff;
-        }
-
-        /* Status Bar */
         .status-bar {
             padding: 10px 24px;
             background: var(--bg-primary);
@@ -1065,7 +943,6 @@
             gap: 6px;
         }
 
-        /* Upload Area */
         .upload-area {
             border: 2px dashed var(--border);
             border-radius: var(--radius-lg);
@@ -1098,11 +975,8 @@
             color: var(--text-secondary);
         }
 
-        .upload-text strong {
-            color: var(--accent);
-        }
+        .upload-text strong { color: var(--accent); }
 
-        /* Responsive */
         @media (max-width: 1024px) {
             .sidebar {
                 position: fixed;
@@ -1112,51 +986,21 @@
                 z-index: 100;
                 box-shadow: var(--shadow-lg);
             }
-
-            .sidebar.open {
-                left: 0;
-            }
-
-            .menu-toggle {
-                display: block;
-            }
-
-            .editor-content {
-                padding: 24px;
-            }
-
-            .upload-area {
-                margin: 24px;
-            }
+            .sidebar.open { left: 0; }
+            .menu-toggle { display: block; }
+            .editor-content { padding: 24px; }
+            .upload-area { margin: 24px; }
         }
 
         @media (max-width: 640px) {
-            .auth-card {
-                padding: 32px 24px;
-            }
-
-            .top-bar {
-                padding: 12px 16px;
-            }
-
-            .page-title-input {
-                max-width: 200px;
-            }
-
-            .template-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .toolbar-btn span {
-                display: none;
-            }
-
-            .editor-wrapper {
-                padding: 16px;
-            }
+            .auth-card { padding: 32px 24px; }
+            .top-bar { padding: 12px 16px; }
+            .page-title-input { max-width: 200px; }
+            .template-grid { grid-template-columns: 1fr; }
+            .toolbar-btn span { display: none; }
+            .editor-wrapper { padding: 16px; }
         }
 
-        /* Loading */
         .loading {
             display: flex;
             align-items: center;
@@ -1173,13 +1017,8 @@
             animation: spin 1s linear infinite;
         }
 
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Toast */
         .toast {
             position: fixed;
             bottom: 24px;
@@ -1199,17 +1038,10 @@
         }
 
         @keyframes slideIn {
-            from {
-                transform: translateY(100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            from { transform: translateY(100px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
         }
 
-        /* Slash Menu */
         #slash-menu .modal-content {
             max-width: 420px;
             padding: 16px;
@@ -1228,7 +1060,6 @@
             color: var(--text-tertiary);
         }
 
-        /* Search */
         .search-box {
             position: relative;
             margin: 12px;
@@ -1260,15 +1091,8 @@
             opacity: 0.5;
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .fade-in {
-            animation: fadeIn 0.3s ease;
-        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .fade-in { animation: fadeIn 0.3s ease; }
     </style>
 </head>
 <body>
@@ -1291,7 +1115,7 @@
                 <input type="text" id="reg-username" placeholder="Username" autocomplete="username">
                 <input type="email" id="reg-email" placeholder="Email" autocomplete="email">
                 <input type="password" id="reg-password" placeholder="Password" autocomplete="new-password">
-                <input type="text" id="reg-invite" placeholder="Invite code (optional)">
+                <input type="text" id="reg-invite" placeholder="Admin secret (required)">
                 <button class="auth-btn" onclick="register()">Create account</button>
                 <div class="auth-divider"><span>or</span></div>
                 <button class="auth-btn auth-btn-secondary" onclick="showLogin()">Sign In</button>
@@ -1302,7 +1126,6 @@
 
     <!-- Main App -->
     <div id="app-page" class="app-container">
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <div class="sidebar-header">
                 <div class="sidebar-logo">
@@ -1337,9 +1160,7 @@
             </div>
         </aside>
 
-        <!-- Main Content -->
         <main class="main-content">
-            <!-- Top Bar -->
             <header class="top-bar">
                 <div class="top-bar-left">
                     <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
@@ -1352,9 +1173,7 @@
                 </div>
             </header>
 
-            <!-- Editor Wrapper -->
             <div class="editor-wrapper">
-                <!-- Empty State -->
                 <div id="empty-state" class="empty-state">
                     <div class="empty-state-icon">📁</div>
                     <h2>No spaces yet</h2>
@@ -1362,7 +1181,6 @@
                     <button class="btn btn-primary" onclick="openNewSpaceModal()">+ New space</button>
                 </div>
 
-                <!-- Editor Container -->
                 <div id="editor-container" class="editor-container" style="display: none;">
                     <div class="editor-toolbar">
                         <button class="toolbar-btn" onclick="formatDoc('bold')" title="Bold"><b>B</b></button>
@@ -1390,7 +1208,6 @@
                         <button class="toolbar-btn" onclick="openSlashMenu()" title="Commands">⌨️</button>
                     </div>
                     
-                    <!-- Upload Area -->
                     <div class="upload-area" id="upload-area" onclick="document.getElementById('file-input').click()">
                         <div class="upload-icon">📎</div>
                         <div class="upload-text">
@@ -1402,7 +1219,6 @@
                     <div id="editor" class="editor-content" contenteditable="true"></div>
                 </div>
 
-                <!-- Comments Section -->
                 <div class="comments-section" id="comments-section" style="display: none;">
                     <h3 class="comments-title">💬 Comments</h3>
                     <div id="comments-list" class="comment-list"></div>
@@ -1415,13 +1231,12 @@
         </main>
     </div>
 
-    <!-- Status Bar -->
     <div id="status-bar" class="status-bar" style="display: none;">
         <span id="last-saved">● Not saved</span>
         <span id="page-info"></span>
     </div>
 
-    <!-- Modal: New Space -->
+    <!-- Modals -->
     <div id="new-space-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1445,7 +1260,6 @@
         </div>
     </div>
 
-    <!-- Modal: New Page -->
     <div id="new-page-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1469,7 +1283,6 @@
         </div>
     </div>
 
-    <!-- Modal: Table (Updated with Preview) -->
     <div id="table-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1499,7 +1312,6 @@
         </div>
     </div>
 
-    <!-- Modal: History -->
     <div id="history-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1512,7 +1324,6 @@
         </div>
     </div>
 
-    <!-- Modal: Templates -->
     <div id="template-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
@@ -1546,7 +1357,6 @@
         </div>
     </div>
 
-    <!-- Modal: Slash Menu -->
     <div id="slash-menu" class="modal" style="align-items: flex-start; padding-top: 100px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -1583,13 +1393,11 @@
         document.addEventListener('DOMContentLoaded', () => {
             checkAuth();
             
-            // Load saved theme
             const savedTheme = localStorage.getItem('workdocs_theme');
             if (savedTheme) {
                 document.documentElement.setAttribute('data-theme', savedTheme);
             }
             
-            // Drag & drop for file upload
             const uploadArea = document.getElementById('upload-area');
             uploadArea.addEventListener('dragover', (e) => {
                 e.preventDefault();
@@ -1605,19 +1413,13 @@
                 if (files.length > 0) handleFiles(files);
             });
             
-            // Auto-save every 30 seconds
             setInterval(() => { if (currentPage) savePage(true); }, 30000);
             
-            // Save on Ctrl+S
             document.addEventListener('keydown', (e) => {
                 if ((e.ctrlKey || e.metaKey) && e.key === 's') {
                     e.preventDefault();
                     savePage();
                 }
-            });
-            
-            // Close modals on Escape
-            document.addEventListener('keydown', (e) => {
                 if (e.key === 'Escape') {
                     document.querySelectorAll('.modal.active').forEach(modal => {
                         modal.classList.remove('active');
@@ -1662,7 +1464,10 @@
         async function login() {
             const username = document.getElementById('login-username').value.trim();
             const password = document.getElementById('login-password').value;
-            if (!username || !password) { showToast('⚠️ Please enter username and password'); return; }
+            if (!username || !password) { 
+                showToast('⚠️ Please enter username and password'); 
+                return; 
+            }
             try {
                 const res = await fetch('/api/auth', {
                     method: 'POST',
@@ -1671,7 +1476,8 @@
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
-                localStorage.setItem('workdocs_user', JSON.stringify(data.user));
+                // ✅ Исправлено: работает с { token, username }
+                localStorage.setItem('workdocs_user', JSON.stringify({ username: data.username }));
                 localStorage.setItem('workdocs_token', data.token);
                 checkAuth();
                 showToast('✅ Welcome back!');
@@ -1684,17 +1490,28 @@
             const username = document.getElementById('reg-username').value.trim();
             const email = document.getElementById('reg-email').value.trim();
             const password = document.getElementById('reg-password').value;
-            const invite = document.getElementById('reg-invite').value.trim();
-            if (!username || !password) { showToast('⚠️ Please enter username and password'); return; }
+            const adminSecret = document.getElementById('reg-invite').value.trim();
+            
+            if (!username || !password) { 
+                showToast('⚠️ Please enter username and password'); 
+                return; 
+            }
             try {
                 const res = await fetch('/api/auth', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email, password, invite, action: 'register' })
+                    body: JSON.stringify({ 
+                        username, 
+                        email, 
+                        password, 
+                        adminSecret,
+                        action: 'register' 
+                    })
                 });
                 const data = await res.json();
                 if (!res.ok) throw new Error(data.error);
-                localStorage.setItem('workdocs_user', JSON.stringify(data.user));
+                // ✅ Исправлено: работает с { token, username }
+                localStorage.setItem('workdocs_user', JSON.stringify({ username: data.username }));
                 localStorage.setItem('workdocs_token', data.token);
                 checkAuth();
                 showToast('✅ Account created!');
@@ -2142,7 +1959,6 @@
             setTimeout(() => toast.remove(), 3000);
         }
 
-        // Close modals on outside click
         document.querySelectorAll('.modal').forEach(modal => {
             modal.addEventListener('click', (e) => {
                 if (e.target === modal) modal.classList.remove('active');
